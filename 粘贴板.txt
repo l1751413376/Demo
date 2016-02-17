@@ -1,0 +1,32 @@
+﻿visual macros expander
+http://www.cnxp.org/vs-with-qt.html
+http://www.iwantmoon.com/
+R = ( Alpha * Pic_R + ( 255 - Alpha ) * BK_R ) / 255;
+
+
+js sleep效果
+var lastTime = 0;
+var sleepms=16;//睡16毫秒
+
+requestAnimationFrame(callback){
+var currTime = new Date().getTime();
+var timeToCall = Math.max(0, sleepms - (currTime - lastTime));
+var id = window.setTimeout(function () { callback(); },timeToCall);
+lastTime = currTime + timeToCall;
+return id;
+
+}
+function a()
+{
+requestAnimationFrame(a);
+}
+
+//对齐 4位对齐 (仅限2,4,8,16,这样的)
+if ((i & 3) > 0)
+  temp = i & 0xfffc;
+ui渲染器
+
+根据xml，渲染一幅和客户区一样大的图片
+
+//图片缩放
+Sx=Dx*SW/DW

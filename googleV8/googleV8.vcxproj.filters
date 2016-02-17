@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{7f0dfb2a-8daf-43be-9662-e661d0338873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dll">
+      <UniqueIdentifier>{1acaeeee-afee-4d7c-8ca6-8e29092f07be}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="googleV8\helloWorld.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="googleV8\x86\icui18n.dll">
+      <Filter>Dll</Filter>
+    </None>
+    <None Include="googleV8\x86\icui18n.pdb">
+      <Filter>Dll</Filter>
+    </None>
+    <None Include="googleV8\x86\icuuc.dll">
+      <Filter>Dll</Filter>
+    </None>
+    <None Include="googleV8\x86\icuuc.pdb">
+      <Filter>Dll</Filter>
+    </None>
+    <None Include="googleV8\x86\msvcp120.dll">
+      <Filter>Dll</Filter>
+    </None>
+    <None Include="googleV8\x86\msvcr120.dll">
+      <Filter>Dll</Filter>
+    </None>
+    <None Include="googleV8\x86\v8.dll">
+      <Filter>Dll</Filter>
+    </None>
+    <None Include="googleV8\x86\v8.pdb">
+      <Filter>Dll</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="googleV8\x86\v8.lib">
+      <Filter>Dll</Filter>
+    </Library>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="dal">
+      <UniqueIdentifier>{d6caa130-f74b-4bce-aa3a-5d16f5b403b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fileformat">
+      <UniqueIdentifier>{c8d4811f-1279-4d75-95f6-db4bdaa47885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="g_logic">
+      <UniqueIdentifier>{1aa1fd5c-b1b2-46f2-b821-c93981bedd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graphics">
+      <UniqueIdentifier>{e12d8328-b806-4a89-a5fd-35ed72955bc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fileformat\png">
+      <UniqueIdentifier>{dc4d845f-2e5a-4235-8961-448cff338976}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui_logic">
+      <UniqueIdentifier>{d993cd62-ff8c-40de-97c7-2a967400853a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="winmain">
+      <UniqueIdentifier>{4d7170c3-d1e6-4953-83dd-8b35cba4dd14}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dal\OLEDBDAL.cpp">
+      <Filter>dal</Filter>
+    </ClCompile>
+    <ClCompile Include="fileformat\imgformat.cpp">
+      <Filter>fileformat</Filter>
+    </ClCompile>
+    <ClCompile Include="fileformat\mapformat.cpp">
+      <Filter>fileformat</Filter>
+    </ClCompile>
+    <ClCompile Include="fileformat\wasformat.cpp">
+      <Filter>fileformat</Filter>
+    </ClCompile>
+    <ClCompile Include="fileformat\wdfformat.cpp">
+      <Filter>fileformat</Filter>
+    </ClCompile>
+    <ClCompile Include="g_logic\g_main.cpp">
+      <Filter>g_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="g_logic\g_object.cpp">
+      <Filter>g_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\font_alpha.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\graphics_logic.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ui_logic\ui_logic.cpp">
+      <Filter>ui_logic</Filter>
+    </ClCompile>
+    <ClCompile Include="winmain\winmain.cpp">
+      <Filter>winmain</Filter>
+    </ClCompile>
+    <ClCompile Include="baseaction.cpp" />
+    <ClCompile Include="g_source.cpp">
+      <Filter>g_logic</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dal\OLEDBDAL.h">
+      <Filter>dal</Filter>
+    </ClInclude>
+    <ClInclude Include="fileformat\imgformat.h">
+      <Filter>fileformat</Filter>
+    </ClInclude>
+    <ClInclude Include="fileformat\JPEG.H">
+      <Filter>fileformat</Filter>
+    </ClInclude>
+    <ClInclude Include="fileformat\mapformat.h">
+      <Filter>fileformat</Filter>
+    </ClInclude>
+    <ClInclude Include="fileformat\wasformat.h">
+      <Filter>fileformat</Filter>
+    </ClInclude>
+    <ClInclude Include="fileformat\wdfformat.h">
+      <Filter>fileformat</Filter>
+    </ClInclude>
+    <ClInclude Include="g_logic\action.h">
+      <Filter>g_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="g_logic\g_object.h">
+      <Filter>g_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\font_alpha.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_logic\ui_logic.h">
+      <Filter>ui_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="g_logic\g_main.h">
+      <Filter>g_logic</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h" />
+  </ItemGroup>
+</Project>

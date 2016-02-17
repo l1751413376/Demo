@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <!-- html代码 -->
+    <canvas id="canvas"></canvas>
+
+    <!-- JavaScript 代码 -->
+    <script type="text/javascript">
+
+        ; !function () {
+            var lastTime = 0;
+            var vendors = ['webkit', 'moz'];
+            for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+                window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+                window.cancelAnimationFrame =
+		          window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+            }
+
+            if (!window.requestAnimationFrame)
+                window.requestAnimationFrame = function (callback, element) {
+                    var currTime = new Date().getTime();
+                    var timeToCall = Math.max(0, 16 - (currTime - lastTime) + 100);
+                    var id = window.setTimeout(function () { callback(); },
+                        timeToCall);
+                    lastTime = currTime + timeToCall;
+                    return id;
+                };
+
+            if (!window.cancelAnimationFrame)
+                window.cancelAnimationFrame = function (id) {
+                    clearTimeout(id);
+                };
+        }();
+        window.onload = function () {
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            canvas.width = 360;
+            canvas.height = 360;
+            clock(context);
+        }
+        function clock(cxt) {
+            //console.log(1);
+            cxt.clearRect(0, 0, 360, 360);
+            cxt.beginPath();
+            cxt.arc(180, 180, 179, 0, 2 * Math.PI, false);
+            cxt.lineWidth = 1;
+            cxt.strokeStyle = "#aaa";
+            cxt.stroke();
+
+            cxt.font = "bold 16px Helvetica, Arail, MicroSoft Yahei, SimSun";
+            cxt.textAlign = "center";
+            cxt.textBaseline = "middle";
+            cxt.fillStyle = "#999";
+
+            for (var i = 1; i <= 12; i++) {
+                cxt.fillText(i, 160 * Math.cos(1.5 * Math.PI + Math.PI / 6 * i) + 180, 160 * Math.sin(1.5 * Math.PI + Math.PI / 6 * i) + 180);
+            }
+
+            var currentTime = new Date();
+            var currentHours = currentTime.getHours();
+            var currentMinutes = currentTime.getMinutes();
+            var currentSeconds = currentTime.getSeconds();
+            var currentMilliseconds = currentTime.getMilliseconds();
+
+            var h = currentHours % 12;
+            var m = currentMinutes / 60;
+            var s = currentSeconds / 60;
+            var ms = currentMilliseconds / 1000;
+            cxt.beginPath()
+            cxt.lineWidth = 1;
+            cxt.strokeStyle = "#ccc";
+            cxt.moveTo(200, 160);
+            cxt.strokeRect(244, 170, 48, 20);
+
+            cxt.font = "12px Helvetica, Arail, MicroSoft Yahei, SimSun";
+            cxt.textAlign = "center";
+            cxt.textBaseline = "middle";
+            cxt.fillStyle = "#666";
+            cxt.fillText(currentHours >= 12 ? "PM" : "AM", 268, 180);
+
+            cxt.moveTo(200, 160);
+            cxt.strokeRect(100, 170, 48, 20);
+
+            cxt.stroke();
+
+            cxt.beginPath();
+            cxt.moveTo(180, 180);
+
+
+            cxt.lineTo(100 * Math.cos(1.5 * Math.PI + Math.PI / 6 * (h + m)) + 180, 100 * Math.sin(1.5 * Math.PI + Math.PI / 6 * (h + m)) + 180);
+            cxt.lineWidth = 12;
+            cxt.strokeStyle = "#333";
+            cxt.stroke();
+
+            cxt.beginPath();
+            cxt.moveTo(180, 180);
+            cxt.lineTo(120 * Math.cos(1.5 * Math.PI + Math.PI / 30 * (m * 60 + s)) + 180, 120 * Math.sin(1.5 * Math.PI + Math.PI / 30 * (s + m * 60)) + 180);
+            cxt.lineWidth = 8;
+            cxt.strokeStyle = "#333";
+            cxt.stroke();
+
+            cxt.beginPath();
+            cxt.moveTo(180, 180);
+            cxt.lineTo(140 * Math.cos(1.5 * Math.PI + Math.PI / 30 * (s * 60 + ms)) + 180, 140 * Math.sin(1.5 * Math.PI + Math.PI / 30 * (s * 60 + ms)) + 180);
+            cxt.lineWidth = 4;
+            cxt.strokeStyle = "#f00";
+            cxt.stroke();
+
+            cxt.beginPath();
+            cxt.arc(180, 180, 5, 0, Math.PI * 2, true);
+            cxt.lineWidth = 10;
+            cxt.strokeStyle = "#333";
+            cxt.stroke();
+
+            requestAnimationFrame(function () {
+                clock(cxt);
+            });
+        }
+        document.write();
+    </script>
+</body>
+</html>

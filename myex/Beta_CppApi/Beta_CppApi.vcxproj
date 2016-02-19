@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CRC.cpp" />
     <ClCompile Include="DllExport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DllExport.h" />
+    <ClCompile Include="PNG.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED8FBE21-4AA2-4082-BDC9-938637BBD074}</ProjectGuid>

@@ -28,17 +28,18 @@ namespace Beta
         {
             data = 2;
             InitializeComponent();
-
-            //添加到目标属性
-            this.textBox1.SetBinding(TextBox.TextProperty, new Binding("data") { Source = this, Mode = BindingMode.TwoWay });
-            this.tbShowMessage.SetBinding(TextBlock.TextProperty, new Binding("Text") { Source= txtName });
-
+            BitmapImage bi = new BitmapImage();
+            
+            
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            data =(int)slider.Value;
-            PropertyChanged(this, new PropertyChangedEventArgs("data"));
+           
         }
+        
+
+        
+
     }
 }

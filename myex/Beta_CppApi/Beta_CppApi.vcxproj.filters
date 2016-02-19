@@ -18,6 +18,12 @@
     <ClCompile Include="DllExport.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="CRC.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="PNG.h">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DllExport.h">

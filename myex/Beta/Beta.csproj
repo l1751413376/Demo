@@ -61,6 +61,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Dictionary2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -69,6 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FButton.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -76,6 +81,10 @@
     <Page Include="Page1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -104,9 +113,35 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\fontawesome-webfont.ttf" />
+    <Resource Include="Resources\FontAwesome.otf" />
+    <Resource Include="Resources\simsun.ttc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\1x1white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\8x1white.png" />
+    <Resource Include="img\8x8white.png" />
+    <Resource Include="img\9x1white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\1x3red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\2x1white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\2x1red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\logo_normal副本.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

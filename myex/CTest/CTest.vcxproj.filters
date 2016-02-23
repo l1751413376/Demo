@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CRC.cpp">
-      <Filter>头文件</Filter>
-    </ClCompile>
-    <ClCompile Include="lz77 (2).cpp">
-      <Filter>头文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Adler32.cpp">
+    <ClCompile Include="PNG.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,9 +34,15 @@
     <None Include="msado15.dll">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="lz77 (2).cpp">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="Adler32.cpp">
+      <Filter>头文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PNG.h">
+    <ClInclude Include="CRC.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -87,11 +87,11 @@ public:
 		__asm 
 		{
 			mov esi,temp	
-				xor eax,eax		
-				lodsw				
-				xchg al,ah		
-				mov a,ax			
-				mov temp,esi
+			xor eax,eax		
+			lodsw				
+			xchg al,ah		
+			mov a,ax			
+			mov temp,esi
 		}	
 		pfmoving=temp;
 		return a;

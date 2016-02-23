@@ -146,9 +146,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Adler32.cpp" />
-    <ClCompile Include="CRC.cpp" />
-    <ClCompile Include="lz77 (2).cpp" />
+    <None Include="Adler32.cpp" />
+    <ClInclude Include="CRC.h" />
+    <None Include="lz77 (2).cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Debug\1.txt" />
@@ -161,7 +161,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PNG.h" />
+    <ClCompile Include="PNG.cpp">
+      <FileType>CppHeader</FileType>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

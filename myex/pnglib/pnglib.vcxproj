@@ -105,7 +105,6 @@
     <ClInclude Include="pngpriv.h" />
     <ClInclude Include="pngstruct.h" />
     <ClInclude Include="zconf.h" />
-    <ClInclude Include="zlib.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="pnglib.dsp" />

@@ -150,6 +150,8 @@
       <FileType>CppCode</FileType>
     </ClInclude>
     <ClInclude Include="CRC.h" />
+    <ClInclude Include="zconf.h" />
+    <ClInclude Include="zlib.h" />
     <None Include="lz77 (2).cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,6 @@
 namespace PNG {}
 #pragma comment (lib,"zlib.lib")
 using namespace PNG;
-#define out //参数输出
 
 #define png_IHDR 0x49484452
 #define png_IDAT 0x49444154
@@ -27,24 +26,6 @@ inline void Xmemmove(BYTE* &buff, void * value, int size)
 	memmove(buff, value, size);
 	buff += size;
 }
-#define BASE 65521 
-unsigned long adler32(unsigned char *buf, int len)
-{
-
-	unsigned long adler = 1;
-	unsigned long s1 = adler & 0xffff;
-	unsigned long s2 = (adler >> 16) & 0xffff;
-
-	int i;
-	for (i = 0; i < len; i++)
-	{
-		s1 = (s1 + buf[i]) % BASE;
-		s2 = (s2 + s1) % BASE;
-	}
-	return (s2 << 16) + s1;
-}
-
-
 #pragma pack (push)
 #pragma pack (1)
 class Chunk
@@ -140,23 +121,16 @@ WORD ChgWORD(WORD value)
 	return value;
 }
 #pragma pack (pop)
-//ImgData=>ABGR(A蓝绿红)
-void CreatePNG(DWORD Witdh, DWORD Height, DWORD *ImgData, void *& out PNGBuff, int & PNGBuff_Len)
+/*创建Png函数（已经格式化数据）
+ImgData=>0ABGR ABGR ABGR....(A蓝绿红)(数据前面必须要有一个0)
+PNGBuff=>函数内部创建
+*/
+void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuffLen, void *& PNGBuff, int & PNGBuffLen)
 {
-	//计算缓冲区大小
-	int buff_size = sizeof(png_Title)+sizeof(IHDR)+sizeof(IDAT)+sizeof(IEND);
-	//加上图片数据大小“-4”IDATA带了一个图像指针
-	buff_size += Witdh * Height * 4 - 4;
-	PNGBuff_Len = buff_size;
-	//创建缓冲区
-	BYTE *buff = new BYTE[buff_size];
-	PNGBuff = buff;
-
-	//title
-	Xmemmove(buff, (void *)png_Title, sizeof(png_Title));
+	auto compressLen = compressBound(ImgBuffLen);
 	//head info
 	IHDR head;
-	head.ChunkLen = sizeof(IHDR)-sizeof(Chunk);
+	head.ChunkLen = sizeof(IHDR) - sizeof(Chunk);
 	head.Tag = png_IHDR;
 	head.Width = Witdh;
 	head.Height = Height;
@@ -165,34 +139,49 @@ void CreatePNG(DWORD Witdh, DWORD Height, DWORD *ImgData, void *& out PNGBuff, i
 	head.CompressionMethod = 0;
 	head.FilterMethod = 0;
 	head.InterlaceMethod = 0;
-	head.WriteMemoryAndCRC(buff);
+
 	//数据段1
 	IDAT data1;
 	data1.Tag = png_IDAT;
-	memcpy(data1.CompressionAlgorithm, png_CompressionAlgorithm, sizeof(png_CompressionAlgorithm));
-	data1.Len = Witdh*Height * 4 + 1;
-	data1.nLen = 0xFFFF - data1.Len;
-	data1.ImgData = ImgData;
-	memcpy(data1.ImgDataEnd, png_ImgDataEnd, sizeof(png_ImgDataEnd));
-	data1.ChunkLen = sizeof(IDAT) - sizeof(Chunk)+ data1.Len - 5;
-	data1.Adler32 = 0;
-	data1.b1 = 0;
-	data1.WriteMemoryAndCRC(buff);
-
+	data1.CompressData = new BYTE[compressLen];
+	compress2(data1.CompressData, &data1.CompressDataLen, ImgBuff, Witdh*Height * 4 + 1, 1);
+	data1.ChunkLen = 8 + data1.CompressDataLen;
+	
+	//IENDinfo
 	IEND end;
 	end.Tag = png_IEND;
 	//IEND长度为0
 	end.ChunkLen = 0;
+
+	//计算缓冲区大小
+	int buff_size = sizeof(png_Title)+sizeof(IHDR)+sizeof(IEND)+4;
+	//加上图片数据大小
+	buff_size += data1.ChunkLen;
+	PNGBuffLen = buff_size;
+	//创建缓冲区
+	BYTE *buff = new BYTE[buff_size];
+	PNGBuff = buff;
+	//title
+	Xmemmove(buff, (void *)png_Title, sizeof(png_Title));
+	//head
+	head.WriteMemoryAndCRC(buff);
+	//data1
+	data1.WriteMemoryAndCRC(buff);
+	//释放data1.CompressData
+	delete data1.CompressData;
+	//end
 	end.WriteMemoryAndCRC(buff);
 }
-#define OF(args)  args
-typedef void   (*free_func) OF((int opaque,int items,int size));
+
+
+
 void main()
 {
-	DWORD ImgData[] = { 0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff };
+	DWORD ImgData[] = {0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff };
+	//DWORD ImgData[] = { 0xff0000ff };
 	void * buff = 0;
 	int buff_len = 0;
-	CreatePNG(sizeof(ImgData)/4, 1, ImgData, buff, buff_len);
+	CreatePNGByFormatData(9, 1, (Byte*)ImgData,sizeof(ImgData), buff, buff_len);
 	auto filename = "D:/Demo/myex/Beta/img/testcrc.png";
 	auto file = fopen(filename, "wb+");
 	fwrite(buff, buff_len, 1, file);

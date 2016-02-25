@@ -45,5 +45,11 @@
     <ClInclude Include="Adler32.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="zlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

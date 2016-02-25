@@ -122,12 +122,11 @@ WORD ChgWORD(WORD value)
 }
 #pragma pack (pop)
 /*创建Png函数（已经格式化数据）
-ImgData=>0ABGR ABGR ABGR....(A蓝绿红)(数据前面必须要有一个0)
+ImgData=>(红绿蓝A)(每行开始有个0)(第一行0RGBA RGBA RGBA....第二行0RGBA RGBA RGBA....)(A=0透明A=0xFF不透明)
 PNGBuff=>函数内部创建
 */
 void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuffLen, void *& PNGBuff, int & PNGBuffLen)
 {
-	auto compressLen = compressBound(ImgBuffLen);
 	//head info
 	IHDR head;
 	head.ChunkLen = sizeof(IHDR) - sizeof(Chunk);
@@ -141,11 +140,12 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	head.InterlaceMethod = 0;
 
 	//数据段1
-	IDAT data1;
-	data1.Tag = png_IDAT;
-	data1.CompressData = new BYTE[compressLen];
-	compress2(data1.CompressData, &data1.CompressDataLen, ImgBuff, Witdh*Height * 4 + 1, 1);
-	data1.ChunkLen = 8 + data1.CompressDataLen;
+	IDAT data;
+	data.Tag = png_IDAT;
+	auto compressLen = compressBound(ImgBuffLen);
+	data.CompressData = new BYTE[compressLen];
+	compress2(data.CompressData, &data.CompressDataLen, ImgBuff, ImgBuffLen, 0);
+	data.ChunkLen = 8 + data.CompressDataLen;
 	
 	//IENDinfo
 	IEND end;
@@ -156,7 +156,7 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	//计算缓冲区大小
 	int buff_size = sizeof(png_Title)+sizeof(IHDR)+sizeof(IEND)+4;
 	//加上图片数据大小
-	buff_size += data1.ChunkLen;
+	buff_size += data.ChunkLen;
 	PNGBuffLen = buff_size;
 	//创建缓冲区
 	BYTE *buff = new BYTE[buff_size];
@@ -166,9 +166,9 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	//head
 	head.WriteMemoryAndCRC(buff);
 	//data1
-	data1.WriteMemoryAndCRC(buff);
+	data.WriteMemoryAndCRC(buff);
 	//释放data1.CompressData
-	delete data1.CompressData;
+	delete data.CompressData;
 	//end
 	end.WriteMemoryAndCRC(buff);
 }
@@ -177,11 +177,10 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 
 void main()
 {
-	DWORD ImgData[] = {0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff,0x00ffffff,0xff0000ff };
-	//DWORD ImgData[] = { 0xff0000ff };
+	Byte ImgData[] = {0,0xff,0xff,0xff,0xff,0,0,0,0xff,0xff};
 	void * buff = 0;
 	int buff_len = 0;
-	CreatePNGByFormatData(9, 1, (Byte*)ImgData,sizeof(ImgData), buff, buff_len);
+	CreatePNGByFormatData(1, 2, ImgData,sizeof(ImgData), buff, buff_len);
 	auto filename = "D:/Demo/myex/Beta/img/testcrc.png";
 	auto file = fopen(filename, "wb+");
 	fwrite(buff, buff_len, 1, file);

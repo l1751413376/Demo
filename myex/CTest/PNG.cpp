@@ -1,25 +1,41 @@
-#include "CRC.h"
 #include <Windows.h>
 #include <iostream>
 #include <io.h>
 #include "zlib.h"
-
 #pragma warning( disable : 4996 )//忽略非安全函数
 
-namespace PNG {}
+namespace PNG {
+
 #pragma comment (lib,"zlib.lib")
-using namespace PNG;
 
 #define png_IHDR 0x49484452
 #define png_IDAT 0x49444154
 #define png_IEND 0x49454e44
 #define png_IEND_CRC 0xAE426082
 const static BYTE png_Title[] = { 0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A }; //.PNG....
-const static BYTE png_CompressionAlgorithm[3] = { 0x78,0x01,0x00 };
-const static BYTE png_ImgDataEnd[10] = { 0,0,0,0xff,0xff,0x01,0x00,0x00,0xFF,0xFF };
 
-DWORD ChgDWORD(DWORD value);
-inline WORD ChgWORD(WORD value);
+DWORD ChgDWORD(DWORD value)
+{
+	DWORD ret = 0;
+	auto pret = (BYTE*)&ret;
+	auto pvalue = (BYTE*)&value;
+	*pret++ = pvalue[3];
+	*pret++ = pvalue[2];
+	*pret++ = pvalue[1];
+	*pret++ = pvalue[0];
+	return ret;
+
+}
+WORD ChgWORD(WORD value)
+{
+	__asm
+	{
+		mov ax, value
+		xchg al, ah
+		mov value, ax
+	}
+	return value;
+}
 //复制内容并且同时移动指针
 inline void Xmemmove(BYTE* &buff, void * value, int size)
 {
@@ -35,9 +51,6 @@ public:
 	DWORD Tag;//4byte
 	DWORD CRC;
 };
-
-
-
 class IHDR : public Chunk
 {
 public:
@@ -63,7 +76,7 @@ public:
 		Xmemmove(buff, &FilterMethod, sizeof(FilterMethod));
 		Xmemmove(buff, &InterlaceMethod, sizeof(InterlaceMethod));
 		//CRC
-		CRC = crc32(buff_begin, buff- buff_begin);
+		CRC = crc32(0, buff_begin, buff - buff_begin);
 		Xmemmove(buff, &(tempDWORD = ChgDWORD(CRC)), sizeof(CRC));
 	}
 };
@@ -81,14 +94,14 @@ public:
 		Xmemmove(buff, &(tempDWORD = ChgDWORD(Tag)), sizeof(Tag));
 		Xmemmove(buff, CompressData, CompressDataLen);
 		//CRC
-		CRC = crc32(buff_begin, buff - buff_begin);
+		CRC = crc32(0, buff_begin, buff - buff_begin);
 		Xmemmove(buff, &(tempDWORD = ChgDWORD(CRC)), sizeof(CRC));
 	};
 };
-class IEND:public Chunk
+class IEND :public Chunk
 {
 public:
-	void WriteMemoryAndCRC(BYTE* &buff) 
+	void WriteMemoryAndCRC(BYTE* &buff)
 	{
 		DWORD tempDWORD = 0;
 
@@ -98,31 +111,9 @@ public:
 		Xmemmove(buff, &(tempDWORD = ChgDWORD(CRC)), sizeof(CRC));
 	}
 };
-DWORD ChgDWORD(DWORD value)
-{
-	DWORD ret = 0;
-	auto pret = (BYTE*)&ret;
-	auto pvalue = (BYTE*)&value;
-	*pret++ = pvalue[3];
-	*pret++ = pvalue[2];
-	*pret++ = pvalue[1];
-	*pret++ = pvalue[0];
-	return ret;
-
-}
-WORD ChgWORD(WORD value)
-{
-	__asm
-	{
-		mov ax , value
-		xchg al, ah
-		mov value, ax
-	}
-	return value;
-}
 #pragma pack (pop)
 /*创建Png函数（已经格式化数据）
-ImgData=>(红绿蓝A)(每行开始有个0)(第一行0RGBA RGBA RGBA....第二行0RGBA RGBA RGBA....)(A=0透明A=0xFF不透明)
+ImgData=>(A蓝绿红)(每行开始有个0)(第一行0ABGR ABGR ABGR....第二行0ABGR ABGR ABGR....)(A=0透明A=0xFF不透明)
 PNGBuff=>函数内部创建
 */
 void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuffLen, void *& PNGBuff, int & PNGBuffLen)
@@ -139,14 +130,16 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	head.FilterMethod = 0;
 	head.InterlaceMethod = 0;
 
-	//数据段1
+	//数据段
 	IDAT data;
 	data.Tag = png_IDAT;
 	auto compressLen = compressBound(ImgBuffLen);
 	data.CompressData = new BYTE[compressLen];
+	data.CompressDataLen = compressLen;
+	//此含树 第二个参数 需传入dest的长度 同时返回压缩后实际的数据长度
 	compress2(data.CompressData, &data.CompressDataLen, ImgBuff, ImgBuffLen, 0);
-	data.ChunkLen = 8 + data.CompressDataLen;
-	
+	data.ChunkLen = sizeof(data.CRC) + sizeof(data.Tag) + data.CompressDataLen;
+
 	//IENDinfo
 	IEND end;
 	end.Tag = png_IEND;
@@ -154,9 +147,9 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	end.ChunkLen = 0;
 
 	//计算缓冲区大小
-	int buff_size = sizeof(png_Title)+sizeof(IHDR)+sizeof(IEND)+4;
-	//加上图片数据大小
-	buff_size += data.ChunkLen;
+	int buff_size = sizeof(png_Title) + sizeof(IHDR) + sizeof(IEND);
+	//加上IDAT(数据段)
+	buff_size += data.ChunkLen + sizeof(data.ChunkLen);
 	PNGBuffLen = buff_size;
 	//创建缓冲区
 	BYTE *buff = new BYTE[buff_size];
@@ -172,20 +165,63 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	//end
 	end.WriteMemoryAndCRC(buff);
 }
-
-
-
-void main()
+/**/
+void PNGFormatData_A8R8G8B8(BYTE *& dest, int & desLen, BYTE * source, int sourceWitdh, int sourceHeight)
 {
-	Byte ImgData[] = {0,0xff,0xff,0xff,0xff,0,0,0,0xff,0xff};
-	void * buff = 0;
-	int buff_len = 0;
-	CreatePNGByFormatData(1, 2, ImgData,sizeof(ImgData), buff, buff_len);
-	auto filename = "D:/Demo/myex/Beta/img/testcrc.png";
-	auto file = fopen(filename, "wb+");
-	fwrite(buff, buff_len, 1, file);
-	fclose(file);
-	auto ret = 0;
-	
+	//png每行多一个字节0
+	desLen = sourceWitdh * sourceHeight * 4 + sourceHeight;
+	BYTE* buff = new BYTE[desLen];
+	dest = buff;
+	//源位图每行字节数量
+	int witdhSteps = sourceWitdh * 4;
+	for (size_t i = 0; i < sourceHeight; i++)
+	{
+		*buff++ = 0;
+		memcpy(buff, source, witdhSteps);
+		buff += witdhSteps;
+		source += witdhSteps;
+	}
 }
 
+
+
+}
+using namespace PNG;
+void main()
+{
+	
+	//源图像
+	BYTE ImgData[] = { 0xff,0xff,0x00,0x00,0xff,0x00,0x00,0xff };
+	int imgWidth = 1;
+	int imgHeight = 2;
+	//png图像
+	void * pngbuff = 0;
+	int buff_len = 0;
+	//pngIDATImg数据
+	BYTE * pngIDATbuff = 0;
+	int pngIDATbuffLen = 0;
+	//函数调用
+	PNGFormatData_A8R8G8B8(pngIDATbuff, pngIDATbuffLen, (BYTE*)ImgData, imgWidth, imgHeight);
+	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
+
+	//资源释放
+	delete pngIDATbuff;
+	//文件操作
+	auto filename = "D:/Demo/myex/Beta/img/testcrc.png";
+	auto file = fopen(filename, "wb+");
+	fwrite(pngbuff, buff_len, 1, file);
+	fclose(file);
+	auto ret = 0;
+	/*
+	
+	DWORD ImgData[] = { 0xff00ff00,0xff00ffff };
+
+	BYTE source[20];
+	ULONG sourceLen=20;
+	
+	memset(source,0,sizeof(source));
+
+	compress2(source, &sourceLen, (Byte *)ImgData,8,0);
+	int ret = 0;*/
+
+}

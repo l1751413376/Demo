@@ -34,15 +34,9 @@
     <None Include="msado15.dll">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="lz77 (2).cpp">
-      <Filter>头文件</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CRC.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Adler32.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="zlib.h">

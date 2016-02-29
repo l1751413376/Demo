@@ -3,9 +3,6 @@
 #include <io.h>
 #include "zlib.h"
 #pragma warning( disable : 4996 )//忽略非安全函数
-
-namespace PNG {
-
 #pragma comment (lib,"zlib.lib")
 
 #define png_IHDR 0x49484452
@@ -113,7 +110,7 @@ public:
 };
 #pragma pack (pop)
 /*创建Png函数（已经格式化数据）
-ImgData=>(A蓝绿红)(每行开始有个0)(第一行0ABGR ABGR ABGR....第二行0ABGR ABGR ABGR....)(A=0透明A=0xFF不透明)
+ImgData=>(红绿蓝A)(每行开始有个0)(第一行0RGBA RGBA RGBA....第二行0RGBA RGBA RGBA....)(A=0透明A=0xFF不透明)
 PNGBuff=>函数内部创建
 */
 void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuffLen, void *& PNGBuff, int & PNGBuffLen)
@@ -165,8 +162,8 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	//end
 	end.WriteMemoryAndCRC(buff);
 }
-/**/
-void PNGFormatData_A8R8G8B8(BYTE *& dest, int & desLen, BYTE * source, int sourceWitdh, int sourceHeight)
+/*格式化函数*/
+void PNGFormatData_R8G8B8A8(BYTE *& dest, int & desLen, BYTE * source, int sourceWitdh, int sourceHeight)
 {
 	//png每行多一个字节0
 	desLen = sourceWitdh * sourceHeight * 4 + sourceHeight;
@@ -185,15 +182,31 @@ void PNGFormatData_A8R8G8B8(BYTE *& dest, int & desLen, BYTE * source, int sourc
 
 
 
-}
-using namespace PNG;
+
+
 void main()
 {
 	
 	//源图像
-	BYTE ImgData[] = { 0xff,0xff,0x00,0x00,0xff,0x00,0x00,0xff };
-	int imgWidth = 1;
-	int imgHeight = 2;
+	
+	int imgWidth =512;
+	int imgHeight = 512;
+	BYTE *ImgData=new BYTE[imgWidth*imgHeight*4];
+	for (size_t i = 0,len= imgHeight*imgWidth; i < len; i++)
+	{
+		auto item = ImgData + int(i << 2);
+		item[0] = 0xff;//R
+		item[1] = 0x00;//G
+		item[2] = 0x00;//B
+		item[3] = 0xff;//A
+	}
+	{
+		auto item = ImgData + imgHeight*imgWidth*4-4;
+		item[0] = 0x00;//R
+		item[1] = 0xff;//G
+		item[2] = 0x00;//B
+		item[3] = 0xff;//A
+	}
 	//png图像
 	void * pngbuff = 0;
 	int buff_len = 0;
@@ -201,7 +214,7 @@ void main()
 	BYTE * pngIDATbuff = 0;
 	int pngIDATbuffLen = 0;
 	//函数调用
-	PNGFormatData_A8R8G8B8(pngIDATbuff, pngIDATbuffLen, (BYTE*)ImgData, imgWidth, imgHeight);
+	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, ImgData, imgWidth, imgHeight);
 	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
 
 	//资源释放

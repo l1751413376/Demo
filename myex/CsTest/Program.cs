@@ -24,19 +24,7 @@ namespace CsTest
 4661377007	华泰A计划 29-35天
 4661377008	华泰A计划 36-42天
 4661377009	华泰A计划 43-49天";
-            Dictionary<string, string> InsuranceDictionary;
-            var items = str.Split('\n');
-            InsuranceDictionary = new Dictionary<string, string>();
-            foreach (var item in items)
-            {
-                int spaceindex = 0;
-                if ((spaceindex = item.IndexOf('\t')) == -1 && (spaceindex = item.IndexOf((char)32)) == -1)
-                {
-                    continue;
-                }   
-                
-                InsuranceDictionary.Add(item.Substring(0, spaceindex).Trim((char)32,'\t','\r'), item.Substring(spaceindex, item.Length - spaceindex).Trim((char)32, '\t','\r'));
-            }
+            str == null || str.ToString() == "有效" ? "" : "";
         }
     }
 

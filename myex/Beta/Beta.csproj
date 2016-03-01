@@ -113,6 +113,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\1207.map.tga" />
+    <Resource Include="Resources\000.tga" />
     <Resource Include="Resources\fontawesome-webfont.ttf" />
     <Resource Include="Resources\FontAwesome.otf" />
     <Resource Include="Resources\simsun.ttc" />
@@ -166,6 +168,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\512x513bule.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\无标题.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

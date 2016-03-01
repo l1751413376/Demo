@@ -26,13 +26,24 @@ namespace Beta
         public int data { get; set; }
         public MainWindow()
         {
-            data = 2;
             InitializeComponent();
-            BitmapImage bi = new BitmapImage();
-            
-            
+
+
+            IntPtr PngBuff = IntPtr.Zero;
+            var len=CppAPI.GetBitMap(out PngBuff);
+            byte[] managed_data = new byte[len];
+            Marshal.Copy(PngBuff, managed_data, 0, len);
+            MemoryStream ms = new MemoryStream(managed_data);
+
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.StreamSource = ms;
+            image.EndInit();
+            bgMap.Source = image;
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
            

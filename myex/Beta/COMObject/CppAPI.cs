@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Beta
 {
-    public class CppAPI
+    public static class CppAPI
     {
-        [DllImport("Beta_CppApi.dll")]
+        [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
         public extern static int add(int x, int y);
-        [DllImport("Beta_CppApi.dll")]
-        public extern static IntPtr GetBitMap();//与dll中一致 
+        [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
+        public extern static int GetBitMap(out IntPtr Pointer);//与dll中一致 
     }
 }

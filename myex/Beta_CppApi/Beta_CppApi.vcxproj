@@ -19,12 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CRC.cpp" />
     <ClCompile Include="DllExport.cpp" />
+    <ClCompile Include="PNG.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CRC.h" />
     <ClInclude Include="DllExport.h" />
-    <ClCompile Include="PNG.h" />
+    <ClInclude Include="file.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClCompile Include="mapformat.cpp" />
+    <ClInclude Include="JPEG.H" />
+    <ClInclude Include="mapformat.h" />
+    <ClInclude Include="Png.h" />
+    <ClInclude Include="zconf.h" />
+    <ClInclude Include="zlib.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED8FBE21-4AA2-4082-BDC9-938637BBD074}</ProjectGuid>

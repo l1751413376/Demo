@@ -109,7 +109,7 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Image Height="100" Width="100" x:Name="bgMap"></Image>
+        <Image Height="512" Width="512" x:Name="bgMap"></Image>
         <Canvas></Canvas>
         <StackPanel Orientation="Horizontal">
             <local:FButton FIcon="A" Margin="3"  AllowsAnimation="True">系统换转</local:FButton>

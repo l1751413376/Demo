@@ -8,7 +8,7 @@ int __stdcall add(int x, int y)
 	return g_count++;
 }
 
-int __stdcall GetBitMap(int **Pointer)
+int __stdcall GetBitMap(void **Pointer)
 {
 	//源图像
 
@@ -43,7 +43,7 @@ int __stdcall GetBitMap(int **Pointer)
 	//资源释放
 	delete pngIDATbuff;
 
-	*Pointer=(int*)pngbuff;
+	*Pointer=pngbuff;
 	return buff_len;
 }
 

@@ -4,4 +4,4 @@
 
 C_dllexport int __stdcall add(int x, int y);
 
-C_dllexport int __stdcall GetBitMap(int **Pointer);
+C_dllexport int __stdcall GetBitMap(void **Pointer);

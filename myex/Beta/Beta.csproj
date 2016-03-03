@@ -123,7 +123,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\1x1white.png" />
+    <Resource Include="img\1x1white.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\test.txt" />
@@ -146,7 +148,9 @@
     <Resource Include="img\logo_normal副本.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="img\testcrc.png" />
+    <Resource Include="img\testcrc.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\9x1red.png" />

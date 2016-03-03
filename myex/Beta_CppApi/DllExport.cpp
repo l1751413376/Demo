@@ -1,5 +1,6 @@
 #include "DllExport.h"
 #include "Png.h"
+#include "mapformat.h"
 
 int g_count = 0;
 
@@ -45,5 +46,32 @@ int __stdcall GetBitMap(void **Pointer)
 
 	*Pointer=pngbuff;
 	return buff_len;
-}
+};
+
+int __stdcall GetBitMap2(void **Pointer,int filename)
+{
+	//源图像
+	tagfile map;
+	map.load_file("D:/Demo/myex/Beta/Resources/1207.map.tga");
+	
+	int imgWidth = map.header.ImageWidth;
+	int imgHeight = map.header.ImageHeight;
+	BYTE *ImgData = (BYTE*)map.bmp32;
+	
+	//png图像
+	void * pngbuff = 0;
+	int buff_len = 0;
+	//pngIDATImg数据
+	BYTE * pngIDATbuff = 0;
+	int pngIDATbuffLen = 0;
+	//函数调用
+	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, ImgData, imgWidth, imgHeight);
+	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
+
+	//资源释放
+	delete pngIDATbuff;
+
+	*Pointer = pngbuff;
+	return buff_len;
+};
 

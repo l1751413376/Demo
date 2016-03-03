@@ -13,5 +13,7 @@ namespace Beta
         public extern static int add(int x, int y);
         [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
         public extern static int GetBitMap(out IntPtr Pointer);//与dll中一致 
+        [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
+        public extern static int GetBitMap2(out IntPtr Pointer, int filename);
     }
 }

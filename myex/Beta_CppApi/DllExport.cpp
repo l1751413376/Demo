@@ -1,6 +1,7 @@
 #include "DllExport.h"
 #include "Png.h"
 #include "mapformat.h"
+#include "WasFile.h"
 
 int g_count = 0;
 
@@ -53,11 +54,11 @@ int __stdcall GetBitMap2(void **Pointer,int filename)
 	//源图像
 	tagfile map;
 	map.load_file("D:/Demo/myex/Beta/Resources/1207.map.tga");
-	
+
 	int imgWidth = map.header.ImageWidth;
 	int imgHeight = map.header.ImageHeight;
 	BYTE *ImgData = (BYTE*)map.bmp32;
-	
+
 	//png图像
 	void * pngbuff = 0;
 	int buff_len = 0;
@@ -75,3 +76,34 @@ int __stdcall GetBitMap2(void **Pointer,int filename)
 	return buff_len;
 };
 
+//int __stdcall GetBitMap2(void **Pointer,int filename)
+
+/* in char* filename,out int** ptr,out int* directionCount,out int* frameCount
+参数 in->输入 out->输出
+filename 文件名，ptr WasImg指针,directionCount 精灵方向计数，frame_Count 帧计数
+*/
+void __stdcall GetWasFileInfo(char* filename,int** ptr,int* directionCount,int* frameCount)
+{
+	WasImg *wasImg=new WasImg();
+	wasImg->load_file(filename);
+	*ptr=(int*)wasImg;
+	*directionCount=wasImg->spriteCount;
+	*frameCount=wasImg->frameCount;
+}
+
+void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,int frameIndex,int** dataptr,int* dataptrLen)
+{
+	WasImg *wasImg=(WasImg*)wasPtr;
+	auto frame=&wasImg->frames[directionIndex][frameIndex];
+	auto len=width*height*4;
+	auto buff=new BYTE[len];
+	for(int h=0;h<height;h++)
+	{
+		for(int w=0;w<width;w++)
+		{
+			auto pixel=frame->pixels[height][width];
+		}
+	}
+
+
+}

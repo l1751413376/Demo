@@ -185,7 +185,7 @@ void PNGFormatData_R8G8B8A8(BYTE *& dest, int & desLen, BYTE * source, int sourc
 
 
 
-void main()
+void main1()
 {
 	
 	//Ô´Í¼Ïñ

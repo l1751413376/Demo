@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="DllExport.cpp" />
     <ClCompile Include="PNG.cpp" />
+    <ClCompile Include="WasFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CRC.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="JPEG.H" />
     <ClInclude Include="mapformat.h" />
     <ClInclude Include="Png.h" />
+    <ClInclude Include="WasFile.h" />
     <ClInclude Include="zconf.h" />
     <ClInclude Include="zlib.h" />
   </ItemGroup>
@@ -43,9 +45,9 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

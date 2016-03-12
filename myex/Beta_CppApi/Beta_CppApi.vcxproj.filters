@@ -30,6 +30,9 @@
     <ClCompile Include="PNG.cpp">
       <Filter>Png</Filter>
     </ClCompile>
+    <ClCompile Include="WasFile.cpp">
+      <Filter>FileFormat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DllExport.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="Png.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WasFile.h">
+      <Filter>FileFormat</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

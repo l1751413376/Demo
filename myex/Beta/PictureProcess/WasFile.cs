@@ -28,7 +28,7 @@ namespace Beta.PictureProcess
         /// </summary>
         public BitmapImage[][] Frames;
 
-        UnmanagedType
+        
 
     }
 }

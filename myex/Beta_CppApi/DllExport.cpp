@@ -82,7 +82,7 @@ int __stdcall GetBitMap2(void **Pointer,int filename)
 参数 in->输入 out->输出
 filename 文件名，ptr WasImg指针,directionCount 精灵方向计数，frame_Count 帧计数
 */
-void __stdcall GetWasFileInfo(char* filename,int** ptr,int* directionCount,int* frameCount)
+void __stdcall GetWasFileInfo(const char* filename,int** ptr,int* directionCount,int* frameCount)
 {
 	WasImg *wasImg=new WasImg();
 	wasImg->load_file(filename);
@@ -97,13 +97,59 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 	auto frame=&wasImg->frames[directionIndex][frameIndex];
 	auto len=width*height*4;
 	auto buff=new BYTE[len];
-	for(int h=0;h<height;h++)
+	//输出参数
+	*dataptr=(int*)buff;
+	*dataptrLen=len;
+	//数据处理
+	memset(buff,0,len);
+	auto offx=(width+wasImg->width - wasImg->centerX - frame->offX)/2;
+	auto offy=(height+wasImg->height - wasImg->centerY - frame->offY)/2;
+
+	//buff+=offy*4;
+	for(int h=0;h<frame->height;h++)
 	{
-		for(int w=0;w<width;w++)
+		//buff+= offx<<2;
+		for(int w=0;w<frame->width;w++)
 		{
-			auto pixel=frame->pixels[height][width];
+			auto pixle=frame->pixels[h][w];
+			auto pixleb=((byte*)&pixle);
+			buff[0]=pixleb[2];
+			buff[1]=pixleb[1];
+			buff[2]=pixleb[0];
+			buff[3]=pixleb[3];
+			buff+=4;
 		}
+		//buff+= (width-frame->width)*4;
 	}
 
 
+}
+void main()
+{
+	int imgWidth=39;
+	int imgHeight=93;
+
+	auto filename="D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
+	int *intptr=0;
+	int directionCount=0;
+	int frameCount=0;
+	GetWasFileInfo(filename,&intptr,&directionCount,&frameCount);
+	int *dataptr=0;
+	int datalen=0;
+	GetWasFrame(imgWidth,imgHeight,intptr,0,0,&dataptr,&datalen);
+
+	//png图像
+	void * pngbuff = 0;
+	int buff_len = 0;
+	//pngIDATImg数据
+	BYTE * pngIDATbuff = 0;
+	int pngIDATbuffLen = 0;
+
+	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, (byte*)dataptr, imgWidth, imgHeight);
+	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
+
+	auto pngfilename = "D:/Demo/myex/Beta/img/testcrc.png";
+	auto file = fopen(pngfilename, "wb+");
+	fwrite(pngbuff, buff_len, 1, file);
+	fclose(file);
 }

@@ -152,6 +152,7 @@ void WasImg::Parse(WasFrame* pFrame)
 	int frameWidth = pFrame->width;
 	int frameHeight = pFrame->height;
 	pFrame->pixels = new DWORD*[frameHeight];
+	memset(pFrame->pixels,0xffffffff, frameHeight * 4);
 	for (int i = 0; i < frameHeight; i++)
 	{
 		pFrame->pixels[i] = new DWORD[frameWidth];

@@ -287,7 +287,7 @@ namespace Beta
         }
         /*
         //图片操作
-        IntPtr PngBuff = IntPtr.Zero;
+           IntPtr PngBuff = IntPtr.Zero;
            var len=CppAPI.GetBitMap2(out PngBuff,1);
            byte[] managed_data = new byte[len];
            Marshal.Copy(PngBuff, managed_data, 0, len);

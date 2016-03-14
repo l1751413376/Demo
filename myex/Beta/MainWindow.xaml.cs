@@ -53,10 +53,10 @@ namespace Beta
 
             Spirit.Y = 400; //为精灵关联属性Y赋值
 
-            Spirit.Timer.Interval = TimeSpan.FromMilliseconds(150); //精灵图片切换频率
+            Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率
 
-            Spirit.ImageAddress = @"..\Player\"; //精灵图片源地址
-
+            InitWas();
+            ResetMatrix();
             Carrier.Children.Add(Spirit);
 
         }
@@ -64,9 +64,7 @@ namespace Beta
         public MainWindow()
         {
             InitializeComponent();
-            ResetMatrix();
-            InitPlayer();
-            InitWas();
+            InitSpirit();
 
         }
         List<BitmapImage> imgList=new List<BitmapImage>();
@@ -90,6 +88,8 @@ namespace Beta
                 item.FromIntPtr(dataptr, datalen);
                 imgList.Add(item);
             }
+            Spirit.limitcount = frameCount-1;
+            Spirit.imgList = imgList;
         }
         private void InitPlayer()
         {

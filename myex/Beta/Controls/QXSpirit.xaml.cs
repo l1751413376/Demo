@@ -38,15 +38,15 @@ namespace Beta.Controls
         }
         public string ImageAddress;
         //精灵线程间隔事件
-
-        int count = 0;
-
+        public List<BitmapImage> imgList;
+        public int count = 0;
+        public int limitcount = 0;
         private void Timer_Tick(object sender, EventArgs e)
         {
+            
+            Body.Source = imgList[count];
 
-            //Body.Source = new BitmapImage((new Uri(".png", UriKind.Relative)));
-
-            count = count == 7 ? 0 : count + 1;
+            count = count == limitcount ? 0 : count + 1;
 
         }
         //精灵X坐标(关联属性)

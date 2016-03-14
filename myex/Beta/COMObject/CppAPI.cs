@@ -15,6 +15,10 @@ namespace Beta
         public extern static int GetBitMap(out IntPtr Pointer);//与dll中一致 
         [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
         public extern static int GetBitMap2(out IntPtr Pointer, int filename);
+        [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
+        public extern static void GetWasFileInfo([MarshalAs(UnmanagedType.LPStr)]string filename, out IntPtr ptr, out int directionCount, out int frameCount);
+        [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
+        public extern static void GetWasFrame(int width, int height, IntPtr wasPtr, int directionIndex, int frameIndex, out IntPtr dataptr, out int dataptrLen);
     }
 
 

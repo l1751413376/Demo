@@ -20,6 +20,7 @@ using System.Windows.Threading;
 using QXGame_Silverlight3.AStar;
 using Point = System.Windows.Point;
 using Beta.Controls;
+using Beta.PictureProcess;
 
 
 namespace Beta
@@ -27,7 +28,7 @@ namespace Beta
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window 
+    public partial class MainWindow : Window
     {
         Rectangle rect;
 
@@ -65,8 +66,30 @@ namespace Beta
             InitializeComponent();
             ResetMatrix();
             InitPlayer();
+            InitWas();
 
+        }
+        List<BitmapImage> imgList=new List<BitmapImage>();
+        void InitWas()
+        {
+            int imgWidth = 150;
+            int imgHeight = 150;
 
+            var filename = "D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
+            IntPtr intptr;
+            int directionCount = 0;
+            int frameCount = 0;
+            CppAPI.GetWasFileInfo(filename, out intptr, out directionCount, out frameCount);
+            IntPtr dataptr;
+            int datalen = 0;
+
+            for (int i = 0; i < frameCount; i++)
+            {
+                CppAPI.GetWasFrame(imgWidth, imgHeight, intptr, 0, i, out dataptr, out datalen);
+                var item = new BitmapImage();
+                item.FromIntPtr(dataptr, datalen);
+                imgList.Add(item);
+            }
         }
         private void InitPlayer()
         {
@@ -160,7 +183,7 @@ namespace Beta
 
             PathFinder.HeuristicEstimate = 0;
 
-            List<PathFinderNode> path = PathFinder.FindPath(new QXGame_Silverlight3.AStar.Point(Start.X,Start.Y) , new QXGame_Silverlight3.AStar.Point(End.X, End.Y)); //开始寻径
+            List<PathFinderNode> path = PathFinder.FindPath(new QXGame_Silverlight3.AStar.Point(Start.X, Start.Y), new QXGame_Silverlight3.AStar.Point(End.X, End.Y)); //开始寻径
 
             if (path == null)
             {
@@ -168,7 +191,8 @@ namespace Beta
                 MessageBox.Show("路径不存在！");
 
             }
-            else {
+            else
+            {
 
                 Point[] framePosition = new Point[path.Count]; //定义关键帧坐标集
 

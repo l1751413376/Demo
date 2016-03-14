@@ -102,13 +102,13 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 	*dataptrLen=len;
 	//数据处理
 	memset(buff,0,len);
-	auto offx=(width+wasImg->width - wasImg->centerX - frame->offX)/2;
-	auto offy=(height+wasImg->height - wasImg->centerY - frame->offY)/2;
-
-	//buff+=offy*4;
+	auto offxl=(width-frame->width)/2;
+	auto offxr=width-frame->width-offxl;
+	auto offy=(height-frame->height)/2;
+	buff+=width*offy*4;
 	for(int h=0;h<frame->height;h++)
 	{
-		//buff+= offx<<2;
+		buff += offxl*4;
 		for(int w=0;w<frame->width;w++)
 		{
 			auto pixle=frame->pixels[h][w];
@@ -119,24 +119,8 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 			buff[3]=pixleb[3];
 			buff+=4;
 		}
-		//buff+= (width-frame->width)*4;
+		buff += offxr*4;
 	}
-
-
-}
-void main()
-{
-	int imgWidth=39;
-	int imgHeight=93;
-
-	auto filename="D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
-	int *intptr=0;
-	int directionCount=0;
-	int frameCount=0;
-	GetWasFileInfo(filename,&intptr,&directionCount,&frameCount);
-	int *dataptr=0;
-	int datalen=0;
-	GetWasFrame(imgWidth,imgHeight,intptr,0,0,&dataptr,&datalen);
 
 	//png图像
 	void * pngbuff = 0;
@@ -145,11 +129,33 @@ void main()
 	BYTE * pngIDATbuff = 0;
 	int pngIDATbuffLen = 0;
 
-	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, (byte*)dataptr, imgWidth, imgHeight);
-	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
+	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, (byte*)*dataptr, width, height);
+	CreatePNGByFormatData(width, height, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
 
-	auto pngfilename = "D:/Demo/myex/Beta/img/testcrc.png";
-	auto file = fopen(pngfilename, "wb+");
-	fwrite(pngbuff, buff_len, 1, file);
-	fclose(file);
+	*dataptr=(int*)pngbuff;
+	*dataptrLen=buff_len;
+}
+void main()
+{
+	int imgWidth=150;
+	int imgHeight=150;
+
+	auto filename="D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
+	int *intptr=0;
+	int directionCount=0;
+	int frameCount=0;
+	GetWasFileInfo(filename,&intptr,&directionCount,&frameCount);
+	int *dataptr=0;
+	int datalen=0;
+
+	for(int i=0;i<frameCount;i++)
+	{
+
+		GetWasFrame(imgWidth,imgHeight,intptr,0,i,&dataptr,&datalen);
+		char pngfilename[] = "D:/Demo/myex/Beta/img/testcrc0.png";
+		pngfilename[29]=(char)i+48;
+		auto file = fopen(pngfilename, "wb+");
+		fwrite(dataptr, datalen, 1, file);
+		fclose(file);
+	}
 }

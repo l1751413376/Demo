@@ -57,7 +57,7 @@ namespace Beta
 
             InitWas();
             ResetMatrix();
-            Carrier.Children.Add(Spirit);
+            //Carrier.Children.Add(Spirit);
 
         }
 

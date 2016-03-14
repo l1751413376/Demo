@@ -8,11 +8,11 @@
         <Image x:Name="Body" Width="150" Height="150"/>
         <StackPanel Name="Description" Width="150" Height="58" Canvas.Top="-21">
             <!--门派-->
-            <TextBlock x:Name="Faction" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False"/>
+            <TextBlock x:Name="Faction" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False" Text="7987979"/>
             <!--家族-->
-            <TextBlock x:Name="Clan" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False"/>
+            <TextBlock x:Name="Clan" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False " Text="7987979" Foreground="Blue"/>
             <!--姓名-->
-            <TextBlock x:Name="SName" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False"/>
+            <TextBlock x:Name="SName" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False" Text="7987979"/>
             
         </StackPanel>
     </Canvas>

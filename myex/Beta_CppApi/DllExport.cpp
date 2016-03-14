@@ -102,9 +102,11 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 	*dataptrLen=len;
 	//数据处理
 	memset(buff,0,len);
-	auto offxl=(width-frame->width)/2;
+	auto offxl=(width+wasImg->centerX - frame->offX-frame->width)/2;
+	auto offy=(height+wasImg->centerY - frame->offY-frame->height)/2;
+
 	auto offxr=width-frame->width-offxl;
-	auto offy=(height-frame->height)/2;
+
 	buff+=width*offy*4;
 	for(int h=0;h<frame->height;h++)
 	{

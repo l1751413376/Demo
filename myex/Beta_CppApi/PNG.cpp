@@ -159,7 +159,8 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	//data1
 	data.WriteMemoryAndCRC(buff);
 	// Õ∑≈data1.CompressData
-	delete data.CompressData;
+	delete[] data.CompressData;
+	delete[] ImgBuff;
 	//end
 	end.WriteMemoryAndCRC(buff);
 }

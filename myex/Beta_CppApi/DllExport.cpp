@@ -78,17 +78,21 @@ int __stdcall GetBitMap2(void **Pointer,int filename)
 
 //int __stdcall GetBitMap2(void **Pointer,int filename)
 
-/* in char* filename,out int** ptr,out int* directionCount,out int* frameCount
+/* in char* filename,out int** ptr,out int* directionCount,out int* frameCount,out int* centerX,out int* centerY ,out int* width,out int *height,out int *centerX,out int *centerY
 参数 in->输入 out->输出
-filename 文件名，ptr WasImg指针,directionCount 精灵方向计数，frame_Count 帧计数
+filename 文件名，ptr WasImg指针,directionCount 精灵方向计数，frame_Count 帧计数，图片宽高 width height ,图片中心坐标 centerX,centerY
 */
-void __stdcall GetWasFileInfo(const char* filename,int** ptr,int* directionCount,int* frameCount)
+void __stdcall GetWasFileInfo(const char* filename,int** ptr,int* directionCount,int* frameCount,int* width,int *height,int *centerX,int *centerY)
 {
 	WasImg *wasImg=new WasImg();
 	wasImg->load_file(filename);
 	*ptr=(int*)wasImg;
 	*directionCount=wasImg->spriteCount;
 	*frameCount=wasImg->frameCount;
+	*centerX=wasImg->centerX;
+	*centerY=wasImg->centerY;
+	*width=wasImg->width;
+	*height=wasImg->height;
 }
 
 void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,int frameIndex,int** dataptr,int* dataptrLen)
@@ -98,12 +102,12 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 	auto len=width*height*4;
 	auto buff=new BYTE[len];
 	//输出参数
-	*dataptr=(int*)buff;
+	auto orginbuff=buff;
 	*dataptrLen=len;
 	//数据处理
 	memset(buff,0,len);
-	auto offxl=(width+wasImg->centerX - frame->offX-frame->width)/2;
-	auto offy=(height+wasImg->centerY - frame->offY-frame->height)/2;
+	auto offxl=wasImg->centerX - frame->offX;
+	auto offy=wasImg->centerY - frame->offY;
 
 	auto offxr=width-frame->width-offxl;
 
@@ -131,11 +135,13 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 	BYTE * pngIDATbuff = 0;
 	int pngIDATbuffLen = 0;
 
-	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, (byte*)*dataptr, width, height);
+	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, orginbuff, width, height);
 	CreatePNGByFormatData(width, height, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
-
+	
 	*dataptr=(int*)pngbuff;
 	*dataptrLen=buff_len;
+	//资源释放
+	delete[] orginbuff;
 }
 void main()
 {
@@ -146,7 +152,12 @@ void main()
 	int *intptr=0;
 	int directionCount=0;
 	int frameCount=0;
-	GetWasFileInfo(filename,&intptr,&directionCount,&frameCount);
+	int waswidth=0;
+	int washeigth=0;
+	int centerX;
+	int centerY;
+
+	GetWasFileInfo(filename,&intptr,&directionCount,&frameCount,&waswidth,&washeigth,&centerX,&centerY);
 	int *dataptr=0;
 	int datalen=0;
 

@@ -9,12 +9,16 @@ using System.Windows.Media.Imaging;
 namespace Beta.PictureProcess
 {
     //
-    public class WasAction
+    public class WasFile
     {
         /// <summary>
         /// 帧数量
         /// </summary>
-        public int Count;
+        public int FrameCount;
+        /// <summary>
+        /// 方向计数
+        /// </summary>
+        public int DirectionCount;
         /// <summary>
         /// 整个Action宽度
         /// </summary>
@@ -24,11 +28,62 @@ namespace Beta.PictureProcess
         /// </summary>
         public int Height;
         /// <summary>
+        /// 中心X
+        /// </summary>
+        public int CentryX;
+        /// <summary>
+        /// 中心Y
+        /// </summary>
+        public int CentryY;
+        /// <summary>
         /// 帧集合
         /// </summary>
-        public BitmapImage[][] Frames;
+        public BitmapImage[,] Frames;
+        /// <summary>
+        /// 文件路径
+        /// </summary>
+        public string filePath;
 
-        
+        public void LoadFile(String filePath)
+        {
+            IntPtr wasptr;
+            CppAPI.GetWasFileInfo(filePath, out wasptr, out DirectionCount, out FrameCount, out Width, out Height, out CentryX, out CentryY);
+            IntPtr dataptr;
+            int datalen = 0;
+            Frames = new BitmapImage[DirectionCount, FrameCount];
+            for (int x = 0; x < DirectionCount;x++)
+            {
+                for (int y = 0; y < FrameCount; y++)
+                {
+                    CppAPI.GetWasFrame(Width, Height, wasptr, x, y, out dataptr, out datalen);
+                    var item = new BitmapImage();
+                    item.FromIntPtr(dataptr, datalen);
+                    Frames[x, y] = item;
+                    CppAPI.Delete(dataptr);
+                }
+            }
+            CppAPI.Delete(wasptr);
+        }
+
+        /// <summary>
+        /// 1-上，2-右上...8-左上
+        /// </summary>
+        public BitmapImage GetImg(int directon,int count) 
+        {
+            if (DirectionCount == 4)//只有4个方向
+            {
+                directon = directon / 2;
+            }
+            if (count < FrameCount && directon < DirectionCount)
+            {
+                return Frames[directon, count];
+            }
+            else 
+            {
+                return null;
+            }
+
+        }
 
     }
 }

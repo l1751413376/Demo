@@ -18,13 +18,10 @@ public:
 		delay = 1;
 		lineOffsets = NULL;
 		pixels = NULL;
-		m_pImage = NULL;
 	};
 	~WasFrame()
 	{
 		Release();
-		delete m_pImage;
-		m_pImage = NULL;
 	};
 	void Release()
 	{
@@ -58,8 +55,6 @@ public:// 帧数据偏移
 	int offX;// 图像偏移
 	int offY;
 
-	// Image格式图像
-	CImage* m_pImage;
 
 	// 图像原始数据<br>
 	// 0-15位RGB颜色(565)<br>

@@ -7,16 +7,348 @@
 </head>
     
 <body>
-    <style>
-        div {
-            border:1px solid #f00;
-        }
-    </style>
-    <div style="width:150px;height:150px;">
-    <div style="width:46px;height:102px;">
-        <div style="width:39px;height:93px;"></div>
-    </div>
-    </div>
+    <table id="tbEntityContent" border="0" cellpadding="8" cellspacing="0" align="center">
+	<tbody><tr>
+		<td><b>参数名</b></td>
+		<td align="center"><b>类型</b></td>
+		<td><b>参数说明</b></td>
+		<td><b>约束</b></td>
+		<td><b>参数值</b></td>
+	</tr>
+	<tr>
+		<td>PageIndex</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            当前页码
+            </td>
+		<td></td>
+		<td><input name="PageIndex" type="text" value="0" id="PageIndex"></td>
+	</tr>
+	<tr>
+		<td>PageSize</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            每页大小
+            </td>
+		<td></td>
+		<td><input name="PageSize" type="text" value="0" id="PageSize"></td>
+	</tr>
+	<tr>
+		<td>CostmerSerialId</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            客户订单号
+            </td>
+		<td></td>
+		<td><input name="CostmerSerialId" type="text" value="0" id="CostmerSerialId" autocomplete="off" style="cursor: auto; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsPDhss3LcOZQAAAU5JREFUOMvdkzFLA0EQhd/bO7iIYmklaCUopLAQA6KNaawt9BeIgnUwLHPJRchfEBR7CyGWgiDY2SlIQBT/gDaCoGDudiy8SLwkBiwz1c7y+GZ25i0wnFEqlSZFZKGdi8iiiOR7aU32QkR2c7ncPcljAARAkgckb8IwrGf1fg/oJ8lRAHkR2VDVmOQ8AKjqY1bMHgCGYXhFchnAg6omJGcBXEZRtNoXYK2dMsaMt1qtD9/3p40x5yS9tHICYF1Vn0mOxXH8Uq/Xb389wff9PQDbQRB0t/QNOiPZ1h4B2MoO0fxnYz8dOOcOVbWhqq8kJzzPa3RAXZIkawCenHMjJN/+GiIqlcoFgKKq3pEMAMwAuCa5VK1W3SAfbAIopum+cy5KzwXn3M5AI6XVYlVt1mq1U8/zTlS1CeC9j2+6o1wuz1lrVzpWXLDWTg3pz/0CQnd2Jos49xUAAAAASUVORK5CYII=); background-attachment: scroll; background-position: 100% 50%; background-repeat: no-repeat;"><input id="nullable_CostmerSerialId" type="checkbox" name="nullable_CostmerSerialId" onclick="checkNullable('CostmerSerialId');"><label for="nullable_CostmerSerialId">Null　</label></td>
+	</tr>
+	<tr>
+		<td>VisaName</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            签证信息名称
+            </td>
+		<td></td>
+		<td><input name="VisaName" type="text" value="出境游自动化测试" id="VisaName"><input id="nullable_VisaName" type="checkbox" name="nullable_VisaName" onclick="checkNullable('VisaName');"><label for="nullable_VisaName">Null　</label></td>
+	</tr>
+	<tr>
+		<td>TravelStartDate</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            出行开始日期
+            </td>
+		<td></td>
+		<td><input name="TravelStartDate" type="text" value="2016-03-15" id="TravelStartDate"></td>
+	</tr>
+	<tr>
+		<td>TravelEndDate</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            出行结束日期
+            </td>
+		<td></td>
+		<td><input name="TravelEndDate" type="text" value="2016-03-15" id="TravelEndDate"></td>
+	</tr>
+	<tr>
+		<td>TravelStartOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            出行日期排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="TravelStartOrderBy" type="text" value="0" id="TravelStartOrderBy"></td>
+	</tr>
+	<tr>
+		<td>AddressId</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            目的地Id
+            </td>
+		<td></td>
+		<td><input name="AddressId" type="text" value="0" id="AddressId" autocomplete="off" style="cursor: auto; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsPDhss3LcOZQAAAU5JREFUOMvdkzFLA0EQhd/bO7iIYmklaCUopLAQA6KNaawt9BeIgnUwLHPJRchfEBR7CyGWgiDY2SlIQBT/gDaCoGDudiy8SLwkBiwz1c7y+GZ25i0wnFEqlSZFZKGdi8iiiOR7aU32QkR2c7ncPcljAARAkgckb8IwrGf1fg/oJ8lRAHkR2VDVmOQ8AKjqY1bMHgCGYXhFchnAg6omJGcBXEZRtNoXYK2dMsaMt1qtD9/3p40x5yS9tHICYF1Vn0mOxXH8Uq/Xb389wff9PQDbQRB0t/QNOiPZ1h4B2MoO0fxnYz8dOOcOVbWhqq8kJzzPa3RAXZIkawCenHMjJN/+GiIqlcoFgKKq3pEMAMwAuCa5VK1W3SAfbAIopum+cy5KzwXn3M5AI6XVYlVt1mq1U8/zTlS1CeC9j2+6o1wuz1lrVzpWXLDWTg3pz/0CQnd2Jos49xUAAAAASUVORK5CYII=); background-attachment: scroll; background-position: 100% 50%; background-repeat: no-repeat;"><input id="nullable_AddressId" type="checkbox" name="nullable_AddressId" onclick="checkNullable('AddressId');"><label for="nullable_AddressId">Null　</label></td>
+	</tr>
+	<tr>
+		<td>DistrictId</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            领区Id
+            </td>
+		<td></td>
+		<td><input name="DistrictId" type="text" value="0" id="DistrictId" autocomplete="off" style="cursor: auto; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsPDhss3LcOZQAAAU5JREFUOMvdkzFLA0EQhd/bO7iIYmklaCUopLAQA6KNaawt9BeIgnUwLHPJRchfEBR7CyGWgiDY2SlIQBT/gDaCoGDudiy8SLwkBiwz1c7y+GZ25i0wnFEqlSZFZKGdi8iiiOR7aU32QkR2c7ncPcljAARAkgckb8IwrGf1fg/oJ8lRAHkR2VDVmOQ8AKjqY1bMHgCGYXhFchnAg6omJGcBXEZRtNoXYK2dMsaMt1qtD9/3p40x5yS9tHICYF1Vn0mOxXH8Uq/Xb389wff9PQDbQRB0t/QNOiPZ1h4B2MoO0fxnYz8dOOcOVbWhqq8kJzzPa3RAXZIkawCenHMjJN/+GiIqlcoFgKKq3pEMAMwAuCa5VK1W3SAfbAIopum+cy5KzwXn3M5AI6XVYlVt1mq1U8/zTlS1CeC9j2+6o1wuz1lrVzpWXLDWTg3pz/0CQnd2Jos49xUAAAAASUVORK5CYII=); background-attachment: scroll; background-position: 100% 50%; background-repeat: no-repeat;"></td>
+	</tr>
+	<tr>
+		<td>DeliveryStart</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            签送开始时间
+            </td>
+		<td></td>
+		<td><input name="DeliveryStart" type="text" value="2016-03-15" id="DeliveryStart"></td>
+	</tr>
+	<tr>
+		<td>DeliveryEnd</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            签送结束时间
+            </td>
+		<td></td>
+		<td><input name="DeliveryEnd" type="text" value="2016-03-15" id="DeliveryEnd"></td>
+	</tr>
+	<tr>
+		<td>DeliveryOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            签送时间排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="DeliveryOrderBy" type="text" value="0" id="DeliveryOrderBy"></td>
+	</tr>
+	<tr>
+		<td>OrderStatus</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            订单状态
+            </td>
+		<td></td>
+		<td><input name="OrderStatus" type="text" value="出境游自动化测试" id="OrderStatus"><input id="nullable_OrderStatus" type="checkbox" name="nullable_OrderStatus" onclick="checkNullable('OrderStatus');"><label for="nullable_OrderStatus">Null　</label></td>
+	</tr>
+	<tr>
+		<td>MaterialPostStart</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料提交开始时间
+            </td>
+		<td></td>
+		<td><input name="MaterialPostStart" type="text" value="2016-03-15" id="MaterialPostStart"></td>
+	</tr>
+	<tr>
+		<td>MaterialPostEnd</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料提交结束时间
+            </td>
+		<td></td>
+		<td><input name="MaterialPostEnd" type="text" value="2016-03-15" id="MaterialPostEnd"></td>
+	</tr>
+	<tr>
+		<td>MaterialPostOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            材料提交排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="MaterialPostOrderBy" type="text" value="0" id="MaterialPostOrderBy"></td>
+	</tr>
+	<tr>
+		<td>MaterialMaiStart</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料邮寄开始时间
+            </td>
+		<td></td>
+		<td><input name="MaterialMaiStart" type="text" value="2016-03-15" id="MaterialMaiStart"></td>
+	</tr>
+	<tr>
+		<td>MaterialMaiEnd</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料邮寄结束时间
+            </td>
+		<td></td>
+		<td><input name="MaterialMaiEnd" type="text" value="2016-03-15" id="MaterialMaiEnd"></td>
+	</tr>
+	<tr>
+		<td>MaterialMailOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            材料邮寄排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="MaterialMailOrderBy" type="text" value="0" id="MaterialMailOrderBy"></td>
+	</tr>
+	<tr>
+		<td>MaterialFinalExameStart</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料终审开始时间
+            </td>
+		<td></td>
+		<td><input name="MaterialFinalExameStart" type="text" value="2016-03-15" id="MaterialFinalExameStart"></td>
+	</tr>
+	<tr>
+		<td>MaterialFinalExameEnd</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料终审结束时间
+            </td>
+		<td></td>
+		<td><input name="MaterialFinalExameEnd" type="text" value="2016-03-15" id="MaterialFinalExameEnd"></td>
+	</tr>
+	<tr>
+		<td>MaterialFinalOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            材料终审排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="MaterialFinalOrderBy" type="text" value="0" id="MaterialFinalOrderBy"></td>
+	</tr>
+	<tr>
+		<td>MaterialOutCheckStart</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            出签开始时间
+            </td>
+		<td></td>
+		<td><input name="MaterialOutCheckStart" type="text" value="2016-03-15" id="MaterialOutCheckStart"></td>
+	</tr>
+	<tr>
+		<td>MaterialOutCheckEnd</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            出签结束时间
+            </td>
+		<td></td>
+		<td><input name="MaterialOutCheckEnd" type="text" value="2016-03-15" id="MaterialOutCheckEnd"></td>
+	</tr>
+	<tr>
+		<td>MaterialOutCheckOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            出签时间排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="MaterialOutCheckOrderBy" type="text" value="0" id="MaterialOutCheckOrderBy"></td>
+	</tr>
+	<tr>
+		<td>SupplierId</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            供应商Id
+            </td>
+		<td></td>
+		<td><input name="SupplierId" type="text" value="0" id="SupplierId" autocomplete="off" style="background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsPDhss3LcOZQAAAU5JREFUOMvdkzFLA0EQhd/bO7iIYmklaCUopLAQA6KNaawt9BeIgnUwLHPJRchfEBR7CyGWgiDY2SlIQBT/gDaCoGDudiy8SLwkBiwz1c7y+GZ25i0wnFEqlSZFZKGdi8iiiOR7aU32QkR2c7ncPcljAARAkgckb8IwrGf1fg/oJ8lRAHkR2VDVmOQ8AKjqY1bMHgCGYXhFchnAg6omJGcBXEZRtNoXYK2dMsaMt1qtD9/3p40x5yS9tHICYF1Vn0mOxXH8Uq/Xb389wff9PQDbQRB0t/QNOiPZ1h4B2MoO0fxnYz8dOOcOVbWhqq8kJzzPa3RAXZIkawCenHMjJN/+GiIqlcoFgKKq3pEMAMwAuCa5VK1W3SAfbAIopum+cy5KzwXn3M5AI6XVYlVt1mq1U8/zTlS1CeC9j2+6o1wuz1lrVzpWXLDWTg3pz/0CQnd2Jos49xUAAAAASUVORK5CYII=); background-attachment: scroll; background-position: 100% 50%; background-repeat: no-repeat;"></td>
+	</tr>
+	<tr>
+		<td>LoginAccount</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            登陆账号
+            </td>
+		<td></td>
+		<td><input name="LoginAccount" type="text" value="出境游自动化测试" id="LoginAccount"><input id="nullable_LoginAccount" type="checkbox" name="nullable_LoginAccount" onclick="checkNullable('LoginAccount');"><label for="nullable_LoginAccount">Null　</label></td>
+	</tr>
+	<tr>
+		<td>RelatedName</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            签证类型
+            </td>
+		<td></td>
+		<td><input name="RelatedName" type="text" value="出境游自动化测试" id="RelatedName"><input id="nullable_RelatedName" type="checkbox" name="nullable_RelatedName" onclick="checkNullable('RelatedName');"><label for="nullable_RelatedName">Null　</label></td>
+	</tr>
+	<tr>
+		<td>MaxStopTimesOrEnterTimes</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            最长停留时间与入境次数
+            </td>
+		<td></td>
+		<td><input name="MaxStopTimesOrEnterTimes" type="text" value="出境游自动化测试" id="MaxStopTimesOrEnterTimes"><input id="nullable_MaxStopTimesOrEnterTimes" type="checkbox" name="nullable_MaxStopTimesOrEnterTimes" onclick="checkNullable('MaxStopTimesOrEnterTimes');"><label for="nullable_MaxStopTimesOrEnterTimes">Null　</label></td>
+	</tr>
+	<tr>
+		<td>PassengerName</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            出游人
+            </td>
+		<td></td>
+		<td><input name="PassengerName" type="text" value="出境游自动化测试" id="PassengerName"><input id="nullable_PassengerName" type="checkbox" name="nullable_PassengerName" onclick="checkNullable('PassengerName');"><label for="nullable_PassengerName">Null　</label></td>
+	</tr>
+	<tr>
+		<td>Address</td>
+		<td align="center">[String] </td>
+		<td width="200px">
+            目的地Id
+            </td>
+		<td></td>
+		<td><input name="Address" type="text" value="出境游自动化测试" id="Address"><input id="nullable_Address" type="checkbox" name="nullable_Address" onclick="checkNullable('Address');"><label for="nullable_Address">Null　</label></td>
+	</tr>
+	<tr>
+		<td>VisaMailStart</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            签证邮寄开始时间
+            </td>
+		<td></td>
+		<td><input name="VisaMailStart" type="text" value="2016-03-15" id="VisaMailStart"></td>
+	</tr>
+	<tr>
+		<td>VisaMailEnd</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            签证邮寄结束时间
+            </td>
+		<td></td>
+		<td><input name="VisaMailEnd" type="text" value="2016-03-15" id="VisaMailEnd"></td>
+	</tr>
+	<tr>
+		<td>VisaMailOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            签证邮寄排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="VisaMailOrderBy" type="text" value="0" id="VisaMailOrderBy"></td>
+	</tr>
+	<tr>
+		<td>MaterialReceiptStart</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料签收开始时间
+            </td>
+		<td></td>
+		<td><input name="MaterialReceiptStart" type="text" value="2016-03-15" id="MaterialReceiptStart"></td>
+	</tr>
+	<tr>
+		<td>MaterialReceiptEnd</td>
+		<td align="center">[DateTime] </td>
+		<td width="200px">
+            材料签收结束时间
+            </td>
+		<td></td>
+		<td><input name="MaterialReceiptEnd" type="text" value="2016-03-15" id="MaterialReceiptEnd"></td>
+	</tr>
+	<tr>
+		<td>MaterialReceiptOrderBy</td>
+		<td align="center">[Int32] </td>
+		<td width="200px">
+            材料签收排序0-无 1-降序 2-升序
+            </td>
+		<td></td>
+		<td><input name="MaterialReceiptOrderBy" type="text" value="0" id="MaterialReceiptOrderBy"></td>
+	</tr>
+</tbody></table>
 </body>
 
 </html>

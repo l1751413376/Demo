@@ -53,44 +53,28 @@ namespace Beta
 
             Spirit.Y = 400; //为精灵关联属性Y赋值
 
+            var filename = "D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
+            Spirit.wasFile = new WasFile();
+            Spirit.wasFile.LoadFile(filename);
+            Spirit.limitcount = Spirit.wasFile.FrameCount - 1;
+
             Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率
 
-            InitWas();
-            ResetMatrix();
-            //Carrier.Children.Add(Spirit);
+            
+            //ResetMatrix();
+            Carrier.Children.Add(Spirit);
 
         }
 
         public MainWindow()
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            Left = 0;//屏幕宽度
+            Top = SystemParameters.PrimaryScreenHeight-100;//屏幕高度;;
             InitSpirit();
-
         }
-        List<BitmapImage> imgList=new List<BitmapImage>();
-        void InitWas()
-        {
-            int imgWidth = 150;
-            int imgHeight = 150;
-
-            var filename = "D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
-            IntPtr intptr;
-            int directionCount = 0;
-            int frameCount = 0;
-            CppAPI.GetWasFileInfo(filename, out intptr, out directionCount, out frameCount);
-            IntPtr dataptr;
-            int datalen = 0;
-
-            for (int i = 0; i < frameCount; i++)
-            {
-                CppAPI.GetWasFrame(imgWidth, imgHeight, intptr, 0, i, out dataptr, out datalen);
-                var item = new BitmapImage();
-                item.FromIntPtr(dataptr, datalen);
-                imgList.Add(item);
-            }
-            Spirit.limitcount = frameCount-1;
-            Spirit.imgList = imgList;
-        }
+       
         private void InitPlayer()
         {
 
@@ -159,6 +143,7 @@ namespace Beta
 
         private void Carrier_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            return;
             Point p = e.GetPosition(Carrier);
 
             //进行坐标系缩小

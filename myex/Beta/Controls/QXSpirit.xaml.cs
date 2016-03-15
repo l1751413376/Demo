@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Beta.PictureProcess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,14 +39,17 @@ namespace Beta.Controls
         }
         public string ImageAddress;
         //精灵线程间隔事件
-        public List<BitmapImage> imgList;
-        public int count = 0;
-        public int limitcount = 0;
+        public WasFile wasFile;
+        int count;
+        public int limitcount;
         private void Timer_Tick(object sender, EventArgs e)
         {
-            
-            Body.Source = imgList[count];
-
+            var img = wasFile.GetImg(0, count);
+            Body.Source = img;
+            Body.Width = img.Width;
+            Body.Height = img.Height;
+            Canvas.SetLeft(Body,0);
+            Canvas.SetTop(Body, 0);
             count = count == limitcount ? 0 : count + 1;
 
         }

@@ -5,15 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d">
     <Canvas x:Name="Spirit">
-        <Image x:Name="Body" Width="150" Height="150"/>
-        <StackPanel Name="Description" Width="150" Height="58" Canvas.Top="-21">
-            <!--门派-->
-            <TextBlock x:Name="Faction" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False" Text="7987979"/>
-            <!--家族-->
-            <TextBlock x:Name="Clan" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False " Text="7987979" Foreground="Blue"/>
+        <Border x:Name="LifeBorder" Width="150" Height="150" BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left">
+            <Canvas x:Name="ImgCanvas"  Width="{Binding Path=Width,ElementName=LifeBorder}" Height="{Binding Path=Height,ElementName=LifeBorder}">
+                <Image x:Name="Body"/>
+            </Canvas>
+        </Border>
+        <StackPanel Name="Description" Width="150" Height="58" Canvas.Top="130">
             <!--姓名-->
-            <TextBlock x:Name="SName" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" IsHitTestVisible="False" Text="7987979"/>
-            
+            <TextBlock x:Name="SName" FontSize="14" FontFamily="新宋体" HorizontalAlignment="Center" IsHitTestVisible="False" Text="色料色拉" Foreground="Green"/>
         </StackPanel>
     </Canvas>
 </UserControl>

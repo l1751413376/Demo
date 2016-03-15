@@ -22,6 +22,8 @@ namespace Beta.Controls
     /// </summary>
     public partial class QXSpirit : UserControl
     {
+        const int CentryX = 75;
+        const int CentryY = 120;
         public QXSpirit()
         {
             InitializeComponent();
@@ -48,8 +50,8 @@ namespace Beta.Controls
             Body.Source = img;
             Body.Width = img.Width;
             Body.Height = img.Height;
-            Canvas.SetLeft(Body,0);
-            Canvas.SetTop(Body, 0);
+            Canvas.SetLeft(Body, CentryX - wasFile.CentryX);
+            Canvas.SetTop(Body, CentryY - wasFile.CentryY);
             count = count == limitcount ? 0 : count + 1;
 
         }

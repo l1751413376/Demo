@@ -70,10 +70,6 @@ namespace Beta.PictureProcess
         /// </summary>
         public BitmapImage GetImg(int directon,int count) 
         {
-            if (DirectionCount == 4)//只有4个方向
-            {
-                directon = directon / 2;
-            }
             if (count < FrameCount && directon < DirectionCount)
             {
                 return Frames[directon, count];

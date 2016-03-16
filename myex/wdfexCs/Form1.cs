@@ -43,7 +43,8 @@ namespace 梦幻西游wdf文件读取
                 listBox1.Items.Clear();
                 for (int i = 0; i < wdf.filesum; i++)
                 { 
-                  listBox1.Items.Add(Convert.ToString((wdf.filelist[i].Uid), 16));
+                    var item =wdf.filelist[i];
+                    listBox1.Items.Add(string.Format("{0:X8}.{1}",item.Uid, WdfClass.FILETYPE[item.FileType]));
                 }
 
                 //wdf.ReadFileData(wdf.filelist[0].Uid);
@@ -81,6 +82,18 @@ namespace 梦幻西游wdf文件读取
                 f.Flush();
                 f.Close();
                 MessageBox.Show("OK");
+            }
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            foreach (var item in wdf.filelist)
+            {
+                wdf.ReadFileData(item.Uid);
+                FileStream f = File.Open(string.Format("{0:X8}.{1}",item.Uid, WdfClass.FILETYPE[item.FileType]), FileMode.OpenOrCreate);
+                f.Write(wdf.filelist[listBox1.SelectedIndex].FileData, 0, wdf.filelist[listBox1.SelectedIndex].FileData.Length);
+                f.Flush();
+                f.Close();
             }
         }
     }

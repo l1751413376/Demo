@@ -43,6 +43,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlibtest", "zlibtest\zlibte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QXGameHelper", "QXGameHelper\QXGameHelper.csproj", "{3835D757-BF34-469A-B627-66EB169261AC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WDFSplit", "WDFSplit\WDFSplit.vcxproj", "{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -391,11 +393,24 @@ Global
 		{3835D757-BF34-469A-B627-66EB169261AC}.Release|x64.Build.0 = Release|Any CPU
 		{3835D757-BF34-469A-B627-66EB169261AC}.Release|x86.ActiveCfg = Release|Any CPU
 		{3835D757-BF34-469A-B627-66EB169261AC}.Release|x86.Build.0 = Release|Any CPU
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|Win32.Build.0 = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|x64.ActiveCfg = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|x86.ActiveCfg = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Debug|x86.Build.0 = Debug|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|Any CPU.ActiveCfg = Release|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|Win32.ActiveCfg = Release|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|Win32.Build.0 = Release|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|x64.ActiveCfg = Release|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|x86.ActiveCfg = Release|Win32
+		{4F9F67C6-A20D-4828-9EBA-681DFE054E1A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

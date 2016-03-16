@@ -53,9 +53,9 @@ namespace Beta
 
             Spirit.Y = 400; //为精灵关联属性Y赋值
 
-            var filename = "D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
+            var filename = "D:/Demo/myex/Alpha/project/bin/EB5088EA.was";
             Spirit.wasFile = new WasFile();
-            Spirit.wasFile.LoadFile(filename);
+            Spirit.wasFile.LoadFileFromPath(filename);
             Spirit.limitcount = Spirit.wasFile.FrameCount - 1;
 
             Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率

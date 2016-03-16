@@ -40,11 +40,13 @@ namespace Beta.PictureProcess
         /// </summary>
         public BitmapImage[,] Frames;
         /// <summary>
-        /// 文件路径
+        /// 文件路径或者文件偏移量
         /// </summary>
-        public string filePath;
-
-        public void LoadFile(String filePath)
+        public string Path;
+        /// <summary>
+        /// 从路径中获取文件
+        /// </summary>
+        public void LoadFileFromPath(String filePath)
         {
             IntPtr wasptr;
             CppAPI.GetWasFileInfo(filePath, out wasptr, out DirectionCount, out FrameCount, out Width, out Height, out CentryX, out CentryY);

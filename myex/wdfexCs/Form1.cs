@@ -34,7 +34,7 @@ namespace 梦幻西游wdf文件读取
             if (of.ShowDialog() == DialogResult.OK)
             {
                 wdfpath = of.FileName;
-
+                
                 wdf = new WdfClass(wdfpath);
                 wdf.ReadWdfFile();
                
@@ -76,8 +76,9 @@ namespace 梦幻西游wdf文件读取
         {
             if (listBox1.SelectedIndex != -1)
             {
+                var item = wdf.filelist[listBox1.SelectedIndex];
                 wdf.ReadFileData(wdf.filelist[listBox1.SelectedIndex].Uid);
-                FileStream f = File.Open(listBox1.SelectedItem.ToString() + "." + WdfClass.FILETYPE[wdf.filelist[listBox1.SelectedIndex].FileType], FileMode.OpenOrCreate);
+                FileStream f = File.Open(string.Format("{0:X8}.{1}", item.Uid, WdfClass.FILETYPE[item.FileType]), FileMode.OpenOrCreate);
                 f.Write(wdf.filelist[listBox1.SelectedIndex].FileData, 0, wdf.filelist[listBox1.SelectedIndex].FileData.Length);
                 f.Flush();
                 f.Close();

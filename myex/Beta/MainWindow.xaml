@@ -5,15 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Beta"
         mc:Ignorable="d"
-        Title="MainWindow" Width="200" Height="200">
-    <Canvas x:Name="Carrier" Width="200" Height="200" Background="Silver" MouseLeftButtonDown="Carrier_MouseLeftButtonDown">
+        Title="MainWindow" Width="814" d:DesignHeight="639">
+    <Canvas x:Name="Carrier" Background="Silver" MouseLeftButtonDown="Carrier_MouseLeftButtonDown" Width="800" Height="600">
         
-        
-        <!--<Border x:Name="LifeBorder" Width="90" Height="5" BorderBrush="LightBlue" BorderThickness="0.6" HorizontalAlignment="Left">
-
-            <Rectangle x:Name="Life" Width="45" Height="5" HorizontalAlignment="Left" Fill="Red"></Rectangle>
-
-        </Border>-->
-
     </Canvas>
+
 </Window>

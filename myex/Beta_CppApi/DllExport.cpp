@@ -10,50 +10,11 @@ int __stdcall add(int x, int y)
 	return g_count++;
 }
 
-int __stdcall GetBitMap(void **Pointer)
-{
-	//源图像
-
-	int imgWidth = 512;
-	int imgHeight = 512;
-	BYTE *ImgData = new BYTE[imgWidth*imgHeight * 4];
-	for (size_t i = 0, len = imgHeight*imgWidth; i < len; i++)
-	{
-		auto item = ImgData + int(i << 2);
-		item[0] = 0xff;//R
-		item[1] = 0x00;//G
-		item[2] = 0x00;//B
-		item[3] = 0xff;//A
-	}
-	{
-		auto item = ImgData + imgHeight*imgWidth * 4 - 4;
-		item[0] = 0x00;//R
-		item[1] = 0xff;//G
-		item[2] = 0x00;//B
-		item[3] = 0xff;//A
-	}
-	//png图像
-	void * pngbuff = 0;
-	int buff_len = 0;
-	//pngIDATImg数据
-	BYTE * pngIDATbuff = 0;
-	int pngIDATbuffLen = 0;
-	//函数调用
-	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, ImgData, imgWidth, imgHeight);
-	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
-
-	//资源释放
-	delete pngIDATbuff;
-
-	*Pointer=pngbuff;
-	return buff_len;
-};
-
-int __stdcall GetBitMap2(void **Pointer,int filename)
+void __stdcall GetBitMap(char * filename,void **Pointer,int * len)
 {
 	//源图像
 	tagfile map;
-	map.load_file("D:/Demo/myex/Beta/Resources/1207.map.tga");
+	map.load_file(filename);
 
 	int imgWidth = map.header.ImageWidth;
 	int imgHeight = map.header.ImageHeight;
@@ -70,10 +31,8 @@ int __stdcall GetBitMap2(void **Pointer,int filename)
 	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
 
 	//资源释放
-	delete pngIDATbuff;
-
 	*Pointer = pngbuff;
-	return buff_len;
+	*len=buff_len;
 };
 
 //int __stdcall GetBitMap2(void **Pointer,int filename)
@@ -145,30 +104,8 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 }
 void main()
 {
-	int imgWidth=150;
-	int imgHeight=150;
-
-	auto filename="D:/Demo/myex/Alpha/project/bin/0AF85B1A.was";
-	int *intptr=0;
-	int directionCount=0;
-	int frameCount=0;
-	int waswidth=0;
-	int washeigth=0;
-	int centerX;
-	int centerY;
-
-	GetWasFileInfo(filename,&intptr,&directionCount,&frameCount,&waswidth,&washeigth,&centerX,&centerY);
-	int *dataptr=0;
-	int datalen=0;
-
-	for(int i=0;i<frameCount;i++)
-	{
-
-		GetWasFrame(imgWidth,imgHeight,intptr,0,i,&dataptr,&datalen);
-		char pngfilename[] = "D:/Demo/myex/Beta/img/testcrc0.png";
-		pngfilename[29]=(char)i+48;
-		auto file = fopen(pngfilename, "wb+");
-		fwrite(dataptr, datalen, 1, file);
-		fclose(file);
-	}
+	char * filename="D:/Demo/myex/Beta/Resources/1207.map.tga";
+	int *Pointer=0;
+	int len=0;
+	GetBitMap(filename,(void**)&Pointer,&len);
 }

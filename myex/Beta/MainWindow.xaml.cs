@@ -30,40 +30,40 @@ namespace Beta
     /// </summary>
     public partial class MainWindow : Window
     {
-        Rectangle rect;
-
         private IPathFinder PathFinder = null;
-
         private byte[,] Matrix = new byte[1024, 1024]; //寻路用二维矩阵
-
-        private int GridSize = 20; //单位格子大小
-
+        private int GridSize = 10; //单位格子大小
         private Point Start; //移动起点坐标
-
         private Point End; //移动终点坐标
 
-        Ellipse player = new Ellipse(); //用一个圆来模拟目标对象
 
-        QXSpirit Spirit = new QXSpirit();
+        QXSprite Spirit = new QXSprite();
+        WasFile wasFile1 = new WasFile();
+        WasFile wasFile2 = new WasFile();
+
+        QXMap map = new QXMap();
 
         private void InitSpirit()
         {
 
-            Spirit.X = 300; //为精灵关联属性X赋值
+            //Spirit.X = 300; //为精灵关联属性X
+            //Spirit.Y = 400; //为精灵关联属性Y赋值
+            //var filename = "D:/Demo/myex/Alpha/project/bin/EB5088EA.was";
+            //wasFile1.LoadFileFromPath(filename);
+            //wasFile2.LoadFileFromPath("D:/Demo/myex/Alpha/project/bin/0AF85B1A.was");
+            //Spirit.wasFile = wasFile2;
+            //Spirit.limitcount = wasFile2.FrameCount - 1;
+            //Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率
+            //Carrier.Children.Add(Spirit);
 
-            Spirit.Y = 400; //为精灵关联属性Y赋值
 
-            var filename = "D:/Demo/myex/Alpha/project/bin/EB5088EA.was";
-            Spirit.wasFile = new WasFile();
-            Spirit.wasFile.LoadFileFromPath(filename);
-            Spirit.limitcount = Spirit.wasFile.FrameCount - 1;
+            map.ReadMap();
+            map.Width = 800;
+            map.Height = 600;
+            Canvas.SetZIndex(map,-1);
+            Carrier.Children.Add(map);
 
-            Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率
-
-            
-            //ResetMatrix();
             Carrier.Children.Add(Spirit);
-
         }
 
         public MainWindow()
@@ -75,213 +75,34 @@ namespace Beta
             InitSpirit();
         }
        
-        private void InitPlayer()
+        
+        
+        /// <summary>
+        /// 直线移动
+        /// </summary>
+        private void LinearMove(QXSprite sprite, Point p) 
         {
-
-            player.Fill = new SolidColorBrush(Colors.Blue);
-
-            player.Width = GridSize;
-
-            player.Height = GridSize;
-
-            Carrier.Children.Add(player);
-
-            //开始位置(1,1)
-
-            Canvas.SetLeft(player, GridSize);
-
-            Canvas.SetTop(player, 5 * GridSize);
-
-        }
-        private void ResetMatrix()
-        {
-
-            for (int y = 0; y < Matrix.GetUpperBound(1); y++)
+            GV.Storyboard.NewStoryboard(sprite.Name);
+            var moveCost = Super.GetAnimationTimeConsuming(sprite.Coordinate, p, GridSize, sprite.VRunSpeed);
+            //创建坐标变换属性动画
+            PointAnimation pointAnimation = new PointAnimation()
             {
-
-                for (int x = 0; x < Matrix.GetUpperBound(0); x++)
-                {
-
-                    //默认值可以通过(非障碍物)在矩阵中用1表示
-
-                    Matrix[x, y] = 1;
-
-                }
-
-            }
-
-            //构建障碍物(举例)
-
-            for (int i = 0; i < 18; i++)
-            {
-
-                //障碍物在矩阵中用0表示
-
-                Matrix[i, 12] = 0;
-
-                rect = new Rectangle();
-
-                rect.Fill = new SolidColorBrush(Colors.Red);
-
-                rect.Width = GridSize;
-
-                rect.Height = GridSize;
-
-                Carrier.Children.Add(rect);
-
-                Canvas.SetLeft(rect, i * GridSize);
-
-                Canvas.SetTop(rect, 12 * GridSize);
-
-            }
-
-            //构建其他障碍物……(省略)
-
-            Start = new Point(1, 1); //设置起点坐标
-
+                To = p,
+                Duration = new Duration(TimeSpan.FromMilliseconds(moveCost))
+            };
+            Storyboard.SetTarget(pointAnimation, sprite);
+            Storyboard.SetTargetProperty(pointAnimation, new PropertyPath("Coordinate"));
+            sprite.Action = Actions.Run;
+            //启动属性动画
+            GV.Storyboard[sprite.Name].Children.Add(pointAnimation);
+            GV.Storyboard[sprite.Name].Begin();
         }
 
         private void Carrier_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            return;
             Point p = e.GetPosition(Carrier);
+            LinearMove(Spirit,p);
 
-            //进行坐标系缩小
-
-            int start_x = (int)Canvas.GetLeft(player) / GridSize;
-
-            int start_y = (int)Canvas.GetTop(player) / GridSize;
-
-            Start = new Point(start_x, start_y); //设置起点坐标
-
-            int end_x = (int)p.X / GridSize;
-
-            int end_y = (int)p.Y / GridSize;
-
-            End = new Point(end_x, end_y); //设置终点坐标
-
-            PathFinder = new PathFinderFast(Matrix);
-
-            PathFinder.Formula = HeuristicFormula.Manhattan; //使用我个人觉得最快的曼哈顿A*算法
-
-            PathFinder.HeavyDiagonals = true; //使用对角线移动
-
-            PathFinder.HeuristicEstimate = 0;
-
-            List<PathFinderNode> path = PathFinder.FindPath(new QXGame_Silverlight3.AStar.Point(Start.X, Start.Y), new QXGame_Silverlight3.AStar.Point(End.X, End.Y)); //开始寻径
-
-            if (path == null)
-            {
-
-                MessageBox.Show("路径不存在！");
-
-            }
-            else
-            {
-
-                Point[] framePosition = new Point[path.Count]; //定义关键帧坐标集
-
-                for (int i = path.Count - 1; i >= 0; i--)
-                {
-
-                    //从起点开始以GridSize为单位，顺序填充关键帧坐标集，并进行坐标系放大
-
-                    framePosition[path.Count - 1 - i] = new Point(path[i].X * GridSize, path[i].Y * GridSize);
-
-                }
-
-                //创建故事板
-
-                Storyboard storyboard = new Storyboard();
-
-                int cost = 100; //每移动一个小方格(20*20)花费100毫秒
-
-                //创建X轴方向逐帧动画
-
-                DoubleAnimationUsingKeyFrames keyFramesAnimationX = new DoubleAnimationUsingKeyFrames();
-
-                //总共花费时间 = path.Count * cost
-
-                keyFramesAnimationX.Duration = new Duration(TimeSpan.FromMilliseconds(path.Count * cost));
-
-                Storyboard.SetTarget(keyFramesAnimationX, player);
-
-                Storyboard.SetTargetProperty(keyFramesAnimationX, new PropertyPath("(Canvas.Left)"));
-
-                //创建Y轴方向逐帧动画
-
-                DoubleAnimationUsingKeyFrames keyFramesAnimationY = new DoubleAnimationUsingKeyFrames();
-
-                keyFramesAnimationY.Duration = new Duration(TimeSpan.FromMilliseconds(path.Count * cost));
-
-                Storyboard.SetTarget(keyFramesAnimationY, player);
-
-                Storyboard.SetTargetProperty(keyFramesAnimationY, new PropertyPath("(Canvas.Top)"));
-
-                for (int i = 0; i < framePosition.Count(); i++)
-                {
-
-                    //加入X轴方向的匀速关键帧
-
-                    LinearDoubleKeyFrame keyFrame = new LinearDoubleKeyFrame();
-
-                    keyFrame.Value = i == 0 ? Canvas.GetLeft(player) : framePosition[i].X; //平滑衔接动画
-
-                    keyFrame.KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(cost * i));
-
-                    keyFramesAnimationX.KeyFrames.Add(keyFrame);
-
-                    //加入Y轴方向的匀速关键帧
-
-                    keyFrame = new LinearDoubleKeyFrame();
-
-                    keyFrame.Value = i == 0 ? Canvas.GetTop(player) : framePosition[i].Y;
-
-                    keyFrame.KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromMilliseconds(cost * i));
-
-                    keyFramesAnimationY.KeyFrames.Add(keyFrame);
-
-                }
-
-                storyboard.Children.Add(keyFramesAnimationX);
-
-                storyboard.Children.Add(keyFramesAnimationY);
-
-                //添加进资源
-
-                if (!Resources.Contains("storyboard"))
-                {
-
-                    Resources.Add("storyboard", storyboard);
-
-                }
-
-                //故事板动画开始
-
-                storyboard.Begin();
-
-                //用白色点记录移动轨迹
-
-                for (int i = path.Count - 1; i >= 0; i--)
-                {
-
-                    rect = new Rectangle();
-
-                    rect.Fill = new SolidColorBrush(Colors.Snow);
-
-                    rect.Width = 5;
-
-                    rect.Height = 5;
-
-                    Carrier.Children.Add(rect);
-
-                    Canvas.SetLeft(rect, path[i].X * GridSize);
-
-                    Canvas.SetTop(rect, path[i].Y * GridSize);
-
-                }
-
-            }
         }
 
         /// <summary>
@@ -294,6 +115,7 @@ namespace Beta
                 new Int32Rect(x, y, width, height)
                  );
         }
+
         /*
         //图片操作
            IntPtr PngBuff = IntPtr.Zero;

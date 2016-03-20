@@ -4,9 +4,7 @@
 
 C_dllexport int __stdcall add(int x, int y);
 
-C_dllexport int __stdcall GetBitMap(void **Pointer);
-
-C_dllexport int __stdcall GetBitMap2(void **Pointer, int filename);
+C_dllexport void __stdcall GetBitMap(char * filename,void **Pointer,int * len);
 
 C_dllexport void __stdcall GetWasFileInfo(const char* filename,int** ptr,int* directionCount,int* frameCount,int* width,int *height,int *centerX,int *centerY);
 

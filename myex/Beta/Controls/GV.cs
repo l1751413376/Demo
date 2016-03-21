@@ -25,5 +25,10 @@ namespace Beta.Controls
         /// 精灵移动用Storyboard管理器
         /// </summary>
         public static Dictionary<String, Storyboard> Storyboard = new Dictionary<String, Storyboard>();
+
+        /// <summary>
+        /// 主角距离窗口的边距,超过边距时移动地图
+        /// </summary>
+        public const int LeaderMargin = 200;
     }
 }

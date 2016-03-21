@@ -42,6 +42,10 @@ namespace Beta.Controls
         // 地图宽
         public double Width_
         {
+            get 
+            {
+                return ImageContent.Width;
+            }
             set
             {
                 ImageContent.Width = value;
@@ -52,6 +56,10 @@ namespace Beta.Controls
 
         public double Height_
         {
+            get
+            {
+                return ImageContent.Height;
+            }
             set
             {
                 ImageContent.Height = value;
@@ -79,17 +87,21 @@ namespace Beta.Controls
 
         public void ReadMap()
         {
+            /*
             IntPtr PngBuff = IntPtr.Zero;
             int len = 0;
             CppAPI.GetBitMap(@"D:\Demo\myex\Beta\Resources\1207.map.tga", out PngBuff, out len);
             byte[] managed_data = new byte[len];
             Marshal.Copy(PngBuff, managed_data, 0, len);
             MemoryStream ms = new MemoryStream(managed_data);
-
+            
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             image.StreamSource = ms;
             image.EndInit();
+             **/
+            BitmapImage image = new BitmapImage(new Uri(@"D:\Demo\myex\Beta\Resources\1442304430-7.jpg"));
+            
             Source = image;
             Height_ = image.Height;
             Width_ = image.Width;

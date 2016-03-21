@@ -26,11 +26,11 @@ namespace Beta.Controls
         /// <summary>
         /// 图片位于控件中心的位置X
         /// </summary>
-        const int CentryX = 75;
+        public static int CentryX = 75;
         /// <summary>
         /// 图片位于控件中心的位置Y
         /// </summary>
-        const int CentryY = 120;
+        public static int CentryY = 120;
 
         /// <summary>
         /// 图片类型0-图形1-was文件
@@ -48,6 +48,22 @@ namespace Beta.Controls
         /// 获取跑步速度ms(每移动一个单元格的花费时间,越小越快)
         /// </summary>
         public double VRunSpeed = 50;
+
+        /// <summary>
+        /// X地图偏移坐标
+        /// </summary>
+        public int XOffset { get; set; }
+        /// <summary>
+        /// X地图偏移坐标
+        /// </summary>
+        public int YOffset { get; set; }
+
+        /// <summary>
+        /// 获取或设置精灵移动目的地
+        /// </summary>
+        public Point Destination { get; set; }
+
+
         public QXSprite()
         {
             InitializeComponent();
@@ -63,8 +79,8 @@ namespace Beta.Controls
                 player.Fill = new SolidColorBrush(Colors.Red);
                 player.Width = 10;
                 player.Height = 10;
-                Canvas.SetLeft(player, 0);
-                Canvas.SetTop(player, 0);
+                Canvas.SetLeft(player, CentryX - player.Width/2);
+                Canvas.SetTop(player, CentryY - player.Height / 2);
                 ImgCanvas.Children.Add(player);
             }
             else 
@@ -90,71 +106,7 @@ namespace Beta.Controls
             Canvas.SetTop(Body, CentryY - wasFile.CentryY);
             count = count == limitcount ? 0 : count + 1;
         }
-        //精灵X坐标(关联属性)
-
-        public double X
-        {
-
-            get { return (double)GetValue(XProperty); }
-
-            set { SetValue(XProperty, value); }
-
-        }
-        public double Y
-        {
-
-            get { return (double)GetValue(YProperty); }
-
-            set { SetValue(YProperty, value); }
-
-        }
-        public static readonly DependencyProperty XProperty = DependencyProperty.Register(
-            "X", //属性名
-
-            typeof(double), //属性类型
-
-            typeof(QXSprite), //属性主人类型
-
-            new FrameworkPropertyMetadata(
-
-                 (double)0, //初始值0
-
-                 FrameworkPropertyMetadataOptions.None, //不特定界面修改
-
-                 //不需要属性改变回调
-
-                 null,//new PropertyChangedCallback(QXSpiritInvalidated),
-
-                 //不使用强制回调
-
-                 null
-
-                 ));
-        //精灵Y坐标(关联属性)
-
         
-
-        public static readonly DependencyProperty YProperty = DependencyProperty.Register(
-
-            "Y",
-
-            typeof(double),
-
-            typeof(QXSprite),
-
-            new FrameworkPropertyMetadata(
-
-                 (double)0,
-
-                 FrameworkPropertyMetadataOptions.None,
-
-                 null,
-
-                 null
-
-                 )
-
-            );
         public event CoordinateEventHandler CoordinateChanged;
         /// <summary>
         /// 获取或设置精灵坐标(关联属性)
@@ -176,9 +128,10 @@ namespace Beta.Controls
             if (obj.Visibility == Visibility.Visible)
             {
                 Point p = (Point)e.NewValue;
-                obj.SetValue(Canvas.LeftProperty, p.X - obj.CenterX);
-                obj.SetValue(Canvas.TopProperty, p.Y - obj.CenterY);
+                obj.SetValue(Canvas.LeftProperty, p.X - obj.CenterX - CentryX);
+                obj.SetValue(Canvas.TopProperty, p.Y - obj.CenterY - CentryY);
                 obj.SetValue(Canvas.ZIndexProperty, (int)p.Y);
+                obj.SName.Text = string.Format("p.X={0:f0},p.Y={1:f0},\nCenterX={2},CenterY={3}", p.X, p.Y, obj.CenterX, obj.CenterY);
                 if (obj.CoordinateChanged != null)
                 {
                     obj.CoordinateChanged(obj);
@@ -190,8 +143,31 @@ namespace Beta.Controls
         /// </summary>
         public Actions Action;
 
+        public double X
+        {
+            get { return (double)this.GetValue(Canvas.LeftProperty); }
+            set { Coordinate = new Point(value + CenterX, Coordinate.Y + CenterX); }
+        }
 
+        public double Y
+        {
+            get { return (double)this.GetValue(Canvas.TopProperty); }
+            set { Coordinate = new Point(Coordinate.X + CenterX, value + CenterX); }
+        }
 
-        
+        /// <summary>
+        /// 获取或设置精灵当前朝向:0朝上4朝下,顺时针依次为0,1,2,3,4,5,6,7(关联属性)
+        /// </summary>
+        public double Direction
+        {
+            get { return (double)GetValue(DirectionProperty); }
+            set { SetValue(DirectionProperty, value); }
+        }
+        public static readonly DependencyProperty DirectionProperty = DependencyProperty.Register(
+            "Direction",
+            typeof(double),
+            typeof(QXSprite),
+            null
+        );
     }
 }

@@ -263,7 +263,7 @@ namespace Beta
                 var offset = GV.LeaderMargin - marginTop;
                 Canvas.SetTop(map.ImageContent, -(GV.CenterY -= (int)offset));
             }
-            if (GV.CenterY + Height < map.Height && marginBottom <= GV.LeaderMargin)
+            if (GV.CenterY + Height < map.Height_ && marginBottom <= GV.LeaderMargin)
             {
                 var offset = GV.LeaderMargin - marginBottom;
                 Canvas.SetTop(map.ImageContent, -(GV.CenterY += (int)offset));

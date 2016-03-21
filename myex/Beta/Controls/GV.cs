@@ -29,6 +29,6 @@ namespace Beta.Controls
         /// <summary>
         /// 主角距离窗口的边距,超过边距时移动地图
         /// </summary>
-        public const int LeaderMargin = 200;
+        public const int LeaderMargin = 270;
     }
 }

@@ -20,94 +20,47 @@ namespace Beta.Controls
     /// <summary>
     /// QXSpirit.xaml 的交互逻辑
     /// </summary>
-    public partial class QXSprite : UserControl,QXObject
+    public partial class QXSprite : UserControl
     {
-
+        #region 系统属性
         /// <summary>
         /// 图片位于控件中心的位置X
         /// </summary>
-        public static int CentryX = 75;
+        public static int CenterX = 75;
         /// <summary>
         /// 图片位于控件中心的位置Y
         /// </summary>
-        public static int CentryY = 120;
+        public static int CenterY = 120;
 
         /// <summary>
         /// 图片类型0-图形1-was文件
         /// </summary>
         public int ImgType;
-        /// <summary>
-        /// 窗口对于地图的偏移量x
-        /// </summary>
-        public int CenterX { get { return GV.CenterX; } set { GV.CenterX = value; } }
-        /// <summary>
-        /// 窗口对于地图的偏移量Y
-        /// </summary>
-        public int CenterY { get { return GV.CenterY; } set { GV.CenterY = value; } }
+
         /// <summary>
         /// 获取跑步速度ms(每移动一个单元格的花费时间,越小越快)
         /// </summary>
         public double VRunSpeed = 50;
 
         /// <summary>
-        /// X地图偏移坐标
+        /// 位置(相对于地图坐标 0-当前,1-目的地)
         /// </summary>
-        public int XOffset { get; set; }
-        /// <summary>
-        /// X地图偏移坐标
-        /// </summary>
-        public int YOffset { get; set; }
+        public Point[] Position = new Point[2];
 
         /// <summary>
-        /// 获取或设置精灵移动目的地
+        /// 定时器
         /// </summary>
-        public Point Destination { get; set; }
-
-
-        public QXSprite()
-        {
-            InitializeComponent();
-            InitThread();
-        }
         public DispatcherTimer Timer = new DispatcherTimer();
-
-        private void InitThread()
-        {
-            if (ImgType == 0)
-            {
-                Ellipse player = new Ellipse(); //用一个圆来模拟目标对象
-                player.Fill = new SolidColorBrush(Colors.Red);
-                player.Width = 10;
-                player.Height = 10;
-                Canvas.SetLeft(player, CentryX - player.Width/2);
-                Canvas.SetTop(player, CentryY - player.Height / 2);
-                ImgCanvas.Children.Add(player);
-            }
-            else 
-            {
-                Timer.Tick += new EventHandler(Timer_Tick);
-                Timer.Start();
-            }
-           
-        }
-        public string ImageAddress;
-        //精灵线程间隔事件
+        /// <summary>
+        /// Was文件
+        /// </summary>
         public WasFile wasFile;
-        public int count;
-        public int limitcount;
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            
-            var img = wasFile.GetImg(0, count);
-            Body.Source = img;
-            Body.Width = img.Width;
-            Body.Height = img.Height;
-            Canvas.SetLeft(Body, CentryX - wasFile.CentryX);
-            Canvas.SetTop(Body, CentryY - wasFile.CentryY);
-            count = count == limitcount ? 0 : count + 1;
-        }
-        
-        public event CoordinateEventHandler CoordinateChanged;
+
+        /// <summary>
+        /// 计数 0-当前,1最大值
+        /// </summary>
+        public int[] Count=new int[2];
+
         /// <summary>
         /// 获取或设置精灵坐标(关联属性)
         /// </summary>
@@ -116,44 +69,15 @@ namespace Beta.Controls
             get { return (Point)GetValue(CoordinateProperty); }
             set { SetValue(CoordinateProperty, value); }
         }
-        public static readonly DependencyProperty CoordinateProperty = DependencyProperty.Register(
-            "Coordinate",
-            typeof(Point),
-            typeof(QXSprite),
-            new PropertyMetadata(ChangeCoordinateProperty)
-        );
-        private static void ChangeCoordinateProperty(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            QXSprite obj = (QXSprite)d;
-            if (obj.Visibility == Visibility.Visible)
-            {
-                Point p = (Point)e.NewValue;
-                obj.SetValue(Canvas.LeftProperty, p.X - obj.CenterX - CentryX);
-                obj.SetValue(Canvas.TopProperty, p.Y - obj.CenterY - CentryY);
-                obj.SetValue(Canvas.ZIndexProperty, (int)p.Y);
-                obj.SName.Text = string.Format("p.X={0:f0},p.Y={1:f0},\nCenterX={2},CenterY={3}", p.X, p.Y, obj.CenterX, obj.CenterY);
-                if (obj.CoordinateChanged != null)
-                {
-                    obj.CoordinateChanged(obj);
-                }
-            }
-        }
+        /// <summary>
+        /// 坐标变换事件
+        /// </summary>
+        public event CoordinateEventHandler CoordinateChanged;
+
         /// <summary>
         /// 动作
         /// </summary>
         public Actions Action;
-
-        public double X
-        {
-            get { return (double)this.GetValue(Canvas.LeftProperty); }
-            set { Coordinate = new Point(value + CenterX, Coordinate.Y + CenterX); }
-        }
-
-        public double Y
-        {
-            get { return (double)this.GetValue(Canvas.TopProperty); }
-            set { Coordinate = new Point(Coordinate.X + CenterX, value + CenterX); }
-        }
 
         /// <summary>
         /// 获取或设置精灵当前朝向:0朝上4朝下,顺时针依次为0,1,2,3,4,5,6,7(关联属性)
@@ -163,11 +87,94 @@ namespace Beta.Controls
             get { return (double)GetValue(DirectionProperty); }
             set { SetValue(DirectionProperty, value); }
         }
-        public static readonly DependencyProperty DirectionProperty = DependencyProperty.Register(
-            "Direction",
-            typeof(double),
+        #endregion
+
+        #region 初始化方法
+
+        public QXSprite()
+        {
+            InitializeComponent();
+            InitThread();
+        }
+
+        private void InitThread()
+        {
+            if (ImgType == 0)
+            {
+                Ellipse player = new Ellipse(); //用一个圆来模拟目标对象
+                player.Fill = new SolidColorBrush(Colors.Red);
+                player.Width = 10;
+                player.Height = 10;
+                Canvas.SetLeft(player, CenterX - player.Width / 2);
+                Canvas.SetTop(player, CenterY - player.Height / 2);
+                ImgCanvas.Children.Add(player);
+            }
+            else
+            {
+                Timer.Tick += new EventHandler(Timer_Tick);
+                Timer.Start();
+            }
+
+        }
+        #endregion
+        
+
+        /// <summary>
+        /// 间隔事件
+        /// </summary>
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            var img = wasFile.GetImg(0, Count[0]);
+            Body.Source = img;
+            Body.Width = img.Width;
+            Body.Height = img.Height;
+            Canvas.SetLeft(Body, CenterX - wasFile.CentryX);
+            Canvas.SetTop(Body, CenterY - wasFile.CentryY);
+            Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+        }
+
+        #region 属性绑定
+        /// <summary>
+        /// 坐标
+        /// </summary>
+        public static readonly DependencyProperty CoordinateProperty = DependencyProperty.Register(
+            "Coordinate",
+            typeof(Point),
             typeof(QXSprite),
-            null
+            new PropertyMetadata(ChangeCoordinateProperty)
         );
+        /// <summary>
+        /// 方向
+        /// </summary>
+        public static readonly DependencyProperty DirectionProperty = DependencyProperty.Register(
+           "Direction",
+           typeof(double),
+           typeof(QXSprite),
+           null
+       );
+        #endregion
+        /// <summary>
+        /// 坐标改变事件
+        /// </summary>
+        private static void ChangeCoordinateProperty(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            QXSprite obj = (QXSprite)d;
+            if (obj.Visibility == Visibility.Visible)
+            {
+                Point p = (Point)e.NewValue;
+                obj.SetValue(Canvas.LeftProperty, p.X - GV.WindowOffsetX - CenterX);
+                obj.SetValue(Canvas.TopProperty, p.Y - GV.WindowOffsetY - CenterX);
+                obj.SetValue(Canvas.ZIndexProperty, (int)p.Y);
+                obj.SName.Text = string.Format("p.X={0:f0},p.Y={1:f0},\nCenterX={2},CenterY={3}", p.X, p.Y, GV.WindowOffsetX, GV.WindowOffsetY);
+                if (obj.CoordinateChanged != null)
+                {
+                    obj.CoordinateChanged(obj);
+                }
+            }
+        }
+       
+
+       
+       
     }
 }

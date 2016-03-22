@@ -187,54 +187,6 @@ void PNGFormatData_R8G8B8A8(BYTE *& dest, int & desLen, BYTE * source, int sourc
 void main()
 {
 	
-	//源图像
-	
-	int imgWidth =512;
-	int imgHeight = 512;
-	BYTE *ImgData=new BYTE[imgWidth*imgHeight*4];
-	for (size_t i = 0,len= imgHeight*imgWidth; i < len; i++)
-	{
-		auto item = ImgData + int(i << 2);
-		item[0] = 0xff;//R
-		item[1] = 0x00;//G
-		item[2] = 0x00;//B
-		item[3] = 0xff;//A
-	}
-	{
-		auto item = ImgData + imgHeight*imgWidth*4-4;
-		item[0] = 0x00;//R
-		item[1] = 0xff;//G
-		item[2] = 0x00;//B
-		item[3] = 0xff;//A
-	}
-	//png图像
-	void * pngbuff = 0;
-	int buff_len = 0;
-	//pngIDATImg数据
-	BYTE * pngIDATbuff = 0;
-	int pngIDATbuffLen = 0;
-	//函数调用
-	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, ImgData, imgWidth, imgHeight);
-	CreatePNGByFormatData(imgWidth, imgHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
-
-	//资源释放
-	delete pngIDATbuff;
-	//文件操作
-	auto filename = "D:/Demo/myex/Beta/img/testcrc.png";
-	auto file = fopen(filename, "wb+");
-	fwrite(pngbuff, buff_len, 1, file);
-	fclose(file);
-	auto ret = 0;
-	/*
-	
-	DWORD ImgData[] = { 0xff00ff00,0xff00ffff };
-
-	BYTE source[20];
-	ULONG sourceLen=20;
-	
-	memset(source,0,sizeof(source));
-
-	compress2(source, &sourceLen, (Byte *)ImgData,8,0);
-	int ret = 0;*/
+	auto size=sizeof(RECT);
 
 }

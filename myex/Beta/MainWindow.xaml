@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Beta"
         mc:Ignorable="d"
-        Title="MainWindow" Width="814" d:DesignHeight="639" >
-    <Canvas x:Name="Carrier" Background="Silver" MouseLeftButtonDown="Carrier_MouseLeftButtonDown" Width="800" Height="600">
-        
+        Title="MainWindow" Width="810" Height="628" >
+    <Canvas x:Name="Carrier" Background="Silver" MouseLeftButtonDown="Carrier_MouseLeftButtonDown" Margin="1,0,1,1" Width="800">
+        <StackPanel Name="ExperiencePanel">
+            <Rectangle x:Name="Experience" Canvas.ZIndex="0"></Rectangle>
+        </StackPanel>
     </Canvas>
-
+    
 </Window>

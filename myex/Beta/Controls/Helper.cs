@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace Beta.Controls
@@ -140,22 +142,73 @@ namespace Beta.Controls
             return direction;
         }
 
-
-        public static Point ToMapCoordinate(this Point p) 
+        public static LinearGradientBrush CreateRainbowBrush(byte r0, byte g0, byte b0, byte r1, byte g1, byte b1)
         {
-            p.X += GV.CenterX;
-            p.Y += GV.CenterY;
+            return new LinearGradientBrush()
+            {
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(0, 1),
+                GradientStops = new GradientStopCollection() {
+                    new GradientStop() {
+                        Color = Color.FromArgb(255, r0, g0, b0),
+                        Offset = 0
+                    },
+                    new GradientStop() {
+                        Color = Color.FromArgb(255, r1, g1, b1),
+                        Offset = 1
+                    }
+                }
+            };
+        }
+        
+    }
+    /// <summary>
+    /// 坐标转换
+    /// </summary>
+    public static class PointHelper 
+    {
+
+        public static int GridSize = 10;
+
+        /// <summary>
+        /// 窗口坐标->地图坐标
+        /// </summary>
+        public static Point ToMapCoordinate(this Point p)
+        {
+            p.X += GV.WindowOffsetX;
+            p.Y += GV.WindowOffsetY;
             return p;
         }
-
+        /// <summary>
+        /// 地图坐标->窗口坐标
+        /// </summary>
         public static Point ToWindowCoordinate(this Point p)
         {
-            p.X -= GV.CenterX;
-            p.Y -= GV.CenterY;
+            p.X -= GV.WindowOffsetX;
+            p.Y -= GV.WindowOffsetY;
             return p;
         }
+
+        /// <summary>
+        /// 地图位置->地图坐标
+        /// </summary>
+        public static Point ToCoordinate(this Point p)
+        {
+            p.X = p.X * GridSize + GridSize / 5;
+            p.Y = p.Y * GridSize + GridSize / 5;
+            return p;
+        }
+        /// <summary>
+        /// 地图坐标->地图位置
+        /// </summary>
+        public static Point ToPosition(this Point p)
+        {
+            p.X = (int)(p.X / GridSize);
+            p.X = (int)(p.Y / GridSize);
+            return p;
+        }
+
     }
-  
 
     /// <summary>
     /// 坐标改变委托

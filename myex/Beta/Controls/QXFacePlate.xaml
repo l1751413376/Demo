@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="Beta.Controls.QXFacePlate"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Height="111" Width="318">
+    <Canvas x:Name="Container" Margin="0,0,-28,0" Height="114" VerticalAlignment="Top">
+
+        <Border x:Name="FaceBorder" HorizontalAlignment="Left" BorderBrush="Red" BorderThickness="2" CornerRadius="5" Opacity="0.8">
+            <Rectangle x:Name="Face" Stretch="Fill" Width="100" Height="100" RadiusX="{Binding ElementName=LifeBorder,Path=CornerRadius}" RadiusY="{Binding ElementName=LifeBorder,Path=CornerRadius}">
+            </Rectangle>
+        </Border>
+        <Border x:Name="PropertyBorder" Width="200" Height="104"  HorizontalAlignment="Left" BorderBrush="Red" BorderThickness="2" CornerRadius="5" Opacity="0.8" Canvas.Left="109">
+            <Canvas x:Name="LifeCanvas" Margin="8,8,46,63">
+                <TextBlock></TextBlock>
+                <Border Width="130" BorderBrush="Red" BorderThickness="1" >
+                <Rectangle  Width="130" Height="10" x:Name="Life"></Rectangle>
+                </Border>
+            </Canvas>
+        </Border>
+
+        <!--<Grid x:Name="LevelGrid">
+            <TextBlock x:Name="Level" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Grid>
+        <Grid x:Name="ExperienceValueGrid" Canvas.ZIndex="2">
+            <TextBlock x:Name="ExperienceValue" FontSize="9" Foreground="White" HorizontalAlignment="Center"></TextBlock>
+        </Grid>
+        <Rectangle x:Name="ExperienceMask" Canvas.ZIndex="1">
+            <ToolTipService.ToolTip>
+                <TextBlock x:Name="ExperienceDetails" FontSize="10" Foreground="Black" HorizontalAlignment="Center"></TextBlock>
+            </ToolTipService.ToolTip>
+        </Rectangle>
+        <StackPanel Name="ExperiencePanel">
+            <Rectangle x:Name="Experience" Canvas.ZIndex="0"></Rectangle>
+        </StackPanel>
+        <StackPanel Name="LifePanel">
+            <TextBlock x:Name="SName" FontFamily="SimSun" FontSize="12" Foreground="White" HorizontalAlignment="Center"/>
+            <Rectangle x:Name="Life" Canvas.ZIndex="0"></Rectangle>
+            <TextBlock x:Name="LifeValue" FontSize="11" Foreground="White" HorizontalAlignment="Center" Canvas.ZIndex="1"/>
+        </StackPanel>
+        <StackPanel Name="MagicPanel">
+            <Rectangle x:Name="Magic" Canvas.ZIndex="0"></Rectangle>
+            <TextBlock x:Name="MagicValue" FontSize="10" Foreground="White" HorizontalAlignment="Center" Canvas.ZIndex="1"/>
+        </StackPanel>
+        <StackPanel Name="EnergyPanel">
+            <Rectangle x:Name="Energy" Canvas.ZIndex="0"></Rectangle>
+            <TextBlock x:Name="EnergyValue" FontSize="10" Foreground="White" HorizontalAlignment="Center" Canvas.ZIndex="1"/>
+        </StackPanel>
+        <StackPanel x:Name="AdditionalEffectPanel" Orientation="Horizontal"/>-->
+    </Canvas>
+</UserControl>

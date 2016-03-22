@@ -42,7 +42,9 @@ namespace Beta
         WasFile wasFile2 = new WasFile();
 
         QXMap map = new QXMap();
-
+        SolidColorBrush redsolid = new SolidColorBrush(Colors.Red);
+        SolidColorBrush whitesolid = new SolidColorBrush(Colors.White);
+        int count = 0;
         private void InitSpirit()
         {
 
@@ -62,9 +64,61 @@ namespace Beta
             map.Height = 600;
             Canvas.SetZIndex(map,-1);
             Carrier.Children.Add(map);
-
             Carrier.Children.Add(Spirit);
+            DrawGrid();
+            Canvas.SetZIndex(showRect, -2);
+            Carrier.Children.Add(showRect);
+
+            Timer.Interval = TimeSpan.FromMilliseconds(100);
+            Timer.Tick += (sender, e) => 
+            {
+                if (showRect.Fill != redsolid)
+                {
+                    showRect.Fill = redsolid;
+                }
+                else 
+                {
+                    showRect.Fill = whitesolid;
+                }
+                count++;
+                if (count == 6)
+                {
+                    Canvas.SetZIndex(showRect,-2);
+                    Timer.Stop();
+                    count = 0;
+                }
+            };
+
+
         }
+
+        void DrawGrid() 
+        {
+            for (int x = 0; x <= 800; x += GridSize*2)
+            {
+                Rectangle rect = new Rectangle();
+                rect.Width = 1;
+                rect.Height = 600;
+                rect.Fill = new SolidColorBrush(Colors.Red);
+                Canvas.SetLeft(rect,x);
+                Canvas.SetTop(rect, 0);
+                Canvas.SetZIndex(rect, 100);
+                Carrier.Children.Add(rect);
+
+            }
+            for (int x = 0; x <= 600; x += GridSize*2)
+            {
+                Rectangle rect = new Rectangle();
+                rect.Width = 800;
+                rect.Height = 1;
+                rect.Fill = new SolidColorBrush(Colors.Red);
+                Canvas.SetLeft(rect, 0);
+                Canvas.SetTop(rect, x);
+                Canvas.SetZIndex(rect, 100);
+                Carrier.Children.Add(rect);
+
+            }
+        } 
 
         public MainWindow()
         {
@@ -83,8 +137,6 @@ namespace Beta
         private void LinearMove(QXSprite sprite, Point p) 
         {
             //转换坐标为地图坐标
-
-
             GV.Storyboard.NewStoryboard(sprite.Name);
             var moveCost = Super.GetAnimationTimeConsuming(sprite.Coordinate, p.ToMapCoordinate(), GridSize, sprite.VRunSpeed);
 
@@ -136,7 +188,8 @@ namespace Beta
             {
                 HeavyDiagonals = false,
                 HeuristicEstimate = 2,
-                SearchLimit = 2000
+                SearchLimit = 2000,
+                Diagonals=true,
             };
             List<PathFinderNode> path = pathFinderFast.FindPath(new QXGame_Silverlight3.AStar.Point(start.X, start.Y), new QXGame_Silverlight3.AStar.Point(end.X, end.Y));
 
@@ -179,7 +232,7 @@ namespace Beta
                 }
                 else if (i == 0)
                 {
-                    linearPointKeyFrame.Value = sprite.Destination;
+                    linearPointKeyFrame.Value = sprite.Position[1];
                 }
                 else
                 {
@@ -211,7 +264,7 @@ namespace Beta
         {
         }
         /// <summary>
-        /// 获取画布Name精灵控件
+        /// 
         /// </summary>
         private QXSprite FindSprite(string name)
         {
@@ -221,8 +274,26 @@ namespace Beta
         {
             Point p = e.GetPosition(Carrier);
             LinearMove(Spirit,p);
-
+            ShowRect(p);
         }
+        Rectangle showRect = new Rectangle();
+        private void ShowRect(Point p)
+        {
+            p = new Point()
+            {
+                X = p.X / (GridSize*2),
+                Y = p.Y / (GridSize*2)
+            };
+
+            Canvas.SetLeft(showRect,(int)p.X * GridSize * 2);
+            Canvas.SetTop(showRect, (int)p.Y * GridSize * 2);
+            showRect.Width = GridSize * 2;
+            showRect.Height = GridSize * 2;
+            Canvas.SetZIndex(showRect, 2);
+            Timer.Start();
+        }
+
+        DispatcherTimer Timer = new DispatcherTimer();
 
         /// <summary>
         /// 裁剪图片
@@ -243,32 +314,49 @@ namespace Beta
         {
             var lc=leader.Coordinate;
 
-            var marginLeft = lc.X - GV.CenterX;
-            var marginRight =GV.CenterX + WidthWindow -lc.X;
-            var marginTop = lc.Y - GV.CenterY;
-            var marginBottom = GV.CenterY + HeightWindow - lc.Y;
+            var marginLeft = lc.X - GV.WindowOffsetX;
+            var marginRight =GV.WindowOffsetX + WidthWindow -lc.X;
+            var marginTop = lc.Y - GV.WindowOffsetY;
+            var marginBottom = GV.WindowOffsetY + HeightWindow - lc.Y;
 
-            if (GV.CenterX>0 && marginLeft < GV.LeaderMargin)
+            if (GV.WindowOffsetX>0 && marginLeft < GV.LeaderMargin)
             {
                 var offset=GV.LeaderMargin-marginLeft;
-                Canvas.SetLeft(map.ImageContent, -(GV.CenterX -= (int)offset));
+                if((GV.WindowOffsetX -= (int)offset)<0)
+                {
+                    GV.WindowOffsetX=0;
+                }
+                Canvas.SetLeft(map.ImageContent, -(GV.WindowOffsetX));
             }
-            if (GV.CenterX + WidthWindow < map.Width_ && marginRight <= GV.LeaderMargin)
+            if (GV.WindowOffsetX + WidthWindow < map.Width_ && marginRight <= GV.LeaderMargin)
             {
                 var offset = GV.LeaderMargin - marginRight;
-                Canvas.SetLeft(map.ImageContent, -(GV.CenterX += (int)offset));
+                if ((GV.WindowOffsetX += (int)offset) + WidthWindow > map.Width_) 
+                {
+                    GV.WindowOffsetX =(int)(map.Width_ - WidthWindow);
+                }
+                Canvas.SetLeft(map.ImageContent, -(GV.WindowOffsetX));
             }
-            if (GV.CenterY > 0  &&  marginTop <= GV.LeaderMargin)
+            if (GV.WindowOffsetY > 0  &&  marginTop <= GV.LeaderMargin)
             {
                 var offset = GV.LeaderMargin - marginTop;
-                Canvas.SetTop(map.ImageContent, -(GV.CenterY -= (int)offset));
+                if ((GV.WindowOffsetY -= (int)offset) < 0)
+                {
+                    GV.WindowOffsetY = 0;
+                }
+                Canvas.SetTop(map.ImageContent, -(GV.WindowOffsetY));
             }
-            if (GV.CenterY + Height < map.Height_ && marginBottom <= GV.LeaderMargin)
+            if (GV.WindowOffsetY + Height < map.Height_ && marginBottom <= GV.LeaderMargin)
             {
                 var offset = GV.LeaderMargin - marginBottom;
-                Canvas.SetTop(map.ImageContent, -(GV.CenterY += (int)offset));
+                if ((GV.WindowOffsetY += (int)offset) + HeightWindow > map.Height_)
+                {
+                    GV.WindowOffsetY = (int)(map.Height_ - HeightWindow);
+                }
+                Canvas.SetTop(map.ImageContent, -(GV.WindowOffsetY));
             }
         }
+
 
         /*
         //图片操作

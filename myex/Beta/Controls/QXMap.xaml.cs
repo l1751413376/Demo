@@ -20,16 +20,16 @@ namespace Beta.Controls
     /// <summary>
     /// QXMap.xaml 的交互逻辑
     /// </summary>
-    public partial class QXMap :UserControl,QXObject
+    public partial class QXMap :UserControl
     {
         /// <summary>
         /// 窗口对于地图的偏移量x
         /// </summary>
-        public int CenterX { get { return GV.CenterX; } set { GV.CenterX = value; } }
+        public int CenterX { get { return GV.WindowOffsetX; } set { GV.WindowOffsetX = value; } }
         /// <summary>
         /// 窗口对于地图的偏移量Y
         /// </summary>
-        public int CenterY { get { return GV.CenterY; } set { GV.CenterY = value; } }
+        public int CenterY { get { return GV.WindowOffsetY; } set { GV.WindowOffsetY = value; } }
         /// <summary>
         /// 物体在地图上面的坐标x
         /// </summary>

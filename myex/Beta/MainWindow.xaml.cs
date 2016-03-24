@@ -65,7 +65,7 @@ namespace Beta
             Canvas.SetZIndex(map,-1);
             Carrier.Children.Add(map);
             Carrier.Children.Add(Spirit);
-            DrawGrid();
+            //DrawGrid();
             Canvas.SetZIndex(showRect, -2);
             Carrier.Children.Add(showRect);
 
@@ -89,6 +89,20 @@ namespace Beta
                 }
             };
 
+            QXFacePlate face = new QXFacePlate();
+            face.SetValue(0,new double[]{1000,1000});
+            face.SetValue(1,new double[] { 300, 1000 });
+            face.SetValue(2,new double[] { 500, 1000 });
+            Canvas.SetZIndex(face, 2);
+            Carrier.Children.Add(face);
+            
+            MetalFrame mf = new MetalFrame();
+            Canvas.SetTop(mf,300);
+            Canvas.SetLeft(mf, 50);
+            Canvas.SetZIndex(mf, 3);
+            mf.SetHeight(100);
+            mf.SetWidth(500);
+            Carrier.Children.Add(mf);
 
         }
 
@@ -189,7 +203,7 @@ namespace Beta
                 HeavyDiagonals = false,
                 HeuristicEstimate = 2,
                 SearchLimit = 2000,
-                Diagonals=true,
+                //Diagonals=true,
             };
             List<PathFinderNode> path = pathFinderFast.FindPath(new QXGame_Silverlight3.AStar.Point(start.X, start.Y), new QXGame_Silverlight3.AStar.Point(end.X, end.Y));
 

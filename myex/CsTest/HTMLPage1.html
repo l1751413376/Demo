@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="C:\Program Files (x86)\Microsoft Visual Studio 11.0\JavaScript\References\jquery-1.10.2.js"></script>
+</head>
+    
+<body>
+    <select style="display:none;" id="t1">
+    <option value="0">无</option>
+    <option value="1">原件</option>
+    <option value="2">复印件</option>
+    <option value="3">扫描件</option>
+</select>
+    <script>
+        var obj = $("#t1").clone();
+        console.log(obj[0].outerHTML);
+    </script>
+</body>
+</html>

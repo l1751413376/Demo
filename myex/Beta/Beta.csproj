@@ -67,6 +67,14 @@
     </ApplicationDefinition>
     <Compile Include="COMObject\CppAPI.cs" />
     <Compile Include="COMObject\WindowsAPI.cs" />
+    <Page Include="Controls\MetalFrame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\QXFacePlate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\QXMap.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -85,6 +93,12 @@
     </Compile>
     <Compile Include="Controls\Enumeration.cs" />
     <Compile Include="Controls\GV.cs" />
+    <Compile Include="Controls\MetalFrame.xaml.cs">
+      <DependentUpon>MetalFrame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\QXFacePlate.xaml.cs">
+      <DependentUpon>QXFacePlate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\QXMap.xaml.cs">
       <DependentUpon>QXMap.xaml</DependentUpon>
     </Compile>

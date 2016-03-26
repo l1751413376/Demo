@@ -20,6 +20,10 @@ namespace Beta.Controls
     /// </summary>
     public partial class QXFacePlate : UserControl
     {
+        static QXFacePlate() 
+        {
+            CutStripImg();
+        }
         public static int MaxWidth = 130;
         //life
         LinearGradientBrush[] rainbowBrush = new LinearGradientBrush[]
@@ -37,17 +41,38 @@ namespace Beta.Controls
         public QXFacePlate()
         {
             InitializeComponent();
-            HPVector.Fill = rainbowBrush[0];
-            MPVector.Fill = rainbowBrush[1];
-            TPVector.Fill = rainbowBrush[3];
-        }
 
+            HPBorder.MoveBitmap(BorderImg[0]);
+            HPStrip.MoveBitmap(StripImg[0]);
+        }
+        static BitmapSource[] BorderStripImg = new BitmapSource[] 
+        {
+            BitmapFrame.Create(new Uri(@"D:\Demo\myex\Beta\Resources\Gauge-FullGreen.png", UriKind.Absolute)),
+            BitmapFrame.Create(new Uri(@"D:\Demo\myex\Beta\Resources\Gauge-FullYellow.png", UriKind.Absolute)),
+        };
+        //框框
+        static BitmapSource[] BorderImg;
+        //条子
+        static BitmapSource[] StripImg;
+        public static void CutStripImg() 
+        {
+            var count=BorderStripImg.Count();
+            BorderImg=new BitmapSource[count];
+            StripImg=new BitmapSource[count];
+            for (int i = 0; i < count;i++ )
+            {
+                var img=BorderStripImg[i];
+                BorderImg[i] =new CroppedBitmap(img, new Int32Rect(0, 0, 124, 24));
+                StripImg[i] = new CroppedBitmap(img, new Int32Rect(0, 24, 124, 24));
+            }
+
+        }
         public void SetValue(int type, double[] value)
         {
             switch (type)
             {
                 case 0:
-                    HPVector.Width = value[0] / value[1] * MaxWidth;
+                    
                     HPText.Text = string.Format("{0:f0}/{1:f0}", value[0], value[1]);
                     break;
                 case 1:

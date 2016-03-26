@@ -84,5 +84,42 @@ namespace Beta.Controls
             
         }
 
+        public int BorderWidth { set { SetWidth(value); } }
+
+        /// <summary>
+        /// 坐标
+        /// </summary>
+        public static readonly DependencyProperty BorderWidthProperty = DependencyProperty.Register(
+            "BorderWidth",
+            typeof(int),
+            typeof(MetalFrame),
+            new PropertyMetadata(ChangeBorderWidth)
+        );
+
+        private static void ChangeBorderWidth(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var obj = (MetalFrame)d;
+            var value = (int)e.NewValue;
+            obj.BorderWidth = value;  
+        }
+
+        public int BorderHeight { set { SetHeight(value); } }
+
+        /// <summary>
+        /// 坐标
+        /// </summary>
+        public static readonly DependencyProperty BorderHeightProperty = DependencyProperty.Register(
+            "BorderHeight",
+            typeof(int),
+            typeof(MetalFrame),
+            new PropertyMetadata(ChangeBorderHeight)
+        );
+
+        private static void ChangeBorderHeight(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var obj = (MetalFrame)d;
+            var value = (int)e.NewValue;
+            obj.BorderHeight = value;
+        }
     }
 }

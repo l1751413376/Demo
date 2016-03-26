@@ -64,7 +64,7 @@ namespace Beta
             map.Height = 600;
             Canvas.SetZIndex(map,-1);
             Carrier.Children.Add(map);
-            Carrier.Children.Add(Spirit);
+            //Carrier.Children.Add(Spirit);
             //DrawGrid();
             Canvas.SetZIndex(showRect, -2);
             Carrier.Children.Add(showRect);
@@ -286,9 +286,9 @@ namespace Beta
         }
         private void Carrier_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Point p = e.GetPosition(Carrier);
-            LinearMove(Spirit,p);
-            ShowRect(p);
+            //Point p = e.GetPosition(Carrier);
+            //LinearMove(Spirit,p);
+            //ShowRect(p);
         }
         Rectangle showRect = new Rectangle();
         private void ShowRect(Point p)
@@ -369,6 +369,11 @@ namespace Beta
                 }
                 Canvas.SetTop(map.ImageContent, -(GV.WindowOffsetY));
             }
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
         }
 
 

@@ -18,7 +18,7 @@ namespace Beta.Controls
     /// <summary>
     /// MetalFrame.xaml 的交互逻辑
     /// </summary>
-    public partial class MetalFrame : UserControl
+    public partial class MetalFrame : ContentControl
     {
         public MetalFrame()
         {
@@ -33,6 +33,9 @@ namespace Beta.Controls
                 //保存原始坐标
                 item1.Tag = new Int32Rect((int)Canvas.GetLeft(item1), (int)(Canvas.GetTop(item1)), (int)item1.Width, (int)item1.Height);
             }
+            Button b = new Button();
+            
+            
         }
         static BitmapSource img = BitmapFrame.Create(new Uri(@"D:\Demo\myex\Beta\Resources\Window.png", UriKind.Absolute));
         BitmapSource[] C = new BitmapSource[] 

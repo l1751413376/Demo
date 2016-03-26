@@ -96,7 +96,8 @@ namespace Beta.Controls
                     MPText.Text = string.Format("{0:f0}/{1:f0}", value[0], value[1]);
                     break;
                 case 2:
-                    
+                    var v=(34 - value[0] / value[1] * 34);
+                   
                     break;
             }
 

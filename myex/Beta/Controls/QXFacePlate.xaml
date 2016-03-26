@@ -13,7 +13,7 @@
         <src:MetalFrame BorderHeight="{Binding ElementName=FaceBorder,Path=Height}" BorderWidth="{Binding ElementName=FaceBorder,Path=Width}"/>
 
         <Border x:Name="PropertyBorder" Width="217" Height="104"  HorizontalAlignment="Left" Canvas.Left="109">
-            <Canvas Margin="8,6,-8,-6">
+            <Canvas Margin="10,10,-10,-10">
                 <Canvas x:Name="HPCanvas" Width="130" Height="12" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10">
                     <StackPanel  Width="130" Canvas.ZIndex="2">
                         <TextBlock x:Name="HPText" FontSize="12" FontFamily="新宋体" Visibility="Hidden"  HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
@@ -43,7 +43,7 @@
                     </StackPanel>
                     <Canvas>
                         <Image x:Name="HeartBorder"></Image>
-                        <Grid x:Name="HeartStripMask" Margin="1,2">
+                        <Grid x:Name="HeartStripMask" Margin="1,1">
                             <Image x:Name="HeartStrip" ></Image>
                         </Grid>
                     </Canvas>

@@ -67,6 +67,10 @@
     </ApplicationDefinition>
     <Compile Include="COMObject\CppAPI.cs" />
     <Compile Include="COMObject\WindowsAPI.cs" />
+    <Page Include="Controls\Dictionary1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MetalFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

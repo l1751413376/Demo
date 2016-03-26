@@ -18,7 +18,7 @@ namespace Beta.Controls
     /// <summary>
     /// MetalFrame.xaml 的交互逻辑
     /// </summary>
-    public partial class MetalFrame : UserControl
+    public partial class MetalFrame : ContentControl
     {
         public MetalFrame()
         {
@@ -33,6 +33,9 @@ namespace Beta.Controls
                 //保存原始坐标
                 item1.Tag = new Int32Rect((int)Canvas.GetLeft(item1), (int)(Canvas.GetTop(item1)), (int)item1.Width, (int)item1.Height);
             }
+            Button b = new Button();
+            
+            
         }
         static BitmapSource img = BitmapFrame.Create(new Uri(@"D:\Demo\myex\Beta\Resources\Window.png", UriKind.Absolute));
         BitmapSource[] C = new BitmapSource[] 
@@ -84,5 +87,42 @@ namespace Beta.Controls
             
         }
 
+        public int BorderWidth { set { SetWidth(value); } }
+
+        /// <summary>
+        /// 坐标
+        /// </summary>
+        public static readonly DependencyProperty BorderWidthProperty = DependencyProperty.Register(
+            "BorderWidth",
+            typeof(int),
+            typeof(MetalFrame),
+            new PropertyMetadata(ChangeBorderWidth)
+        );
+
+        private static void ChangeBorderWidth(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var obj = (MetalFrame)d;
+            var value = (int)e.NewValue;
+            obj.BorderWidth = value;  
+        }
+
+        public int BorderHeight { set { SetHeight(value); } }
+
+        /// <summary>
+        /// 坐标
+        /// </summary>
+        public static readonly DependencyProperty BorderHeightProperty = DependencyProperty.Register(
+            "BorderHeight",
+            typeof(int),
+            typeof(MetalFrame),
+            new PropertyMetadata(ChangeBorderHeight)
+        );
+
+        private static void ChangeBorderHeight(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var obj = (MetalFrame)d;
+            var value = (int)e.NewValue;
+            obj.BorderHeight = value;
+        }
     }
 }

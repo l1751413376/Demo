@@ -5,8 +5,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace Beta.Controls
 {
@@ -159,6 +161,13 @@ namespace Beta.Controls
                     }
                 }
             };
+        }
+
+        public static void MoveBitmap(this Image image, BitmapSource source) 
+        {
+            image.Source = source;
+            image.Width = source.PixelWidth;
+            image.Height = source.PixelHeight;
         }
         
     }

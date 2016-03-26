@@ -144,6 +144,8 @@
     </None>
     <AppDesigner Include="Properties\" />
     <None Include="Resources\1207.map.tga" />
+    <Resource Include="Resources\DroidSansFallback.ttf" />
+    <None Include="Resources\Map001.rvdata2" />
     <Resource Include="Resources\000.tga" />
     <Resource Include="Resources\fontawesome-webfont.ttf" />
     <Resource Include="Resources\FontAwesome.otf" />
@@ -169,6 +171,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\1442304430-7.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="HTMLPage1.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

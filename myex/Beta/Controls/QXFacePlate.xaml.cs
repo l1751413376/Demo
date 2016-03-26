@@ -50,6 +50,11 @@ namespace Beta.Controls
 
             HeartBorder.MoveBitmap(HeartImg[0]);
             HeartStrip.MoveBitmap(HeartImg[1]);
+
+            HPText.FontFamily = GV.DroidSansFallback;
+            //HPText.FillColour("#fff");
+            MPText.FontFamily = GV.DroidSansFallback;
+            //MPText.FillColour("#fff");
         }
         static BitmapSource[] BorderStripImg = new BitmapSource[] 
         {

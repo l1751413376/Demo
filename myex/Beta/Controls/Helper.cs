@@ -169,6 +169,11 @@ namespace Beta.Controls
             image.Width = source.PixelWidth;
             image.Height = source.PixelHeight;
         }
+
+        public static void FillColour(this TextBlock text,string colour)
+        {
+            text.Foreground =new SolidColorBrush((Color)ColorConverter.ConvertFromString(colour));
+        }
         
     }
     /// <summary>

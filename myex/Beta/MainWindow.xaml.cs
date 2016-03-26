@@ -90,7 +90,7 @@ namespace Beta
             };
 
             QXFacePlate face = new QXFacePlate();
-            face.SetValue(0,new double[] { 900,1000});
+            face.SetValue(0,new double[] { 2990,12350});
             face.SetValue(1,new double[] { 300, 1000 });
             face.SetValue(2,new double[] { 500, 1000 });
             Canvas.SetZIndex(face, 2);

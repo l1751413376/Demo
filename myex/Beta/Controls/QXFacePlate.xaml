@@ -4,6 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Height="111" Width="318" xmlns:src="clr-namespace:Beta.Controls">
+    <UserControl.Resources>
+        <ResourceDictionary Source="Dictionary1.xaml"></ResourceDictionary>
+    </UserControl.Resources>
     <Canvas x:Name="Container" Margin="0,0,-28,0" Height="114" VerticalAlignment="Top">
 
         <Border x:Name="FaceBorder" HorizontalAlignment="Left" BorderBrush="Red" Width="100" Height="104">
@@ -15,9 +18,7 @@
         <Border x:Name="PropertyBorder" Width="217" Height="104"  HorizontalAlignment="Left" Canvas.Left="109">
             <Canvas Margin="10,10,-10,-10">
                 <Canvas x:Name="HPCanvas" Width="130" Height="12" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10">
-                    <StackPanel  Width="130" Canvas.ZIndex="2">
-                        <TextBlock x:Name="HPText" FontSize="12" FontFamily="新宋体" Visibility="Hidden"  HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
-                    </StackPanel>
+                    <TextBlock Style="{StaticResource C}" Panel.ZIndex="2" x:Name="HPText"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" FontSize="16" TextAlignment="Right" HorizontalAlignment="Center" Width="114" Canvas.Top="3" ></TextBlock>
                     <Canvas>
                         <Image x:Name="HPBorder"></Image>
                         <Grid x:Name="HPStripMask" Margin="1,2">
@@ -26,9 +27,7 @@
                     </Canvas>
                 </Canvas>
                 <Canvas x:Name="MPCanvas" Width="130" Height="13" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.667" Canvas.Top="43" Canvas.Left="10">
-                    <StackPanel Width="130" Canvas.ZIndex="2">
-                        <TextBlock x:Name="MPText" FontSize="12" FontFamily="新宋体" Visibility="Hidden" HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
-                    </StackPanel>
+                    <TextBlock Panel.ZIndex="2" x:Name="MPText" FontSize="16" TextAlignment="Right" HorizontalAlignment="Center"  Foreground="Black" Width="114" Canvas.Top="3" ></TextBlock>
                     <Canvas>
                         <Image x:Name="MPBorder"></Image>
                         <Grid x:Name="MPStripMask" Margin="1,2">

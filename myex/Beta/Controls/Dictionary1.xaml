@@ -139,7 +139,7 @@
                         </Border.BitmapEffect>
                         <Border.Background>
                             <SolidColorBrush Color="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(Button.Background).(SolidColorBrush.Color)}"></SolidColorBrush>
-                            
+
                             <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1.5">
                                 <GradientBrush.GradientStops>
                                     <GradientStopCollection>

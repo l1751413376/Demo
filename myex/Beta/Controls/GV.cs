@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
@@ -32,7 +33,9 @@ namespace Beta.Controls
         /// </summary>
         public const int LeaderMargin = 270;
 
-        
+        public static FontFamily DroidSansFallback = new FontFamily(new Uri(@"D:\Demo\myex\Beta\Resources\DroidSansFallback.ttf"), "方正准圆-塞班修改版");
+
+
     }
 
     public class Cache 

@@ -44,11 +44,18 @@ namespace Beta.Controls
 
             HPBorder.MoveBitmap(BorderImg[0]);
             HPStrip.MoveBitmap(StripImg[0]);
+
+            MPBorder.MoveBitmap(BorderImg[1]);
+            MPStrip.MoveBitmap(StripImg[1]);
+
+            HeartBorder.MoveBitmap(HeartImg[0]);
+            HeartStrip.MoveBitmap(HeartImg[1]);
         }
         static BitmapSource[] BorderStripImg = new BitmapSource[] 
         {
             BitmapFrame.Create(new Uri(@"D:\Demo\myex\Beta\Resources\Gauge-FullGreen.png", UriKind.Absolute)),
             BitmapFrame.Create(new Uri(@"D:\Demo\myex\Beta\Resources\Gauge-FullYellow.png", UriKind.Absolute)),
+            BitmapFrame.Create(new Uri(@"D:\Demo\myex\Beta\Resources\Gauge-Heart.png", UriKind.Absolute)),
         };
         //框框
         static BitmapSource[] BorderImg;
@@ -56,32 +63,40 @@ namespace Beta.Controls
         static BitmapSource[] StripImg;
         public static void CutStripImg() 
         {
-            var count=BorderStripImg.Count();
-            BorderImg=new BitmapSource[count];
-            StripImg=new BitmapSource[count];
-            for (int i = 0; i < count;i++ )
+            //条子0-1
+            BorderImg=new BitmapSource[2];
+            StripImg=new BitmapSource[2];
+            for (int i = 0; i < 2;i++ )
             {
                 var img=BorderStripImg[i];
                 BorderImg[i] =new CroppedBitmap(img, new Int32Rect(0, 0, 124, 24));
-                StripImg[i] = new CroppedBitmap(img, new Int32Rect(0, 24, 124, 24));
+                StripImg[i] = new CroppedBitmap(img, new Int32Rect(1, 25, 122, 22));
             }
-
+            //心形
+            HeartImg[0] = new CroppedBitmap(BorderStripImg[2], new Int32Rect(0, 0, 48, 48));
+            HeartImg[1] = new CroppedBitmap(BorderStripImg[2], new Int32Rect(1, 49, 46, 46));
         }
+
+        static BitmapSource[] HeartImg = new BitmapSource[2]; 
+       
+
         public void SetValue(int type, double[] value)
         {
+            const int StripMaskMaxLenght = 118;
+            const int StripMaskMinLenght = 2;
+            const int StripMaskDiffLenght = StripMaskMaxLenght - StripMaskMinLenght;
             switch (type)
             {
                 case 0:
-                    
+                    HPStripMask.Width = StripMaskMaxLenght-(StripMaskDiffLenght - value[0] / value[1] * StripMaskDiffLenght);
                     HPText.Text = string.Format("{0:f0}/{1:f0}", value[0], value[1]);
                     break;
                 case 1:
-                    MPVector.Width = value[0] / value[1] * MaxWidth;
+                    MPStripMask.Width = StripMaskMaxLenght - (StripMaskDiffLenght - value[0] / value[1] * StripMaskDiffLenght);
                     MPText.Text = string.Format("{0:f0}/{1:f0}", value[0], value[1]);
                     break;
                 case 2:
-                    TPVector.Width = value[0] / value[1] * MaxWidth;
-                    TPText.Text = string.Format("{0:f0}/{1:f0}", value[0], value[1]);
+                    
                     break;
             }
 

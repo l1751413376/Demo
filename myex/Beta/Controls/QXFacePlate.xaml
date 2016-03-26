@@ -16,30 +16,37 @@
             <Canvas Margin="8,6,-8,-6">
                 <Canvas x:Name="HPCanvas" Width="130" Height="12" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10">
                     <StackPanel  Width="130" Canvas.ZIndex="2">
-                        <TextBlock x:Name="HPText" Visibility="Hidden"  FontSize="12" FontFamily="新宋体"  HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
+                        <TextBlock x:Name="HPText" FontSize="12" FontFamily="新宋体" Visibility="Hidden"  HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
                     </StackPanel>
                     <Canvas>
                         <Image x:Name="HPBorder"></Image>
-                        <Canvas x:Name="HPStripMask">
+                        <Grid x:Name="HPStripMask" Margin="1,2">
                             <Image x:Name="HPStrip"></Image>
-                        </Canvas>
+                        </Grid>
                     </Canvas>
                 </Canvas>
-                <Canvas x:Name="MPCanvas" Width="130" Height="13" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.667" Canvas.Top="34" Canvas.Left="10">
+                <Canvas x:Name="MPCanvas" Width="130" Height="13" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.667" Canvas.Top="43" Canvas.Left="10">
                     <StackPanel Width="130" Canvas.ZIndex="2">
-                        <TextBlock x:Name="MPText" FontSize="12" FontFamily="新宋体" HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
+                        <TextBlock x:Name="MPText" FontSize="12" FontFamily="新宋体" Visibility="Hidden" HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
                     </StackPanel>
-                    <Border Width="130" BorderBrush="Red" BorderThickness="1">
-                        <Rectangle  Height="12" x:Name="MPVector" HorizontalAlignment="Left"></Rectangle>
-                    </Border>
+                    <Canvas>
+                        <Image x:Name="MPBorder"></Image>
+                        <Grid x:Name="MPStripMask" Margin="1,2">
+                            <Image x:Name="MPStrip" ></Image>
+                        </Grid>
+                    </Canvas>
                 </Canvas>
-                <Canvas x:Name="TPCanvas" Width="130" Height="15" Visibility="Hidden" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Canvas.Top="59" Canvas.Left="10">
-                    <StackPanel Width="130"  Canvas.ZIndex="2">
-                        <TextBlock x:Name="TPText" FontSize="12" FontFamily="新宋体" HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
+
+                <Canvas x:Name="HeartCanvas" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.667" Canvas.Top="13" Canvas.Left="138">
+                    <StackPanel Width="130" Canvas.ZIndex="2">
+                        <TextBlock x:Name="HeartText" FontSize="12" FontFamily="新宋体" Visibility="Hidden" HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
                     </StackPanel>
-                    <Border Width="130" BorderBrush="Red" BorderThickness="1" >
-                        <Rectangle Height="12" x:Name="TPVector" HorizontalAlignment="Left"></Rectangle>
-                    </Border>
+                    <Canvas>
+                        <Image x:Name="HeartBorder"></Image>
+                        <Grid x:Name="HeartStripMask" Margin="1,2">
+                            <Image x:Name="HeartStrip" ></Image>
+                        </Grid>
+                    </Canvas>
                 </Canvas>
             </Canvas>
         </Border>

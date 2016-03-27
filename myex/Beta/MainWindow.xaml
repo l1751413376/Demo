@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Beta"
         mc:Ignorable="d"
-        Title="MainWindow" Width="810" Height="628" >
+        Title="MainWindow" Width="810" Height="628" xmlns:Controls="clr-namespace:Beta.Controls" >
     <Window.Resources>
         <ResourceDictionary Source="Controls/Dictionary1.xaml"></ResourceDictionary>
     </Window.Resources>
@@ -23,6 +23,8 @@
             </Button>
         </Border>
         <Slider Canvas.Left="248" Canvas.Top="244" Width="149" ValueChanged="Slider_ValueChanged"/>
+        
+        
     </Canvas>
 
 </Window>

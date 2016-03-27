@@ -24,6 +24,10 @@ namespace Beta.Controls
         {
             CutStripImg();
         }
+        public static int[] HeartTextMarginLeft = new int[] 
+        {
+            0,-5,-10,-15
+        };
         public static int MaxWidth = 130;
         //life
         LinearGradientBrush[] rainbowBrush = new LinearGradientBrush[]
@@ -49,12 +53,15 @@ namespace Beta.Controls
             MPStrip.MoveBitmap(StripImg[1]);
 
             HeartBorder.MoveBitmap(HeartImg[0]);
+            HeartBorderMaskImg.MoveBitmap(HeartImg[0]);
             HeartStrip.MoveBitmap(HeartImg[1]);
 
             HPText.FontFamily = GV.DroidSansFallback;
-            //HPText.FillColour("#fff");
             MPText.FontFamily = GV.DroidSansFallback;
-            //MPText.FillColour("#fff");
+            HeartText.FontFamily = GV.DroidSansFallback;
+            HPLabel.FontFamily = GV.DroidSansFallback;
+            MPLabel.FontFamily = GV.DroidSansFallback;
+            HeartText.Tag = Canvas.GetLeft(HeartText);
         }
         static BitmapSource[] BorderStripImg = new BitmapSource[] 
         {
@@ -102,7 +109,10 @@ namespace Beta.Controls
                     break;
                 case 2:
                     var v=(34 - value[0] / value[1] * 34);
-                   
+                    HeartText.Text= string.Format("{0:f0}", value[0]);
+                    HeartBorderMask.Height = v+6;
+                    Canvas.SetLeft(HeartText, (double)HeartText.Tag + HeartTextMarginLeft[HeartText.Text.Count()-1]);
+                    //Canvas.SetLeft(HeartText, -100);
                     break;
             }
 

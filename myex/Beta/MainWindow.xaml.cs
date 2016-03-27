@@ -45,6 +45,8 @@ namespace Beta
         SolidColorBrush redsolid = new SolidColorBrush(Colors.Red);
         SolidColorBrush whitesolid = new SolidColorBrush(Colors.White);
         int count = 0;
+        MetalFrame mf = new MetalFrame();
+        QXFacePlate face = new QXFacePlate();
         private void InitSpirit()
         {
 
@@ -89,14 +91,14 @@ namespace Beta
                 }
             };
 
-            QXFacePlate face = new QXFacePlate();
+            
             face.SetValue(0,new double[] { 2990,12350});
             face.SetValue(1,new double[] { 300, 1000 });
-            face.SetValue(2,new double[] { 500, 1000 });
+            face.SetValue(2,new double[] { 1, 1000 });
             Canvas.SetZIndex(face, 2);
             Carrier.Children.Add(face);
             
-            MetalFrame mf = new MetalFrame();
+           
             Canvas.SetTop(mf,300);
             Canvas.SetLeft(mf, 50);
             Canvas.SetZIndex(mf, 3);
@@ -373,7 +375,7 @@ namespace Beta
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
+            face.SetValue(2, new double[] { 100* e.NewValue, 1000 });
         }
 
 

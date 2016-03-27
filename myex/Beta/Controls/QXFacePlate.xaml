@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="111" Width="318" xmlns:src="clr-namespace:Beta.Controls">
+             mc:Ignorable="d" Height="111" Width="318" xmlns:src="clr-namespace:Beta.Controls" xmlns:Controls="clr-namespace:Beta.Controls">
     <UserControl.Resources>
         <ResourceDictionary Source="Dictionary1.xaml"></ResourceDictionary>
     </UserControl.Resources>
@@ -18,7 +18,8 @@
         <Border x:Name="PropertyBorder" Width="217" Height="104"  HorizontalAlignment="Left" Canvas.Left="109">
             <Canvas Margin="10,10,-10,-10">
                 <Canvas x:Name="HPCanvas" Width="130" Height="12" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="10">
-                    <TextBlock Style="{StaticResource C}" Panel.ZIndex="2" x:Name="HPText"  VerticalAlignment="Center" TextTrimming="CharacterEllipsis" FontSize="16" TextAlignment="Right" HorizontalAlignment="Center" Width="114" Canvas.Top="3" ></TextBlock>
+                    <Controls:StrokeableLabel HorizontalAlignment="Right" Panel.ZIndex="2" x:Name="HPLabel" Text="HP"  Fill="#00b8d9" Stroke="Black" StrokeThickness="0.3" FontWeight="Bold" FontSize="16" Canvas.Top="2" Height="20" Width="24" RenderTransformOrigin="0.5,0.5" Canvas.Left="-8"  />
+                    <Controls:StrokeableLabel HorizontalAlignment="Right" Panel.ZIndex="2" x:Name="HPText" Text="HPText"  Fill="#fff" Stroke="Black" StrokeThickness="0.3" FontWeight="Bold" FontSize="16" Canvas.Top="2" Height="20" Canvas.Left="20" Width="59" RenderTransformOrigin="0.5,0.5"  />
                     <Canvas>
                         <Image x:Name="HPBorder"></Image>
                         <Grid x:Name="HPStripMask" Margin="1,2">
@@ -27,7 +28,8 @@
                     </Canvas>
                 </Canvas>
                 <Canvas x:Name="MPCanvas" Width="130" Height="13" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.667" Canvas.Top="43" Canvas.Left="10">
-                    <TextBlock Panel.ZIndex="2" x:Name="MPText" FontSize="16" TextAlignment="Right" HorizontalAlignment="Center"  Foreground="Black" Width="114" Canvas.Top="3" ></TextBlock>
+                    <Controls:StrokeableLabel HorizontalAlignment="Right" Panel.ZIndex="2" x:Name="MPLabel" Text="MP"  Fill="#00b8d9" Stroke="Black" StrokeThickness="0.3" FontWeight="Bold" FontSize="16" Canvas.Top="2" Height="20" Width="24" RenderTransformOrigin="0.5,0.5" Canvas.Left="-8"  />
+                    <Controls:StrokeableLabel HorizontalAlignment="Right" Panel.ZIndex="2" x:Name="MPText" Text="MPText"  Fill="#fff" Stroke="Black" StrokeThickness="0.3" FontWeight="Bold" FontSize="16" Canvas.Top="2" Height="20" Canvas.Left="20" Width="129" RenderTransformOrigin="0.5,0.5"  />
                     <Canvas>
                         <Image x:Name="MPBorder"></Image>
                         <Grid x:Name="MPStripMask" Margin="1,2">
@@ -35,19 +37,23 @@
                         </Grid>
                     </Canvas>
                 </Canvas>
-
                 <Canvas x:Name="HeartCanvas" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.667" Canvas.Top="13" Canvas.Left="138">
-                    <StackPanel Width="130" Canvas.ZIndex="2">
-                        <TextBlock x:Name="HeartText" FontSize="12" FontFamily="新宋体" Visibility="Hidden" HorizontalAlignment="Center"  Foreground="White">123/123</TextBlock>
-                    </StackPanel>
+                    <Controls:StrokeableLabel HorizontalAlignment="Center" Panel.ZIndex="2" x:Name="HeartText" Text="HeartText"  Fill="#fff" Stroke="Black" StrokeThickness="0.3" FontWeight="Bold" FontSize="16" Canvas.Top="13" Height="20" Canvas.Left="19" RenderTransformOrigin="0.5,0.5" Width="80"  />
                     <Canvas>
                         <Image x:Name="HeartBorder"></Image>
-                        <Grid x:Name="HeartStripMask" Margin="1,1">
+                        <Grid x:Name="HeartBorderMask" Panel.ZIndex="3">
+                            <Image x:Name="HeartBorderMaskImg"></Image>
+                        </Grid>
+                        <Grid Margin="1,1">
                             <Image x:Name="HeartStrip" ></Image>
                         </Grid>
                     </Canvas>
                 </Canvas>
+                <StackPanel x:Name="Sutes" Orientation="Horizontal" RenderTransformOrigin="0.479,0.533" Canvas.Top="69" Canvas.Left="20">
+                    <TextBlock>XC</TextBlock>
+                </StackPanel>
             </Canvas>
+
         </Border>
         <src:MetalFrame BorderHeight="{Binding ElementName=PropertyBorder,Path=Height}" BorderWidth="{Binding ElementName=PropertyBorder,Path=Width}" Canvas.Left="109"/>
         <!--<Grid x:Name="LevelGrid">

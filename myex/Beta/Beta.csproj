@@ -87,10 +87,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\StrokeableLabel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +95,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\StrokeableLabel.cs" />
     <Compile Include="Controls\Enumeration.cs" />
     <Compile Include="Controls\GV.cs" />
     <Compile Include="Controls\MetalFrame.xaml.cs">
@@ -115,9 +112,6 @@
       <DependentUpon>QXSprite.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Helper.cs" />
-    <Compile Include="Controls\StrokeableLabel.xaml.cs">
-      <DependentUpon>StrokeableLabel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

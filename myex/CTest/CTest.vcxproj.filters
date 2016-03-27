@@ -18,6 +18,9 @@
     <ClCompile Include="PNG.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
+    <ClCompile Include="Pargram.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Debug\1.txt">

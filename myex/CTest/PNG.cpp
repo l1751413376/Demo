@@ -182,11 +182,3 @@ void PNGFormatData_R8G8B8A8(BYTE *& dest, int & desLen, BYTE * source, int sourc
 
 
 
-
-
-void main()
-{
-	
-	auto size=sizeof(RECT);
-
-}

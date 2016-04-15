@@ -13,7 +13,10 @@ namespace RubyDemo
     {
         static void Main(string[] args)
         {
-            RubyArray rmScripts = (RubyArray)Ruby.MarshalLoad(File.ReadAllBytes(@"D:\MyConfiguration\ly09614.TCENT\Desktop\Scripts.rvdata2"));
+            Ruby.MarshalLoad(File.ReadAllBytes(@"D:\MyConfiguration\ly09614.TCENT\Desktop\Scripts(1).rvdata2"));
+            Ruby.MarshalLoad(File.ReadAllBytes(@"D:\MyConfiguration\ly09614.TCENT\Desktop\Classes.rvdata2"));
+            //Ruby.MarshalLoad(File.ReadAllBytes(@"D:\MyConfiguration\ly09614.TCENT\Desktop\Scripts(1).rvdata2"));
+            RubyArray rmScripts = (RubyArray)Ruby.MarshalLoad(File.ReadAllBytes(@"D:\MyConfiguration\ly09614.TCENT\Desktop\MapInfos.rvdata2"));
 
             foreach (RubyArray rmScript in rmScripts)
                 InsertScript(-1, false, rmScript);

@@ -180,6 +180,7 @@ namespace Beta
             GV.Storyboard[sprite.Name].Children.Add(pointAnimation);
             GV.Storyboard[sprite.Name].Begin();
         }
+
         /// <summary>
         /// A*寻路移动
         /// </summary>

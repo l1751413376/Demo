@@ -54,7 +54,15 @@ namespace Beta.Controls
         /// <summary>
         /// Was文件
         /// </summary>
-        public WasFile wasFile;
+        public WasFile WasStantFile;
+        /// <summary>
+        /// Was文件
+        /// </summary>
+        public WasFile WasRunFile;
+        /// <summary>
+        /// Was文件
+        /// </summary>
+        public List<WasFile> WasFiles;
 
         /// <summary>
         /// 计数 0-当前,1最大值
@@ -78,6 +86,15 @@ namespace Beta.Controls
         /// 动作
         /// </summary>
         public Actions Action;
+
+        /// <summary>
+        /// 设置动作
+        /// </summary>
+        public void SetAction(Actions action) 
+        {
+            Action = action;
+            Count[0] = 0;
+        }
 
         /// <summary>
         /// 获取或设置精灵当前朝向:0朝上4朝下,顺时针依次为0,1,2,3,4,5,6,7(关联属性)
@@ -124,13 +141,32 @@ namespace Beta.Controls
         /// </summary>
         private void Timer_Tick(object sender, EventArgs e)
         {
-            var img = wasFile.GetImg(0, Count[0]);
-            Body.Source = img;
-            Body.Width = img.Width;
-            Body.Height = img.Height;
-            Canvas.SetLeft(Body, CenterX - wasFile.CentryX);
-            Canvas.SetTop(Body, CenterY - wasFile.CentryY);
-            Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+            if (Action == Actions.Stop)
+            {
+                var img = WasStantFile.GetImg(0, Count[0]);
+                Body.Source = img;
+                Body.Width = img.Width;
+                Body.Height = img.Height;
+                Canvas.SetLeft(Body, CenterX - WasStantFile.CentryX);
+                Canvas.SetTop(Body, CenterY - WasStantFile.CentryY);
+                Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+            }
+            else if (Action == Actions.Run)
+            {
+                var storyboard=GV.Storyboard[Name];
+                if (storyboard != null && storyboard.GetCurrentTime() == TimeSpan.FromSeconds(1)) 
+                {
+                    Action = Actions.Stop;
+                }
+
+                var img = WasRunFile.GetImg(0, Count[0]);
+                Body.Source = img;
+                Body.Width = img.Width;
+                Body.Height = img.Height;
+                Canvas.SetLeft(Body, CenterX - WasRunFile.CentryX);
+                Canvas.SetTop(Body, CenterY - WasRunFile.CentryY);
+                Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+            }
         }
 
         #region 属性绑定
@@ -162,6 +198,7 @@ namespace Beta.Controls
             if (obj.Visibility == Visibility.Visible)
             {
                 Point p = (Point)e.NewValue;
+                obj.Position[0] = p.ToPosition();
                 obj.SetValue(Canvas.LeftProperty, p.X - GV.WindowOffsetX - CenterX);
                 obj.SetValue(Canvas.TopProperty, p.Y - GV.WindowOffsetY - CenterY);
                 obj.SetValue(Canvas.ZIndexProperty, (int)p.Y);

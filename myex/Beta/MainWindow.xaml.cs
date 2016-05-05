@@ -61,7 +61,7 @@ namespace Beta
             //Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率
             //Carrier.Children.Add(Spirit);
             Spirit.Coordinate = new Point(10, 10);
-            //Spirit.CoordinateChanged += MapMove;
+            Spirit.CoordinateChanged += MapMove;
             FixedObstruction = new byte[1024, 1024];
             {
                 for (var i = 0; i < 1024; i++)
@@ -204,7 +204,7 @@ namespace Beta
                 }
             }
             //进行单元格缩小
-            Point start = new Point(0,0);
+            Point start = sprite.Position[0];
             Point mapPosition = p.ToMapCoordinate();
             Point end = mapPosition.ToPosition();
             //相同点 return
@@ -240,7 +240,8 @@ namespace Beta
             //创建坐标变换逐帧动画
             PointAnimationUsingKeyFrames pointAnimationUsingKeyFrames = new PointAnimationUsingKeyFrames()
             {
-                Duration = new Duration(TimeSpan.FromMilliseconds(path.Count * sprite.VRunSpeed))
+                Duration = new Duration(TimeSpan.FromMilliseconds(path.Count * sprite.VRunSpeed)),
+                
             };
             Storyboard.SetTarget(pointAnimationUsingKeyFrames, sprite);
             Storyboard.SetTargetProperty(pointAnimationUsingKeyFrames, new PropertyPath("Coordinate"));
@@ -256,13 +257,13 @@ namespace Beta
                 if (i == iMax)
                 {
                     //linearPointKeyFrame.Value = sprite.Coordinate;
-                    linearPointKeyFrame.Value = new Point(10,10);
+                    linearPointKeyFrame.Value = sprite.Coordinate;
                 }
                 else
                 {
                     linearPointKeyFrame.Value = new Point(path[i].X,path[i].Y).ToCoordinate(); //+ GridSize / 2为偏移处理
                 }
-                DrawRect(new Point(path[i].X, path[i].Y));
+                //DrawRect(new Point(path[i].X, path[i].Y));
                 pointAnimationUsingKeyFrames.KeyFrames.Add(linearPointKeyFrame);
                 //加入朝向匀速关键帧
                 var linearDoubleKeyFrame = new LinearDoubleKeyFrame()

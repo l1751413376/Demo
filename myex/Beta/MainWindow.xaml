@@ -13,18 +13,6 @@
         <StackPanel Name="ExperiencePanel">
             <Rectangle x:Name="Experience" Canvas.ZIndex="0"></Rectangle>
         </StackPanel>
-        <Border Background="LightBlue" 
-        BorderBrush="Black" 
-        BorderThickness="2" 
-        CornerRadius="45" 
-        Padding="25">
-            <Button  Style="{StaticResource A}" Padding="10"  Canvas.Left="169" Canvas.Top="124" Cursor="Hand">
-                123
-            </Button>
-        </Border>
-        <Slider Canvas.Left="248" Canvas.Top="244" Width="149" ValueChanged="Slider_ValueChanged"/>
-        
-        
     </Canvas>
 
 </Window>

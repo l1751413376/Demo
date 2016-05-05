@@ -182,7 +182,7 @@ namespace Beta.Controls
     public static class PointHelper 
     {
 
-        public static int GridSize = 10;
+        public static int GridSize = 20;
 
         /// <summary>
         /// 窗口坐标->地图坐标
@@ -204,21 +204,21 @@ namespace Beta.Controls
         }
 
         /// <summary>
-        /// 地图位置->地图坐标
+        /// 位置->坐标
         /// </summary>
         public static Point ToCoordinate(this Point p)
         {
-            p.X = p.X * GridSize + GridSize / 5;
-            p.Y = p.Y * GridSize + GridSize / 5;
+            p.X = p.X * GridSize + GridSize / 2;
+            p.Y = p.Y * GridSize + GridSize / 2;
             return p;
         }
         /// <summary>
-        /// 地图坐标->地图位置
+        /// 坐标->位置
         /// </summary>
         public static Point ToPosition(this Point p)
         {
-            p.X = (int)(p.X / GridSize);
-            p.X = (int)(p.Y / GridSize);
+            p.X = (int)(p.X / (GridSize));
+            p.Y = (int)(p.Y / (GridSize));
             return p;
         }
 

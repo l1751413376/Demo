@@ -30,7 +30,7 @@ namespace Beta
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int GridSize = 10; //单位格子大小
+        private int GridSize = 20; //单位格子大小
         /// <summary>
         /// 障碍物
         /// </summary>
@@ -43,6 +43,7 @@ namespace Beta
 
         QXMap map = new QXMap();
         SolidColorBrush redsolid = new SolidColorBrush(Colors.Red);
+        SolidColorBrush GreenYellowSolid = new SolidColorBrush(Colors.GreenYellow);
         SolidColorBrush whitesolid = new SolidColorBrush(Colors.White);
         int count = 0;
         MetalFrame mf = new MetalFrame();
@@ -59,52 +60,60 @@ namespace Beta
             //Spirit.limitcount = wasFile2.FrameCount - 1;
             //Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率
             //Carrier.Children.Add(Spirit);
-            Spirit.Coordinate = new Point(100,100);
-            Spirit.CoordinateChanged += MapMove;
+            Spirit.Coordinate = new Point(10, 10);
+            //Spirit.CoordinateChanged += MapMove;
+            FixedObstruction = new byte[1024, 1024];
+            {
+                for (var i = 0; i < 1024; i++)
+                    for (var x = 0; x < 1024; x++) 
+                    {
+                        FixedObstruction[i, x] = 1;
+                    }
+            }
             map.ReadMap();
             map.Width = 800;
             map.Height = 600;
-            Canvas.SetZIndex(map,-1);
+            Canvas.SetZIndex(map, -1);
             Carrier.Children.Add(map);
-            //Carrier.Children.Add(Spirit);
+            Carrier.Children.Add(Spirit);
             //DrawGrid();
             Canvas.SetZIndex(showRect, -2);
             Carrier.Children.Add(showRect);
 
             Timer.Interval = TimeSpan.FromMilliseconds(100);
-            Timer.Tick += (sender, e) => 
+            Timer.Tick += (sender, e) =>
             {
                 if (showRect.Fill != redsolid)
                 {
                     showRect.Fill = redsolid;
                 }
-                else 
+                else
                 {
                     showRect.Fill = whitesolid;
                 }
                 count++;
                 if (count == 6)
                 {
-                    Canvas.SetZIndex(showRect,-2);
+                    Canvas.SetZIndex(showRect, -2);
                     Timer.Stop();
                     count = 0;
                 }
             };
 
-            
-            face.SetValue(0,new double[] { 2990,12350});
-            face.SetValue(1,new double[] { 300, 1000 });
-            face.SetValue(2,new double[] { 1, 1000 });
-            Canvas.SetZIndex(face, 2);
-            Carrier.Children.Add(face);
-            
-           
-            Canvas.SetTop(mf,300);
-            Canvas.SetLeft(mf, 50);
-            Canvas.SetZIndex(mf, 3);
-            mf.SetHeight(100);
-            mf.SetWidth(500);
-            Carrier.Children.Add(mf);
+
+            //face.SetValue(0,new double[] { 2990,12350});
+            //face.SetValue(1,new double[] { 300, 1000 });
+            //face.SetValue(2,new double[] { 1, 1000 });
+            //Canvas.SetZIndex(face, 2);
+            //Carrier.Children.Add(face);
+
+
+            //Canvas.SetTop(mf,300);
+            //Canvas.SetLeft(mf, 50);
+            //Canvas.SetZIndex(mf, 3);
+            //mf.SetHeight(100);
+            //mf.SetWidth(500);
+            //Carrier.Children.Add(mf);
 
         }
 
@@ -186,17 +195,18 @@ namespace Beta
         /// </summary>
         private void AStarMove(QXSprite sprite, Point p) 
         {
+            for (var i = Carrier.Children.Count-1; i >= 0; i--)
+            {
+                Rectangle obj=null;
+                if ((obj = (Carrier.Children[i] as Rectangle)) != null && obj.Name == "DrawRect")
+                {
+                    Carrier.Children.RemoveAt(i);
+                }
+            }
             //进行单元格缩小
-            Point start = new Point()
-            {
-                X = sprite.Coordinate.X / GridSize,
-                Y = sprite.Coordinate.Y / GridSize
-            };
-            Point end = new Point()
-            {
-                X = p.X / GridSize,
-                Y = p.Y / GridSize
-            };
+            Point start = new Point(0,0);
+            Point mapPosition = p.ToMapCoordinate();
+            Point end = mapPosition.ToPosition();
             //相同点 return
             if (start == end)
                 return;
@@ -245,16 +255,14 @@ namespace Beta
                 //平滑衔接动画(将寻路坐标系中的坐标放大回地图坐标系中的坐标)
                 if (i == iMax)
                 {
-                    linearPointKeyFrame.Value = sprite.Coordinate;
-                }
-                else if (i == 0)
-                {
-                    linearPointKeyFrame.Value = sprite.Position[1];
+                    //linearPointKeyFrame.Value = sprite.Coordinate;
+                    linearPointKeyFrame.Value = new Point(10,10);
                 }
                 else
                 {
-                    linearPointKeyFrame.Value = new Point(path[i].X * GridSize + GridSize / 2, path[i].Y * GridSize + GridSize / 2); //+ GridSize / 2为偏移处理
+                    linearPointKeyFrame.Value = new Point(path[i].X,path[i].Y).ToCoordinate(); //+ GridSize / 2为偏移处理
                 }
+                DrawRect(new Point(path[i].X, path[i].Y));
                 pointAnimationUsingKeyFrames.KeyFrames.Add(linearPointKeyFrame);
                 //加入朝向匀速关键帧
                 var linearDoubleKeyFrame = new LinearDoubleKeyFrame()
@@ -289,25 +297,37 @@ namespace Beta
         }
         private void Carrier_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //Point p = e.GetPosition(Carrier);
-            //LinearMove(Spirit,p);
-            //ShowRect(p);
+            Point p = e.GetPosition(Carrier);
+            AStarMove(Spirit, p);
+            ShowRect(p);
         }
         Rectangle showRect = new Rectangle();
         private void ShowRect(Point p)
         {
             p = new Point()
             {
-                X = p.X / (GridSize*2),
-                Y = p.Y / (GridSize*2)
+                X = p.X / (GridSize),
+                Y = p.Y / (GridSize)
             };
 
-            Canvas.SetLeft(showRect,(int)p.X * GridSize * 2);
-            Canvas.SetTop(showRect, (int)p.Y * GridSize * 2);
-            showRect.Width = GridSize * 2;
-            showRect.Height = GridSize * 2;
+            Canvas.SetLeft(showRect,(int)p.X * GridSize);
+            Canvas.SetTop(showRect, (int)p.Y * GridSize);
+            showRect.Width = GridSize;
+            showRect.Height = GridSize;
             Canvas.SetZIndex(showRect, 2);
             Timer.Start();
+        }
+        private void DrawRect(Point p) 
+        {
+            var rect = new Rectangle();
+            rect.Name = "DrawRect";
+            Canvas.SetLeft(rect, (int)p.X * GridSize);
+            Canvas.SetTop(rect, (int)p.Y * GridSize);
+            rect.Width = GridSize;
+            rect.Height = GridSize;
+            rect.Fill = GreenYellowSolid;
+            Canvas.SetZIndex(rect, 1);
+            Carrier.Children.Add(rect);
         }
 
         DispatcherTimer Timer = new DispatcherTimer();

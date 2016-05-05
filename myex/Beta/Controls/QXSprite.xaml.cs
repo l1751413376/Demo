@@ -163,7 +163,7 @@ namespace Beta.Controls
             {
                 Point p = (Point)e.NewValue;
                 obj.SetValue(Canvas.LeftProperty, p.X - GV.WindowOffsetX - CenterX);
-                obj.SetValue(Canvas.TopProperty, p.Y - GV.WindowOffsetY - CenterX);
+                obj.SetValue(Canvas.TopProperty, p.Y - GV.WindowOffsetY - CenterY);
                 obj.SetValue(Canvas.ZIndexProperty, (int)p.Y);
                 obj.SName.Text = string.Format("p.X={0:f0},p.Y={1:f0},\nCenterX={2},CenterY={3}", p.X, p.Y, GV.WindowOffsetX, GV.WindowOffsetY);
                 if (obj.CoordinateChanged != null)

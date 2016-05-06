@@ -143,6 +143,7 @@ namespace Beta.Controls
             }
             else
             {
+                Timer.Interval = TimeSpan.FromMilliseconds(3000);
                 Timer.Tick += new EventHandler(Timer_Tick);
                 Timer.Start();
             }

@@ -108,7 +108,7 @@ namespace Beta
             Canvas.SetBottom(face, 0);
             Carrier.Children.Add(face);
 
-
+            Alert.Init(Carrier);
             //Canvas.SetTop(mf,300);
             //Canvas.SetLeft(mf, 50);
             //Canvas.SetZIndex(mf, 3);
@@ -299,9 +299,11 @@ namespace Beta
         }
         private void Carrier_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            
             Point p = e.GetPosition(Carrier);
             AStarMove(Spirit, p);
             ShowRect(p);
+            Alert.Show(p.ToString());
         }
         Rectangle showRect = new Rectangle();
         private void ShowRect(Point p)

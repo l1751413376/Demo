@@ -9,7 +9,7 @@
     <Window.Resources>
         <ResourceDictionary Source="Controls/Dictionary1.xaml"></ResourceDictionary>
     </Window.Resources>
-    <Canvas x:Name="Carrier" Background="Silver" MouseLeftButtonDown="Carrier_MouseLeftButtonDown" Margin="1,0,1,1" Width="800">
+    <Canvas x:Name="Carrier" Background="Silver" MouseDown="Carrier_MouseLeftButtonDown" Margin="1,0,1,1" Width="800" Height="600">
         <StackPanel Name="ExperiencePanel">
             <Rectangle x:Name="Experience" Canvas.ZIndex="0"></Rectangle>
         </StackPanel>

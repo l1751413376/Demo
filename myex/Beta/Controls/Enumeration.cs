@@ -17,13 +17,29 @@
         /// 战斗
         /// </summary>
         Attack = 2,
+    }
+
+    public enum AttackActions
+    {
+        /// <summary>
+        /// 停止
+        /// </summary>
+        Stop = 0,
+        /// <summary>
+        /// 跑动
+        /// </summary>
+        Run = 1,
+        /// <summary>
+        /// 战斗
+        /// </summary>
+        Attack = 2,
+        /// <summary>
+        /// 战斗
+        /// </summary>
+        Back = 3,
         /// <summary>
         /// 施法
         /// </summary>
-        Magic = 3,
-        /// <summary>
-        /// 死亡
-        /// </summary>
-        Death = 4,
+        Mage = 4,
     }
 }

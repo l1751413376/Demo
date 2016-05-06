@@ -65,7 +65,7 @@ namespace Beta
             FixedObstruction = new byte[1024, 1024];
             {
                 for (var i = 0; i < 1024; i++)
-                    for (var x = 0; x < 1024; x++) 
+                    for (var x = 0; x < 1024; x++)
                     {
                         FixedObstruction[i, x] = 1;
                     }
@@ -101,11 +101,12 @@ namespace Beta
             };
 
 
-            //face.SetValue(0,new double[] { 2990,12350});
-            //face.SetValue(1,new double[] { 300, 1000 });
-            //face.SetValue(2,new double[] { 1, 1000 });
-            //Canvas.SetZIndex(face, 2);
-            //Carrier.Children.Add(face);
+            face.SetValue(0, new double[] { 2990, 12350 });
+            face.SetValue(1, new double[] { 300, 1000 });
+            face.SetValue(2, new double[] { 1, 1000 });
+            Canvas.SetZIndex(face, 10000);
+            Canvas.SetBottom(face, 0);
+            Carrier.Children.Add(face);
 
 
             //Canvas.SetTop(mf,300);
@@ -117,21 +118,21 @@ namespace Beta
 
         }
 
-        void DrawGrid() 
+        void DrawGrid()
         {
-            for (int x = 0; x <= 800; x += GridSize*2)
+            for (int x = 0; x <= 800; x += GridSize * 2)
             {
                 Rectangle rect = new Rectangle();
                 rect.Width = 1;
                 rect.Height = 600;
                 rect.Fill = new SolidColorBrush(Colors.Red);
-                Canvas.SetLeft(rect,x);
+                Canvas.SetLeft(rect, x);
                 Canvas.SetTop(rect, 0);
                 Canvas.SetZIndex(rect, 100);
                 Carrier.Children.Add(rect);
 
             }
-            for (int x = 0; x <= 600; x += GridSize*2)
+            for (int x = 0; x <= 600; x += GridSize * 2)
             {
                 Rectangle rect = new Rectangle();
                 rect.Width = 800;
@@ -143,23 +144,23 @@ namespace Beta
                 Carrier.Children.Add(rect);
 
             }
-        } 
+        }
 
         public MainWindow()
         {
             InitializeComponent();
             WindowStartupLocation = WindowStartupLocation.Manual;
             Left = 0;//屏幕宽度
-            Top = SystemParameters.PrimaryScreenHeight-100;//屏幕高度;;
+            Top = SystemParameters.PrimaryScreenHeight - 100;//屏幕高度;;
             InitSpirit();
         }
-       
-        
-        
+
+
+
         /// <summary>
         /// 直线移动
         /// </summary>
-        private void LinearMove(QXSprite sprite, Point p) 
+        private void LinearMove(QXSprite sprite, Point p)
         {
             //转换坐标为地图坐标
             GV.Storyboard.NewStoryboard(sprite.Name);
@@ -167,7 +168,7 @@ namespace Beta
 
             //创建坐标变换属性动画
             PointAnimation pointAnimation = new PointAnimation()
-            {
+            {  
                 To = p.ToMapCoordinate(),
                 Duration = new Duration(TimeSpan.FromMilliseconds(moveCost)),
             };
@@ -193,11 +194,11 @@ namespace Beta
         /// <summary>
         /// A*寻路移动
         /// </summary>
-        private void AStarMove(QXSprite sprite, Point p) 
+        private void AStarMove(QXSprite sprite, Point p)
         {
-            for (var i = Carrier.Children.Count-1; i >= 0; i--)
+            for (var i = Carrier.Children.Count - 1; i >= 0; i--)
             {
-                Rectangle obj=null;
+                Rectangle obj = null;
                 if ((obj = (Carrier.Children[i] as Rectangle)) != null && obj.Name == "DrawRect")
                 {
                     Carrier.Children.RemoveAt(i);
@@ -229,7 +230,7 @@ namespace Beta
             }
 
             GV.Storyboard.NewStoryboard(sprite.Name);
-            GV.Storyboard[sprite.Name].Completed += new EventHandler(Move_Completed);
+            GV.Storyboard[sprite.Name].Completed += new EventHandler((sender, e) => Move_Completed(sender, e, sprite));
             //创建朝向动画
             DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames = new DoubleAnimationUsingKeyFrames()
             {
@@ -241,11 +242,11 @@ namespace Beta
             PointAnimationUsingKeyFrames pointAnimationUsingKeyFrames = new PointAnimationUsingKeyFrames()
             {
                 Duration = new Duration(TimeSpan.FromMilliseconds(path.Count * sprite.VRunSpeed)),
-                
+
             };
             Storyboard.SetTarget(pointAnimationUsingKeyFrames, sprite);
             Storyboard.SetTargetProperty(pointAnimationUsingKeyFrames, new PropertyPath("Coordinate"));
-            
+
             for (int iMax = path.Count - 1, i = iMax; i >= 0; i--)
             {
                 //加入坐标变换的匀速关键帧
@@ -256,12 +257,11 @@ namespace Beta
                 //平滑衔接动画(将寻路坐标系中的坐标放大回地图坐标系中的坐标)
                 if (i == iMax)
                 {
-                    //linearPointKeyFrame.Value = sprite.Coordinate;
                     linearPointKeyFrame.Value = sprite.Coordinate;
                 }
                 else
                 {
-                    linearPointKeyFrame.Value = new Point(path[i].X,path[i].Y).ToCoordinate(); //+ GridSize / 2为偏移处理
+                    linearPointKeyFrame.Value = new Point(path[i].X, path[i].Y).ToCoordinate(); //+ GridSize / 2为偏移处理
                 }
                 //DrawRect(new Point(path[i].X, path[i].Y));
                 pointAnimationUsingKeyFrames.KeyFrames.Add(linearPointKeyFrame);
@@ -286,8 +286,9 @@ namespace Beta
         /// <summary>
         /// 移动结束
         /// </summary>
-        private void Move_Completed(object sender, EventArgs e)
+        private void Move_Completed(object sender, EventArgs e, QXSprite sprite)
         {
+            sprite.Action = Actions.Stop;
         }
         /// <summary>
         /// 
@@ -311,14 +312,14 @@ namespace Beta
                 Y = p.Y / (GridSize)
             };
 
-            Canvas.SetLeft(showRect,(int)p.X * GridSize);
+            Canvas.SetLeft(showRect, (int)p.X * GridSize);
             Canvas.SetTop(showRect, (int)p.Y * GridSize);
             showRect.Width = GridSize;
             showRect.Height = GridSize;
             Canvas.SetZIndex(showRect, 2);
             Timer.Start();
         }
-        private void DrawRect(Point p) 
+        private void DrawRect(Point p)
         {
             var rect = new Rectangle();
             rect.Name = "DrawRect";
@@ -350,32 +351,32 @@ namespace Beta
         /// </summary>
         private void MapMove(QXSprite leader)
         {
-            var lc=leader.Coordinate;
+            var lc = leader.Coordinate;
 
             var marginLeft = lc.X - GV.WindowOffsetX;
-            var marginRight =GV.WindowOffsetX + WidthWindow -lc.X;
+            var marginRight = GV.WindowOffsetX + WidthWindow - lc.X;
             var marginTop = lc.Y - GV.WindowOffsetY;
             var marginBottom = GV.WindowOffsetY + HeightWindow - lc.Y;
 
-            if (GV.WindowOffsetX>0 && marginLeft < GV.LeaderMargin)
+            if (GV.WindowOffsetX > 0 && marginLeft < GV.LeaderMargin)
             {
-                var offset=GV.LeaderMargin-marginLeft;
-                if((GV.WindowOffsetX -= (int)offset)<0)
+                var offset = GV.LeaderMargin - marginLeft;
+                if ((GV.WindowOffsetX -= (int)offset) < 0)
                 {
-                    GV.WindowOffsetX=0;
+                    GV.WindowOffsetX = 0;
                 }
                 Canvas.SetLeft(map.ImageContent, -(GV.WindowOffsetX));
             }
             if (GV.WindowOffsetX + WidthWindow < map.Width_ && marginRight <= GV.LeaderMargin)
             {
                 var offset = GV.LeaderMargin - marginRight;
-                if ((GV.WindowOffsetX += (int)offset) + WidthWindow > map.Width_) 
+                if ((GV.WindowOffsetX += (int)offset) + WidthWindow > map.Width_)
                 {
-                    GV.WindowOffsetX =(int)(map.Width_ - WidthWindow);
+                    GV.WindowOffsetX = (int)(map.Width_ - WidthWindow);
                 }
                 Canvas.SetLeft(map.ImageContent, -(GV.WindowOffsetX));
             }
-            if (GV.WindowOffsetY > 0  &&  marginTop <= GV.LeaderMargin)
+            if (GV.WindowOffsetY > 0 && marginTop <= GV.LeaderMargin)
             {
                 var offset = GV.LeaderMargin - marginTop;
                 if ((GV.WindowOffsetY -= (int)offset) < 0)
@@ -397,7 +398,7 @@ namespace Beta
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            face.SetValue(2, new double[] { 100* e.NewValue, 1000 });
+            face.SetValue(2, new double[] { 100 * e.NewValue, 1000 });
         }
 
 

@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -65,9 +66,9 @@ namespace Beta.Controls
         public List<WasFile> WasFiles;
 
         /// <summary>
-        /// 计数 0-当前,1最大值
+        /// 计数 0-当前,1最大值,2攻击时
         /// </summary>
-        public int[] Count=new int[2];
+        public int[] Count = new int[3];
 
         /// <summary>
         /// 获取或设置精灵坐标(关联属性)
@@ -76,6 +77,12 @@ namespace Beta.Controls
         {
             get { return (Point)GetValue(CoordinateProperty); }
             set { SetValue(CoordinateProperty, value); }
+        }
+
+        public Point AttackCoordinate
+        {
+            get { return (Point)GetValue(AttackCoordinateProperty); }
+            set { SetValue(AttackCoordinateProperty, value); }
         }
         /// <summary>
         /// 坐标变换事件
@@ -86,11 +93,14 @@ namespace Beta.Controls
         /// 动作
         /// </summary>
         public Actions Action;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public AttackActions AttackAction;
         /// <summary>
         /// 设置动作
         /// </summary>
-        public void SetAction(Actions action) 
+        public void SetAction(Actions action)
         {
             Action = action;
             Count[0] = 0;
@@ -105,7 +115,12 @@ namespace Beta.Controls
             set { SetValue(DirectionProperty, value); }
         }
         #endregion
-
+        #region 单位属性
+        /// <summary>
+        /// 属性
+        /// </summary>
+        UnitProperties UnitProperties;
+        #endregion
         #region 初始化方法
 
         public QXSprite()
@@ -134,10 +149,10 @@ namespace Beta.Controls
 
         }
         #endregion
-        
+
 
         /// <summary>
-        /// 间隔事件
+        /// 间隔事件（生命钟）
         /// </summary>
         private void Timer_Tick(object sender, EventArgs e)
         {
@@ -153,22 +168,76 @@ namespace Beta.Controls
             }
             else if (Action == Actions.Run)
             {
-                var storyboard=GV.Storyboard[Name];
-                if (storyboard != null && storyboard.GetCurrentTime() == TimeSpan.FromSeconds(1)) 
-                {
-                    Action = Actions.Stop;
-                }
-
                 var img = WasRunFile.GetImg(0, Count[0]);
                 Body.Source = img;
                 Body.Width = img.Width;
                 Body.Height = img.Height;
-                Canvas.SetLeft(Body, CenterX - WasRunFile.CentryX);
-                Canvas.SetTop(Body, CenterY - WasRunFile.CentryY);
+                Canvas.SetLeft(Body, CenterX - WasStantFile.CentryX);
+                Canvas.SetTop(Body, CenterY - WasStantFile.CentryY);
                 Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+            }
+            else if (Action == Actions.Attack)
+            {
+                if (AttackAction == AttackActions.Stop)
+                {
+                    var img = WasFiles[0].GetImg(0, Count[0]);
+                    Body.Source = img;
+                    Body.Width = img.Width;
+                    Body.Height = img.Height;
+                    Canvas.SetLeft(Body, CenterX - WasStantFile.CentryX);
+                    Canvas.SetTop(Body, CenterY - WasStantFile.CentryY);
+                    Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+                }
             }
         }
 
+        public void Attack(QXSprite target)
+        {
+            var storyboard = new Storyboard();
+            var targetCoordinate = new Point(300, 300);
+            var runImg = WasFiles[1];
+            var attactImg = WasFiles[2];
+            var backImg = WasFiles[3];
+            #region 创建坐标变换属性动画
+            AttackAction = AttackActions.Run;
+            PointAnimation run = new PointAnimation()
+            {
+                From = AttackCoordinate,
+                To = targetCoordinate,
+                Duration = new Duration(TimeSpan.FromMilliseconds(1000)),
+
+            };
+            Storyboard.SetTarget(run, this);
+            Storyboard.SetTargetProperty(run, new PropertyPath("AttackCoordinate"));
+            run.Completed += (sender, e) => AttackAction = AttackActions.Attack;
+            PointAnimation attack = new PointAnimation()
+            {
+                From = targetCoordinate,
+                To = targetCoordinate,
+                Duration = new Duration(TimeSpan.FromMilliseconds(1000)),
+                BeginTime = TimeSpan.FromMilliseconds(1000),
+
+            };
+            Storyboard.SetTarget(attack, this);
+            Storyboard.SetTargetProperty(attack, new PropertyPath("AttackCoordinate"));
+            attack.Completed += (sender, e) => AttackAction = AttackActions.Back;
+            PointAnimation back = new PointAnimation()
+            {
+                From = targetCoordinate,
+                To = AttackCoordinate,
+                Duration = new Duration(TimeSpan.FromMilliseconds(1000)),
+                BeginTime = TimeSpan.FromMilliseconds(2000),
+            };
+            Storyboard.SetTarget(back, this);
+            Storyboard.SetTargetProperty(back, new PropertyPath("AttackCoordinate"));
+            back.Completed += (sender, e) => AttackAction = AttackActions.Stop;
+
+            storyboard.Children.Add(run);
+            storyboard.Children.Add(attack);
+            storyboard.Children.Add(back);
+            #endregion
+            storyboard.Begin();
+        }
         #region 属性绑定
         /// <summary>
         /// 坐标
@@ -180,6 +249,16 @@ namespace Beta.Controls
             new PropertyMetadata(ChangeCoordinateProperty)
         );
         /// <summary>
+        /// 坐标
+        /// </summary>
+        public static readonly DependencyProperty AttackCoordinateProperty = DependencyProperty.Register(
+            "AttackCoordinate",
+            typeof(Point),
+            typeof(QXSprite),
+            new PropertyMetadata(ChangeAttackCoordinateProperty)
+        );
+
+        /// <summary>
         /// 方向
         /// </summary>
         public static readonly DependencyProperty DirectionProperty = DependencyProperty.Register(
@@ -188,6 +267,8 @@ namespace Beta.Controls
            typeof(QXSprite),
            null
        );
+
+
         #endregion
         /// <summary>
         /// 坐标改变事件
@@ -209,9 +290,30 @@ namespace Beta.Controls
                 }
             }
         }
-       
+        /// <summary>
+        /// 坐标改变事件
+        /// </summary>
+        private static void ChangeAttackCoordinateProperty(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            QXSprite obj = (QXSprite)d;
+            if (obj.Visibility == Visibility.Visible)
+            {
+                Point p = (Point)e.NewValue;
+                obj.SetValue(Canvas.LeftProperty, p.X - CenterX);
+                obj.SetValue(Canvas.TopProperty, p.Y - CenterY);
+                obj.SetValue(Canvas.ZIndexProperty, (int)p.Y);
+                var img = obj.WasFiles[(int)obj.AttackAction];
+                obj.Body.Source = img.GetImg(0, obj.Count[2]);
+                obj.Body.Width = img.Width;
+                obj.Body.Height = img.Height;
+                Canvas.SetLeft(obj.Body, CenterX - img.CentryX);
+                Canvas.SetTop(obj.Body, CenterY - img.CentryY);
+                obj.SName.Text = string.Format("p.X={0:f0},p.Y={1:f0},\nCenterX={2},CenterY={3}", p.X, p.Y, GV.WindowOffsetX, GV.WindowOffsetY);
 
-       
-       
+            }
+        }
+
+
+
     }
 }

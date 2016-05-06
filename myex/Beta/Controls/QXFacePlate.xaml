@@ -56,6 +56,15 @@
 
         </Border>
         <src:MetalFrame BorderHeight="{Binding ElementName=PropertyBorder,Path=Height}" BorderWidth="{Binding ElementName=PropertyBorder,Path=Width}" Canvas.Left="109"/>
+        <Border x:Name="SkiBorder" Width="200" Height="64"  HorizontalAlignment="Left" Canvas.Left="358">
+            <WrapPanel Margin="11,11,-11,-11">
+                <Rectangle Fill="#ccc" Height="32" Width="32" Margin="10,5,0,0"></Rectangle>
+                <Rectangle Fill="#ccc" Height="32" Width="32" Margin="10,5,0,0"></Rectangle>
+                <Rectangle Fill="#ccc" Height="32" Width="32" Margin="10,5,0,0"></Rectangle>
+                <Rectangle Fill="#ccc" Height="32" Width="32" Margin="10,5,0,0"></Rectangle>
+            </WrapPanel>
+        </Border>
+        <src:MetalFrame BorderHeight="{Binding ElementName=SkiBorder,Path=Height}" BorderWidth="{Binding ElementName=SkiBorder,Path=Width}" Canvas.Left="358"/>
         <!--<Grid x:Name="LevelGrid">
             <TextBlock x:Name="Level" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
         </Grid>

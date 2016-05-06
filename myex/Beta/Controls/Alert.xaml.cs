@@ -42,9 +42,9 @@ namespace Beta.Controls
             alert.UpdateLayout();
             var cx = Parent.Width / 2;
             var cy = Parent.Height / 2;
-
-            var element = VisualTreeHelper.HitTest(Parent, (p) => { return HitTestFilterBehavior.Continue; }, null, null);
-            var el = (Image)element.VisualHit;
+            var list = new List<HitTestResult>();
+            VisualTreeHelper.HitTest(Parent, null, new HitTestResultCallback(r => { list.Add(r); return HitTestResultBehavior.Continue; }), new PointHitTestParameters(new Point(349, 282)));
+            
             var ccx = alert.Border1.ActualWidth;
             var ccy = alert.Border1.ActualHeight;
             Canvas.SetLeft(alert, cx - ccx);

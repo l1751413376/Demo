@@ -109,6 +109,7 @@ namespace Beta
             Carrier.Children.Add(face);
 
             Alert.Init(Carrier);
+            Test();
             //Canvas.SetTop(mf,300);
             //Canvas.SetLeft(mf, 50);
             //Canvas.SetZIndex(mf, 3);
@@ -403,7 +404,63 @@ namespace Beta
             face.SetValue(2, new double[] { 100 * e.NewValue, 1000 });
         }
 
+        public void Test() 
+        {
+            //构建障碍物
 
+            for (int x = 0; x < 25; x++)
+            {
+
+                for (int y = -10; y < 10; y++)
+                {
+                    var rect = new Rectangle();
+
+                    //构建菱形
+
+                    TransformGroup transformGroup = new TransformGroup();
+
+                    SkewTransform skewTransform = new SkewTransform(-10,-25);
+
+                    RotateTransform rotateTransform = new RotateTransform(54);
+
+                    transformGroup.Children.Add(skewTransform);
+
+                    transformGroup.Children.Add(rotateTransform);
+
+                    rect.RenderTransform = transformGroup;
+
+                    rect.Fill = new SolidColorBrush(Colors.GreenYellow);
+
+                    rect.Opacity = 0.3;
+
+                    rect.Stroke = new SolidColorBrush(Colors.Gray);
+
+                    rect.Width = FightPosition.GridSize;
+
+                    rect.Height = FightPosition.GridSize;
+
+                    Carrier.Children.Add(rect);
+
+                    Point p = FightPosition.getWindowPosition(x, y);
+
+                    Canvas.SetLeft(rect, p.X);
+
+                    Canvas.SetTop(rect, p.Y);
+
+
+                    Ellipse player = new Ellipse(); //用一个圆来模拟目标对象
+                    player.Fill = new SolidColorBrush(Colors.Red);
+                    player.Width = 2;
+                    player.Height = 2;
+                    var p2 = FightPosition.getWindowCenterPosition(x, y);
+                    Canvas.SetLeft(player, p2.X);
+                    Canvas.SetTop(player, p2.Y);
+                    Carrier.Children.Add(player);
+
+                }
+
+            }
+        }
         /*
         //图片操作
            IntPtr PngBuff = IntPtr.Zero;

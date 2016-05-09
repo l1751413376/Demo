@@ -108,6 +108,7 @@
     <Compile Include="Controls\Alert.xaml.cs">
       <DependentUpon>Alert.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FightPosition.cs" />
     <Compile Include="Controls\Skill.xaml.cs">
       <DependentUpon>Skill.xaml</DependentUpon>
     </Compile>

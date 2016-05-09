@@ -29,10 +29,6 @@ namespace Beta.Controls
         /// <summary>
         /// 
         /// </summary>
-        public SkillProperties SkillPropertie;
-        /// <summary>
-        /// 
-        /// </summary>
         public EventHandler Complate;
         /// <summary>
         /// 图片位于控件中心的位置X

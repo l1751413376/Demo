@@ -11,30 +11,51 @@ namespace CsTest
 {
     static class Program
     {
-        static Regex PicReg = new Regex(@"_\d+x\d+_", RegexOptions.ECMAScript);
         static void Main(string[] args)
         {
-            var str = "尊敬的客户，您预订的#@VisaLineTitle#，签证客户单号#@VisaCustomerSerialid#已经有出签结果，出签结果已经发送到您的邮箱：#@VisaContractMail#，请注意查收；护照本等相关材料已经邮寄至您预留的地址：#@VisaPMStreetAddress#，请注意清收。同程旅游，快乐每一程。";
-            var rex = new Regex(@"#@C#", RegexOptions.Multiline); 
-            var matchs=rex.Matches(str,0);
-            foreach(var item in matchs)
-            {
-                Console.Write(item);
-            }
+            var file = File.Open(@"D:\MyConfiguration\ly09614.TCENT\Desktop\Unity3D5.0\破解补丁\1222.map", FileMode.Open);
+            MapInfo map = new MapInfo();
+            map.Flag = file.ReadDword();
 
         }
 
-        public class a 
-        {
-            public int pa;
-        }
 
-        public class b:a
+    }
+    public static class FileEx
+    {
+        public static uint ReadDword(this FileStream stream)
         {
-            public int pa=10;
+            byte[] b = new byte[4];
+            stream.Read(b, 0, 4);
+            return BitConverter.ToUInt32(b, 0);
         }
     }
 
-    
+    public class MapInfo
+    {
+        public int Flag;
+        public uint Width;
+        public uint Height;
+        public uint MaskFlag;
+        /// <summary>
+        /// mask数量
+        /// </summary>
+        public int MaskNum;
+        public List<MaskInfo> MaskInfos;
+        /// <summary>
+        /// 图像
+        /// </summary>
+        public byte[] MapImg;
 
+    }
+
+    public class MaskInfo
+    {
+        public int startX;
+        public int startY;
+        public int width;
+        public int height;
+        public int mask_size;
+        public byte[] img;
+    }
 }

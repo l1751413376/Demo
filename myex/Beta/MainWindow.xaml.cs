@@ -169,7 +169,7 @@ namespace Beta
 
             //创建坐标变换属性动画
             PointAnimation pointAnimation = new PointAnimation()
-            {  
+            {
                 To = p.ToMapCoordinate(),
                 Duration = new Duration(TimeSpan.FromMilliseconds(moveCost)),
             };
@@ -300,7 +300,7 @@ namespace Beta
         }
         private void Carrier_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            
+
             Point p = e.GetPosition(Carrier);
             AStarMove(Spirit, p);
             ShowRect(p);
@@ -404,62 +404,86 @@ namespace Beta
             face.SetValue(2, new double[] { 100 * e.NewValue, 1000 });
         }
 
-        public void Test() 
+        public void Test()
         {
             //构建障碍物
-
-            for (int x = 0; x < 25; x++)
+            for (int y = -9; y < 0; y++)
             {
-
-                for (int y = -10; y < 10; y++)
+                int begin = -y - 1;
+                int end = begin + (9 - begin) * 2;
+                for (int x = begin; x < end; x++)
                 {
-                    var rect = new Rectangle();
-
-                    //构建菱形
-
-                    TransformGroup transformGroup = new TransformGroup();
-
-                    SkewTransform skewTransform = new SkewTransform(-10,-25);
-
-                    RotateTransform rotateTransform = new RotateTransform(54);
-
-                    transformGroup.Children.Add(skewTransform);
-
-                    transformGroup.Children.Add(rotateTransform);
-
-                    rect.RenderTransform = transformGroup;
-
-                    rect.Fill = new SolidColorBrush(Colors.GreenYellow);
-
-                    rect.Opacity = 0.3;
-
-                    rect.Stroke = new SolidColorBrush(Colors.Gray);
-
-                    rect.Width = FightPosition.GridSize;
-
-                    rect.Height = FightPosition.GridSize;
-
-                    Carrier.Children.Add(rect);
-
-                    Point p = FightPosition.getWindowPosition(x, y);
-
-                    Canvas.SetLeft(rect, p.X);
-
-                    Canvas.SetTop(rect, p.Y);
-
-
-                    Ellipse player = new Ellipse(); //用一个圆来模拟目标对象
-                    player.Fill = new SolidColorBrush(Colors.Red);
-                    player.Width = 2;
-                    player.Height = 2;
-                    var p2 = FightPosition.getWindowCenterPosition(x, y);
-                    Canvas.SetLeft(player, p2.X);
-                    Canvas.SetTop(player, p2.Y);
-                    Carrier.Children.Add(player);
-
+                    DrawSkew(x, y);
                 }
 
             }
+            //构建障碍物
+            for (int y = 0; y < 12; y++)
+            {
+                int begin = -y - 1;
+                int end = begin + (12 - begin) * 2;
+                for (int x = begin; x < end; x++)
+                {
+                    DrawSkew(x, y);
+                }
+
+            }
+        }
+        public void DrawSkew(int x, int y)
+        {
+
+            var rect = new Rectangle();
+
+            //构建菱形
+
+            TransformGroup transformGroup = new TransformGroup();
+
+            SkewTransform skewTransform = new SkewTransform(-10, -25);
+
+            RotateTransform rotateTransform = new RotateTransform(54);
+
+            transformGroup.Children.Add(skewTransform);
+
+            transformGroup.Children.Add(rotateTransform);
+
+            rect.RenderTransform = transformGroup;
+
+            rect.Fill = new SolidColorBrush(Colors.GreenYellow);
+
+            rect.Opacity = 0.3;
+
+            rect.Stroke = new SolidColorBrush(Colors.Gray);
+
+            rect.Width = FightPosition.GridSize;
+
+            rect.Height = FightPosition.GridSize;
+            rect.Tag = new Point(x, y);
+            rect.MouseDown += (o, e) =>
+            {
+                var sender = (Rectangle)o;
+                e.Handled = true;
+                var p3 = (Point)rect.Tag;
+            };
+
+            Carrier.Children.Add(rect);
+
+            Point p = FightPosition.getWindowPosition(x, y);
+
+            Canvas.SetLeft(rect, p.X);
+
+            Canvas.SetTop(rect, p.Y);
+
+
+            Ellipse player = new Ellipse(); //用一个圆来模拟目标对象
+
+            player.Fill = new SolidColorBrush(Colors.Red);
+            player.Width = 2;
+            player.Height = 2;
+
+            var p2 = FightPosition.getWindowCenterPosition(x, y);
+            Canvas.SetLeft(player, p2.X);
+            Canvas.SetTop(player, p2.Y);
+            Carrier.Children.Add(player);
         }
         /*
         //图片操作

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jpeglib", "jpeglib\jpeglib.vcxproj", "{464130FB-7F96-4A24-85BF-9A9C7D367975}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XYMap", "XYMap\XYMap.vcxproj", "{5DC86AA8-7D17-486B-90E3-B411D24769DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +15,10 @@ Global
 		{464130FB-7F96-4A24-85BF-9A9C7D367975}.Debug|Win32.Build.0 = Debug|Win32
 		{464130FB-7F96-4A24-85BF-9A9C7D367975}.Release|Win32.ActiveCfg = Release|Win32
 		{464130FB-7F96-4A24-85BF-9A9C7D367975}.Release|Win32.Build.0 = Release|Win32
+		{5DC86AA8-7D17-486B-90E3-B411D24769DC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5DC86AA8-7D17-486B-90E3-B411D24769DC}.Debug|Win32.Build.0 = Debug|Win32
+		{5DC86AA8-7D17-486B-90E3-B411D24769DC}.Release|Win32.ActiveCfg = Release|Win32
+		{5DC86AA8-7D17-486B-90E3-B411D24769DC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

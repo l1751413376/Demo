@@ -15,5 +15,6 @@ C_dllexport void __stdcall Delete(void *ptr)
 	delete[] ptr;
 }
 
+C_dllexport int __stdcall DecompressMask(void* in , void* out);
 
 

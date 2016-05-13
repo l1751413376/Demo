@@ -16,7 +16,7 @@ void adjust_path(char *s)
 {
 	int i;
 	char tmp[PATHMAXLEN],*p;
-	strlwr(s);
+	_strlwr(s);
 	for (i=0,p=s;*p;++p,++i) {
 		if (*p=='\\') *p='/';
 		else if (*p=='.' && *(p-1)=='/') {

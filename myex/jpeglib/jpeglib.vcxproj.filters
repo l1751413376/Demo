@@ -3,15 +3,15 @@
   <ItemGroup>
     <Filter Include="源文件">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
     <Filter Include="头文件">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -21,39 +21,39 @@
     <ClCompile Include="compress.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Decode.c">
+    <ClCompile Include="decode.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Huffman.c">
+    <ClCompile Include="HUFFMAN.C">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Idct.c">
+    <ClCompile Include="IDCT.C">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Idct2d.c">
+    <ClCompile Include="IDCT2D.C">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Jpeg.c">
+    <ClCompile Include="JPEG.C">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pack.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Quanty.c">
+    <ClCompile Include="QUANTY.C">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Rgb.c">
+    <ClCompile Include="RGB.C">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Segment.c">
+    <ClCompile Include="SEGMENT.C">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Jpeg.h">
+    <ClInclude Include="JPEG.H">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Jpegint.h">
+    <ClInclude Include="JPEGINT.H">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

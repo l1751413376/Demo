@@ -102,7 +102,7 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 	//×ÊÔ´ÊÍ·Å
 	delete[] orginbuff;
 }
-void main()
+void main2()
 {
 	char * filename="D:/Demo/myex/Beta/Resources/1207.map.tga";
 	int *Pointer=0;

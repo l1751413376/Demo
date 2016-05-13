@@ -160,7 +160,7 @@ void CreatePNGByFormatData(DWORD Witdh, DWORD Height, BYTE *ImgBuff, int ImgBuff
 	data.WriteMemoryAndCRC(buff);
 	// Õ∑≈data1.CompressData
 	delete[] data.CompressData;
-	delete[] ImgBuff;
+	//delete[] ImgBuff;
 	//end
 	end.WriteMemoryAndCRC(buff);
 }
@@ -195,11 +195,11 @@ void PNGFormatData_ARGB1555(BYTE *& dest, int & desLen, BYTE * source, int sourc
 		for (int w = 0; w < sourceWitdh; w++)
 		{
 			auto ARGB1555 = *(WORD*)(source += 2);
-			byte R8G8B8A8[4];//0-A 1-B 2-G 3-R
-			R8G8B8A8[0] = 0xff;
-			R8G8B8A8[1] = (ARGB1555 & 0x1F) << 3;
-			R8G8B8A8[2] = (ARGB1555 & 0x3E0) << 3;
-			R8G8B8A8[3] = (ARGB1555 & 0x7C00) << 3;
+			byte R8G8B8A8[4];//0-R 1-G 2-B 3-A
+			R8G8B8A8[0] = (ARGB1555 & 0x1F) << 3;
+			R8G8B8A8[1] = (ARGB1555 & 0x3E0) >> 2;
+			R8G8B8A8[2] = (ARGB1555 & 0x7C00) >> 7;
+			R8G8B8A8[3] = 0xff;// 
 			memcpy(buff += 4, &R8G8B8A8, 4);
 		}
 

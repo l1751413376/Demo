@@ -1,28 +1,24 @@
 #include "XYMapEx.h"
 
-//-------------------------------------------------------------------------
-// jpg
 #ifdef  __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
-#include "../jpeglib/jpeg.h"
+#include "JPEG.H"
 #ifdef  __cplusplus
 }
 #endif
 
 #ifdef _DEBUG
-#pragma comment (lib,"../jpeglib/debug/jpeglib.lib")
+#pragma comment (lib,"../Debug/jpeglib.lib")
 #else
-#pragma comment (lib,"../jpeglib/release/jpeglib.lib")
+#pragma comment (lib,"../Debug/jpeglib.lib")
 #endif
-//-------------------------------------------------------------------------
 
+
+
+//-------------------------------------------------------------------------
 #define MAP_BLOCK_HEIGHT 240.0
 #define MAP_BLOCK_WIDTH  320.0
-
-
-
 //mask解码
 int DecompressMask(void* in, void* out)
 {
@@ -320,6 +316,7 @@ struct MaskInfo
 	int height;
 	int mask_size;
 	byte* img;
+	int imgsize;
 };
 
 struct MapInfo
@@ -329,6 +326,8 @@ struct MapInfo
 	DWORD Width;
 	DWORD Height;
 	DWORD MaskFlag;
+	int m_MapBmpWidth;
+	int m_MapBmpHeight;
 	/// <summary>
 	/// mask数量
 	/// </summary>
@@ -346,13 +345,12 @@ struct MapInfo
 
 void WriteMapPixel(BMP* bmp, int map_row, int map_col, MapInfo* mapInfo)
 {
-
 	int dst_x = map_col * MAP_BLOCK_WIDTH;
 	int dst_y = map_row * MAP_BLOCK_HEIGHT;
 
 	WORD* pSrc = bmp->line[0];
-	WORD* pDst = (WORD*)mapInfo->MapImg + (mapInfo->Height - 1 - dst_y)*mapInfo->Width + dst_x;
-	int dst_pitch = -mapInfo->Width;
+	WORD* pDst = (WORD*)mapInfo->MapImg + (dst_y + 1)*mapInfo->m_MapBmpWidth + dst_x;
+	int dst_pitch = (int)mapInfo->m_MapBmpWidth;
 
 	for (int h = 0; h < bmp->h; h++)
 	{
@@ -373,8 +371,8 @@ void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
 	//读取地图块
 	int m_MapBlockRowNum = ceil(mapInfo.Height / MAP_BLOCK_HEIGHT);
 	int m_MapBlockColNum = ceil(mapInfo.Width / MAP_BLOCK_WIDTH);
-	int m_MapBmpWidth = m_MapBlockColNum * MAP_BLOCK_WIDTH;
-	int m_MapBmpHeight = m_MapBlockRowNum * MAP_BLOCK_HEIGHT;
+	mapInfo.m_MapBmpWidth = m_MapBlockColNum * MAP_BLOCK_WIDTH;
+	mapInfo.m_MapBmpHeight = m_MapBlockRowNum * MAP_BLOCK_HEIGHT;
 	int block_num = m_MapBlockRowNum * m_MapBlockColNum;
 	UINT* pBlockOffset = new UINT[block_num];
 	fread(pBlockOffset, sizeof(UINT)*block_num, 1, file.pfile);
@@ -386,7 +384,7 @@ void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
 	fread(pMaskDataOffset, sizeof(UINT)*mapInfo.MaskNum, 1, file.pfile);
 
 	//操作块
-	mapInfo.MapImg = (byte*)new WORD[m_MapBmpWidth * m_MapBmpHeight];
+	mapInfo.MapImg = (byte*)new WORD[mapInfo.m_MapBmpWidth * mapInfo.m_MapBmpHeight];
 	for (int i = 0; i < block_num; i++)
 	{
 		file.seek(pBlockOffset[i], SEEK_SET);
@@ -399,6 +397,12 @@ void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
 		fread(pMapJpgData, size, 1, file.pfile);
 		UINT jpg_size = 0;
 		BYTE* pJpgData = JpgHandler(pMapJpgData, size, &jpg_size);
+
+		char outfileitem[] = "D:\\BaiduYunDownload\\1222.map.1.jpg";
+		outfileitem[29] = i + 48;
+		auto outfile = fopen(outfileitem, "wb+");
+		fwrite(pJpgData, jpg_size, 1, outfile);
+		fclose(outfile);
 
 		int map_row = i / m_MapBlockColNum;
 		int map_col = i % m_MapBlockColNum;
@@ -413,26 +417,92 @@ void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
 		delete[] pMapJpgData;
 	}
 
-	//png图像
-	void * pngbuff = 0;
-	int buff_len = 0;
-	//pngIDATImg数据
+	mapInfo.MaskInfos[0] = new MaskInfo[mapInfo.MaskNum];
+	for (int i = 0; i < mapInfo.MaskNum; i++)
+	{
+		file.seek(pMaskDataOffset[i], SEEK_SET);
+		auto item = mapInfo.MaskInfos[i];
+		item->startX = file.read_dword();
+		item->startY = file.read_dword();
+		item->width = file.read_dword();
+		item->height = file.read_dword();
+		item->mask_size = file.read_dword();
+
+		byte* pMaskDataOrgin = new byte[item->mask_size];
+		file.read(pMaskDataOrgin, item->mask_size);
+		//解压mask
+		int align_width = (item->width / 4 + ((item->width % 4 != 0) ? 1 : 0)) * 4;	// 以4对齐的宽度
+		byte* pMaskDataDec = new byte[align_width * item->height / 4];
+
+		int dec_mask_size = DecompressMask(pMaskDataOrgin, pMaskDataDec);
+
+
+		int pixel_num = item->width * item->height;
+		WORD* pOutMaskBmp = new WORD[pixel_num];
+		memset(pOutMaskBmp, 0, sizeof(WORD) * pixel_num);
+
+		// 提取mask像素
+		for (int h = 0; h < item->height; h++)
+		{
+			for (int w = 0; w < item->width; w++)
+			{
+				int mask_index = (h * align_width + w) * 2;		// 单位:位
+				BYTE mask_value = pMaskDataDec[mask_index / 8];	// 定位到字节
+				mask_value = mask_value >> (mask_index % 8);	// 定位到位
+
+				if ((mask_value & 3) == 3)
+				{
+					int mapX = item->startX + w;	// 地图图像中的X位置
+					int mapY = item->startY + h;	// 地图图像中的Y位置
+
+					WORD dstPixel = *(WORD *)(mapInfo.MapImg + ((mapY * mapInfo.m_MapBmpWidth + mapX) << 1));
+					pOutMaskBmp[item->height*item->width] = dstPixel;
+				}
+			}
+		}
+		//格式化为Png阵列图
+		BYTE * pngIDATbuff = 0;
+		int pngIDATbuffLen = 0;
+		//函数调用
+		PNGFormatData_ARGB1555(pngIDATbuff, pngIDATbuffLen, (byte*)pOutMaskBmp, item->width, item->height);
+		//png图像
+		void * pngbuff = 0;
+		int buff_len = 0;
+		CreatePNGByFormatData(item->width, item->height, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
+		item->img = (byte*)pngbuff;
+		item->imgsize = buff_len;
+
+		char outfileitem[] = "D:\\BaiduYunDownload\\1222.mask.1.jpg";
+		outfileitem[30] = i + 48;
+		auto outfile = fopen(outfileitem, "wb+");
+		fwrite(item->img, item->imgsize, 1, outfile);
+		fclose(outfile);
+
+	}
+	//格式化为Png阵列图
 	BYTE * pngIDATbuff = 0;
 	int pngIDATbuffLen = 0;
 	//函数调用
+	PNGFormatData_ARGB1555(pngIDATbuff, pngIDATbuffLen, mapInfo.MapImg, mapInfo.m_MapBmpWidth, mapInfo.m_MapBmpHeight);
 
-	PNGFormatData_ARGB1555(pngIDATbuff, pngIDATbuffLen, mapInfo.MapImg, m_MapBmpWidth, m_MapBmpHeight);
-	CreatePNGByFormatData(m_MapBmpWidth, m_MapBmpHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
+	//png图像
+	void * pngbuff = 0;
+	int buff_len = 0;
+	CreatePNGByFormatData(mapInfo.m_MapBmpWidth, mapInfo.m_MapBmpHeight, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
 
 	//资源释放
 	mapInfo.MapImg = (byte*)pngbuff;
 	mapInfo.MapImgSize = buff_len;
-
+	auto outfilepath = "D:\\BaiduYunDownload\\1222.map.png";
+	auto outfile = fopen(outfilepath, "wb+");
+	fwrite(mapInfo.MapImg, mapInfo.MapImgSize, 1, outfile);
+	fclose(outfile);
 }
 
-void main() 
+void main()
 {
+	init_jpeg();
 	auto filename = "D:\\BaiduYunDownload\\1222.map";
-	
-	LoadMap(filename,0,0);
+
+	LoadMap(filename, 0, 0);
 }

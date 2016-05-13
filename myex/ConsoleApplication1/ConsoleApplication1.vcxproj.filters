@@ -15,38 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PNG.cpp">
-      <Filter>头文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Pargram.cpp">
+    <ClCompile Include="p.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Debug\1.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-    <Text Include="..\Debug\2.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-    <Text Include="..\Debug\3.txt">
-      <Filter>资源文件</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="msado15.dll">
-      <Filter>资源文件</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CRC.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="zconf.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,4 +4,10 @@
 #include <math.h>
 #include "PNG.h"
 
+
+
+
+
+
+
 void LoadMap(char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize);

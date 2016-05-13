@@ -2,7 +2,7 @@
 #include <math.h>
 
 #include "jpeg.h"
-#pragma comment (lib,"lib/jpeglib.lib")
+#pragma comment (lib,"../Debug/jpeglib.lib")
 //-------------------------------------------------------------------------
 
 

@@ -15,6 +15,26 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="PNG.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DllExport.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mapformat.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="WasFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="XYMapEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PNG.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="CRC.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -27,10 +47,13 @@
     <ClInclude Include="JPEG.H">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="PNG.h">
+    <ClInclude Include="mapformat.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="WasFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XYMapEx.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="zconf.h">
@@ -39,25 +62,10 @@
     <ClInclude Include="zlib.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="XYMapEx.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DllExport.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="mapformat.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="PNG.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="WasFile.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XYMapEx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <Image Include="..\..\..\BaiduYunDownload\1222.map.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>

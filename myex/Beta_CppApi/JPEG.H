@@ -17,10 +17,12 @@ typedef BMP* lpBMP;
 BMP *load_jpg(char *filename);
 BMP *Unpak_jpg(unsigned char *inbuf,unsigned int insize);
 
+
 // 释放非压缩的位图
 #define destroy_bitmap(a) free(a)
 
 int init_jpeg(void);
+bool isInit=0;
 #define free_jpeg NULL
 #define active_jpeg NULL
 

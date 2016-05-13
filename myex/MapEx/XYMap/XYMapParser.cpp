@@ -18,15 +18,15 @@
 extern "C"
 {
 #endif
-#include "jpeglib/jpeg.h"
+#include "../jpeglib/jpeg.h"
 #ifdef  __cplusplus
 }
 #endif
 
 #ifdef _DEBUG
-#pragma comment (lib,"jpeglib/debug/jpeglib.lib")
+#pragma comment (lib,"../jpeglib/debug/jpeglib.lib")
 #else
-#pragma comment (lib,"jpeglib/release/jpeglib.lib")
+#pragma comment (lib,"../jpeglib/release/jpeglib.lib")
 #endif
 //-------------------------------------------------------------------------
 

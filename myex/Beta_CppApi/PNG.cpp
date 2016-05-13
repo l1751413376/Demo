@@ -30,7 +30,7 @@ WORD ChgWORD(WORD value)
 	{
 		mov ax, value
 		xchg al, ah
-		mov value, ax
+			mov value, ax
 	}
 	return value;
 }
@@ -182,19 +182,41 @@ void PNGFormatData_R8G8B8A8(BYTE *& dest, int & desLen, BYTE * source, int sourc
 	}
 }
 
+void PNGFormatData_ARGB1555(BYTE *& dest, int & desLen, BYTE * source, int sourceWitdh, int sourceHeight)
+{
+	//png每行多一个字节0
+	desLen = sourceWitdh * sourceHeight * 4 + sourceHeight;
+	BYTE* buff = new BYTE[desLen];
+	dest = buff;
+	//源位图每行字节数量
+	for (int i = 0; i < sourceHeight; i++)
+	{
+		*buff++ = 0;
+		for (int w = 0; w < sourceWitdh; w++)
+		{
+			auto ARGB1555 = *(WORD*)(source += 2);
+			byte R8G8B8A8[4];//0-A 1-B 2-G 3-R
+			R8G8B8A8[0] = 0xff;
+			R8G8B8A8[1] = (ARGB1555 & 0x1F) << 3;
+			R8G8B8A8[2] = (ARGB1555 & 0x3E0) << 3;
+			R8G8B8A8[3] = (ARGB1555 & 0x7C00) << 3;
+			memcpy(buff += 4, &R8G8B8A8, 4);
+		}
 
+	}
+}
 
 
 
 void main1()
 {
-	
+
 	//源图像
-	
-	int imgWidth =512;
+
+	int imgWidth = 512;
 	int imgHeight = 512;
-	BYTE *ImgData=new BYTE[imgWidth*imgHeight*4];
-	for (size_t i = 0,len= imgHeight*imgWidth; i < len; i++)
+	BYTE *ImgData = new BYTE[imgWidth*imgHeight * 4];
+	for (size_t i = 0, len = imgHeight*imgWidth; i < len; i++)
 	{
 		auto item = ImgData + int(i << 2);
 		item[0] = 0xff;//R
@@ -203,7 +225,7 @@ void main1()
 		item[3] = 0xff;//A
 	}
 	{
-		auto item = ImgData + imgHeight*imgWidth*4-4;
+		auto item = ImgData + imgHeight*imgWidth * 4 - 4;
 		item[0] = 0x00;//R
 		item[1] = 0xff;//G
 		item[2] = 0x00;//B
@@ -228,12 +250,12 @@ void main1()
 	fclose(file);
 	auto ret = 0;
 	/*
-	
+
 	DWORD ImgData[] = { 0xff00ff00,0xff00ffff };
 
 	BYTE source[20];
 	ULONG sourceLen=20;
-	
+
 	memset(source,0,sizeof(source));
 
 	compress2(source, &sourceLen, (Byte *)ImgData,8,0);

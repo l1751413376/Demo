@@ -31,5 +31,4 @@ void BmpFile::load(char *filename)
 	close();
 }
 
-#pragma comment (lib,"project/lib/jpeglib.lib")
 

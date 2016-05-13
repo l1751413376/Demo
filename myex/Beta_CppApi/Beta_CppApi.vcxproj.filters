@@ -13,54 +13,51 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="FileFormat">
-      <UniqueIdentifier>{bb617766-80c5-4e9b-8286-fdd7bc5aa934}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Png">
-      <UniqueIdentifier>{9dc6bff6-eea6-4af7-bff9-f6b3d2d836a9}</UniqueIdentifier>
-    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CRC.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="DllExport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="JPEG.H">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PNG.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="WasFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zconf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XYMapEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllExport.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="mapformat.cpp">
-      <Filter>FileFormat</Filter>
+      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PNG.cpp">
-      <Filter>Png</Filter>
+      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="WasFile.cpp">
-      <Filter>FileFormat</Filter>
+      <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="DllExport.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="mapformat.h">
-      <Filter>FileFormat</Filter>
-    </ClInclude>
-    <ClInclude Include="file.h">
-      <Filter>FileFormat</Filter>
-    </ClInclude>
-    <ClInclude Include="JPEG.H">
-      <Filter>FileFormat</Filter>
-    </ClInclude>
-    <ClInclude Include="CRC.h">
-      <Filter>Png</Filter>
-    </ClInclude>
-    <ClInclude Include="zconf.h">
-      <Filter>Png</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib.h">
-      <Filter>Png</Filter>
-    </ClInclude>
-    <ClInclude Include="Png.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="WasFile.h">
-      <Filter>FileFormat</Filter>
-    </ClInclude>
+    <ClCompile Include="XYMapEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

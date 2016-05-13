@@ -421,7 +421,7 @@ void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
 	for (int i = 0; i < mapInfo.MaskNum; i++)
 	{
 		file.seek(pMaskDataOffset[i], SEEK_SET);
-		auto item = mapInfo.MaskInfos[i];
+		auto item = mapInfo.MaskInfos[i]=new MaskInfo();
 		item->startX = file.read_dword();
 		item->startY = file.read_dword();
 		item->width = file.read_dword();

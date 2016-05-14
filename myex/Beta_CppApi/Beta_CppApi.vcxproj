@@ -165,7 +165,11 @@
     <ClInclude Include="zlib.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\BaiduYunDownload\1002.map.0.jpg" />
     <Image Include="..\..\..\BaiduYunDownload\1222.map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\BaiduYunDownload\1002.map" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

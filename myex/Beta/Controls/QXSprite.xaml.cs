@@ -34,14 +34,9 @@ namespace Beta.Controls
         public static int CenterY = 120;
 
         /// <summary>
-        /// 图片类型0-图形1-was文件
-        /// </summary>
-        public int ImgType;
-
-        /// <summary>
         /// 获取跑步速度ms(每移动一个单元格的花费时间,越小越快)
         /// </summary>
-        public double VRunSpeed = 50;
+        public double VRunSpeed = 100;
 
         /// <summary>
         /// 位置(相对于地图坐标 0-当前,1-目的地)
@@ -123,15 +118,25 @@ namespace Beta.Controls
         #endregion
         #region 初始化方法
 
+        public QXSprite(int imgType)
+        {
+            InitializeComponent();
+            InitThread(imgType);
+            var img = GV.Shadow.GetImg(0,0);
+            ShadowBody.Source = img;
+            ShadowBody.Width = img.Width;
+            ShadowBody.Height = img.Height;
+            Canvas.SetZIndex(ShadowCanvas, -1);
+        }
         public QXSprite()
         {
             InitializeComponent();
             InitThread();
         }
 
-        private void InitThread()
+        private void InitThread(int imgType = 0)
         {
-            if (ImgType == 0)
+            if (imgType == 0)
             {
                 Ellipse player = new Ellipse(); //用一个圆来模拟目标对象
                 player.Fill = new SolidColorBrush(Colors.Red);
@@ -143,7 +148,7 @@ namespace Beta.Controls
             }
             else
             {
-                Timer.Interval = TimeSpan.FromMilliseconds(3000);
+                Timer.Interval = TimeSpan.FromMilliseconds(100);
                 Timer.Tick += new EventHandler(Timer_Tick);
                 Timer.Start();
             }
@@ -159,23 +164,25 @@ namespace Beta.Controls
         {
             if (Action == Actions.Stop)
             {
-                var img = WasStantFile.GetImg(0, Count[0]);
+                var img = WasStantFile.GetImg(GV.DirectImg[(int)Direction], Count[0]);
                 Body.Source = img;
                 Body.Width = img.Width;
                 Body.Height = img.Height;
                 Canvas.SetLeft(Body, CenterX - WasStantFile.CentryX);
                 Canvas.SetTop(Body, CenterY - WasStantFile.CentryY);
-                Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+                Count[0] = Count[0] == WasStantFile.FrameCount - 1 ? 0 : Count[0] + 1;
+                
             }
             else if (Action == Actions.Run)
             {
-                var img = WasRunFile.GetImg(0, Count[0]);
+                var img = WasRunFile.GetImg(GV.DirectImg[(int)Direction], Count[0]);
                 Body.Source = img;
                 Body.Width = img.Width;
                 Body.Height = img.Height;
-                Canvas.SetLeft(Body, CenterX - WasStantFile.CentryX);
-                Canvas.SetTop(Body, CenterY - WasStantFile.CentryY);
-                Count[0] = Count[0] == Count[1] ? 0 : Count[0] + 1;
+                Canvas.SetLeft(Body, CenterX - WasRunFile.CentryX);
+                Canvas.SetTop(Body, CenterY - WasRunFile.CentryY);
+                Count[0] = Count[0] == WasRunFile.FrameCount - 1 ? 0 : Count[0] + 1;
+                //SName.Text = Count[0].ToString();
             }
             else if (Action == Actions.Attack)
             {
@@ -309,7 +316,7 @@ namespace Beta.Controls
                 obj.Body.Height = img.Height;
                 Canvas.SetLeft(obj.Body, CenterX - img.CentryX);
                 Canvas.SetTop(obj.Body, CenterY - img.CentryY);
-                obj.SName.Text = string.Format("p.X={0:f0},p.Y={1:f0},\nCenterX={2},CenterY={3}", p.X, p.Y, GV.WindowOffsetX, GV.WindowOffsetY);
+                //obj.SName.Text = string.Format("p.X={0:f0},p.Y={1:f0},\nCenterX={2},CenterY={3}", p.X, p.Y, GV.WindowOffsetX, GV.WindowOffsetY);
 
             }
         }

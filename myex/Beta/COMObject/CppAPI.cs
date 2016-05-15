@@ -19,6 +19,10 @@ namespace Beta
         public extern static void GetWasFrame(int width, int height, IntPtr wasPtr, int directionIndex, int frameIndex, out IntPtr dataptr, out int dataptrLen);
         [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
         public extern static void Delete(IntPtr ptr );
+        [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
+        public extern static void GetWasFileInfoFromWdfFile([MarshalAs(UnmanagedType.LPStr)]string filename, out IntPtr ptr, out int directionCount, out int frameCount, out int width, out int height, out int centerX, out int centerY, uint hash);
+        [DllImport(@"D:\Demo\myex\Debug\Beta_CppApi.dll")]
+        public extern static void GetXYMap([MarshalAs(UnmanagedType.LPStr)]string FileName, out IntPtr mapbuff, out int mapbuffsize);
     }
 
 

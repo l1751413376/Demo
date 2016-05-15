@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Beta.PictureProcess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,12 @@ namespace Beta.Controls
     /// </summary>
     public static class GV
     {
+        static GV()
+        {
+            Shadow = new WasFile();
+            Shadow.LoadFileFromWdf("D:\\BaiduYunDownload\\梦幻西游\\shape.wdf", 0xdce4b562);
+        }
+
         /// <summary>
         /// 窗口对于地图的偏移量X
         /// </summary>
@@ -26,7 +33,7 @@ namespace Beta.Controls
         /// <summary>
         /// 精灵移动用Storyboard管理器
         /// </summary>
-        public static Dictionary<String, Storyboard> Storyboard = new Dictionary<String, Storyboard>();
+        public static Dictionary<String, Storyboard2> Storyboard = new Dictionary<String, Storyboard2>();
 
         /// <summary>
         /// 主角距离窗口的边距,超过边距时移动地图
@@ -36,6 +43,9 @@ namespace Beta.Controls
         public static FontFamily DroidSansFallback = new FontFamily(new Uri(@"D:\Demo\myex\Beta\Resources\DroidSansFallback.ttf"), "方正准圆-塞班修改版");
 
 
+        public static int[] DirectImg = new int[] {6,3,7,0,4,1,5,2 };
+
+        public static WasFile Shadow;
     }
 
     public class Cache 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,21 +24,22 @@ namespace Beta.Controls
             return Math.Sqrt(Math.Pow((end.X - start.X) / gridSize, 2) + Math.Pow((end.Y - start.Y) / gridSize, 2)) * unitCost;
         }
 
-        public static void NewStoryboard(this Dictionary<string, Storyboard> storyboard, string key) 
+        public static void NewStoryboard(this Dictionary<string, Storyboard2> storyboard, string key)
         {
             storyboard.RemoveStoryboard(key);
-            storyboard.Add(key, new Storyboard());
+            storyboard.Add(key, new Storyboard2());
         }
 
         /// <summary>
         /// 暂停精灵Storyboard移动动画板
         /// </summary>
         /// <param name="sprite">对象精灵</param>
-        public static void RemoveStoryboard(this Dictionary<string, Storyboard> storyboard, string key)
+        public static void RemoveStoryboard(this Dictionary<string, Storyboard2> storyboard, string key)
         {
             if (storyboard.ContainsKey(key))
             {
                 storyboard[key].Pause();
+                storyboard[key].Completed2 = null;
                 storyboard[key] = null;
                 storyboard.Remove(key);
             }
@@ -47,9 +49,9 @@ namespace Beta.Controls
         /// 通过正切值获取精灵的朝向代号
         /// </summary>
         /// <returns>精灵朝向代号(以北为0顺时针依次1,2,3,4,5,6,7)</returns>
-        public static double GetDirectionByTan(Point target,Point current)
+        public static double GetDirectionByTan(Point target, Point current)
         {
-            double targetX=target.X, targetY=target.Y;
+            double targetX = target.X, targetY = target.Y;
             double currentX = current.X, currentY = current.Y;
             double tan = (targetY - currentY) / (targetX - currentX);
             var tanAbs = Math.Abs(tan);
@@ -163,23 +165,24 @@ namespace Beta.Controls
             };
         }
 
-        public static void MoveBitmap(this Image image, BitmapSource source) 
+        public static void MoveBitmap(this Image image, BitmapSource source)
         {
             image.Source = source;
             image.Width = source.PixelWidth;
             image.Height = source.PixelHeight;
         }
 
-        public static void FillColour(this TextBlock text,string colour)
+        public static void FillColour(this TextBlock text, string colour)
         {
-            text.Foreground =new SolidColorBrush((Color)ColorConverter.ConvertFromString(colour));
+            text.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colour));
         }
-        
+
+
     }
     /// <summary>
     /// 坐标转换
     /// </summary>
-    public static class PointHelper 
+    public static class PointHelper
     {
 
         public static int GridSize = 20;
@@ -228,4 +231,23 @@ namespace Beta.Controls
     /// 坐标改变委托
     /// </summary>
     public delegate void CoordinateEventHandler(QXSprite sprite);
+
+    public class Storyboard2 : Storyboard
+    {
+        public EventHandler Completed2;
+        public Storyboard2()
+        {
+            Completed += CompletedMethod;
+        }
+        public void CompletedMethod(object sender, EventArgs e)
+        {
+            if (Completed2 != null)
+            {
+                Completed2(sender, e);
+            }
+        }
+    }
 }
+
+
+

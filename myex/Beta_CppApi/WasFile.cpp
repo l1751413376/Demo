@@ -45,11 +45,11 @@ DWORD colour4565to8888(DWORD c)
 void WasImg::load_file(const char* strFileName)
 {
 	open((char *)strFileName);
-	load_data(pfmoving);
+	load_data();
 	close();
 }
 
-void WasImg::load_data(const BYTE* pData)
+void WasImg::load_data()
 {
 	Release();
 

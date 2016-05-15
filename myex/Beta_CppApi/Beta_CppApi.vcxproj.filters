@@ -21,13 +21,13 @@
     <ClCompile Include="DllExport.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="mapformat.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="WasFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="XYMapEx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="XYWdfEx.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,9 +47,6 @@
     <ClInclude Include="JPEG.H">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="mapformat.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="WasFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -60,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="zlib.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XYWdfEx.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,6 +2,8 @@
 #include "Png.h"
 #include "mapformat.h"
 #include "WasFile.h"
+#include "XYWdfEx.h"
+#include "XYMapEx.h"
 
 int g_count = 0;
 
@@ -10,8 +12,9 @@ int __stdcall add(int x, int y)
 	return g_count++;
 }
 
-void __stdcall GetBitMap(char * filename,void **Pointer,int * len)
+void __stdcall GetBitMap(char * filename, void **Pointer, int * len)
 {
+	/*
 	//源图像
 	tagfile map;
 	map.load_file(filename);
@@ -32,7 +35,8 @@ void __stdcall GetBitMap(char * filename,void **Pointer,int * len)
 
 	//资源释放
 	*Pointer = pngbuff;
-	*len=buff_len;
+	*len = buff_len;
+	*/
 };
 
 //int __stdcall GetBitMap2(void **Pointer,int filename)
@@ -41,50 +45,76 @@ void __stdcall GetBitMap(char * filename,void **Pointer,int * len)
 参数 in->输入 out->输出
 filename 文件名，ptr WasImg指针,directionCount 精灵方向计数，frame_Count 帧计数，图片宽高 width height ,图片中心坐标 centerX,centerY
 */
-void __stdcall GetWasFileInfo(const char* filename,int** ptr,int* directionCount,int* frameCount,int* width,int *height,int *centerX,int *centerY)
+void __stdcall GetWasFileInfo(const char* filename, int** ptr, int* directionCount, int* frameCount, int* width, int *height, int *centerX, int *centerY)
 {
-	WasImg *wasImg=new WasImg();
+	WasImg *wasImg = new WasImg();
 	wasImg->load_file(filename);
-	*ptr=(int*)wasImg;
-	*directionCount=wasImg->spriteCount;
-	*frameCount=wasImg->frameCount;
-	*centerX=wasImg->centerX;
-	*centerY=wasImg->centerY;
-	*width=wasImg->width;
-	*height=wasImg->height;
+	*ptr = (int*)wasImg;
+	*directionCount = wasImg->spriteCount;
+	*frameCount = wasImg->frameCount;
+	*centerX = wasImg->centerX;
+	*centerY = wasImg->centerY;
+	*width = wasImg->width;
+	*height = wasImg->height;
+}
+/* in char* filename,out int** ptr,out int* directionCount,out int* frameCount,out int* centerX,out int* centerY ,out int* width,out int *height,out int *centerX,out int *centerY
+参数 in->输入 out->输出
+filename 文件名，ptr WasImg指针,directionCount 精灵方向计数，frame_Count 帧计数，图片宽高 width height ,图片中心坐标 centerX,centerY,hash数值
+*/
+void __stdcall GetWasFileInfoFromWdfFile(char* filename, int** ptr, int* directionCount, int* frameCount, int* width, int *height, int *centerX, int *centerY, DWORD hash)
+{
+	auto wdfFile = LoadWdf(filename);
+	auto wdfItem = GetWasSizeByOffset(wdfFile, hash);
+
+	byte* data = new  byte[wdfItem->Size];
+	wdfFile->FileHandle->seek(wdfItem->Offset, SEEK_SET);
+	wdfFile->FileHandle->read(data, wdfItem->Size);
+
+	WasImg *wasImg = new WasImg();
+	wasImg->pfhead = wasImg->pfmoving = data;
+	wasImg->load_data();
+	*ptr = (int*)wasImg;
+	*directionCount = wasImg->spriteCount;
+	*frameCount = wasImg->frameCount;
+	*centerX = wasImg->centerX;
+	*centerY = wasImg->centerY;
+	*width = wasImg->width;
+	*height = wasImg->height;
+	delete data;
+
 }
 
-void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,int frameIndex,int** dataptr,int* dataptrLen)
+void __stdcall GetWasFrame(int width, int height, int* wasPtr, int directionIndex, int frameIndex, int** dataptr, int* dataptrLen)
 {
-	WasImg *wasImg=(WasImg*)wasPtr;
-	auto frame=&wasImg->frames[directionIndex][frameIndex];
-	auto len=width*height*4;
-	auto buff=new BYTE[len];
+	WasImg *wasImg = (WasImg*)wasPtr;
+	auto frame = &wasImg->frames[directionIndex][frameIndex];
+	auto len = width*height * 4;
+	auto buff = new BYTE[len];
 	//输出参数
-	auto orginbuff=buff;
-	*dataptrLen=len;
+	auto orginbuff = buff;
+	*dataptrLen = len;
 	//数据处理
-	memset(buff,0,len);
-	auto offxl=wasImg->centerX - frame->offX;
-	auto offy=wasImg->centerY - frame->offY;
+	memset(buff, 0, len);
+	auto offxl = wasImg->centerX - frame->offX;
+	auto offy = wasImg->centerY - frame->offY;
 
-	auto offxr=width-frame->width-offxl;
+	auto offxr = width - frame->width - offxl;
 
-	buff+=width*offy*4;
-	for(int h=0;h<frame->height;h++)
+	buff += width*offy * 4;
+	for (int h = 0; h < frame->height; h++)
 	{
-		buff += offxl*4;
-		for(int w=0;w<frame->width;w++)
+		buff += offxl * 4;
+		for (int w = 0; w < frame->width; w++)
 		{
-			auto pixle=frame->pixels[h][w];
-			auto pixleb=((byte*)&pixle);
-			buff[0]=pixleb[2];
-			buff[1]=pixleb[1];
-			buff[2]=pixleb[0];
-			buff[3]=pixleb[3];
-			buff+=4;
+			auto pixle = frame->pixels[h][w];
+			auto pixleb = ((byte*)&pixle);
+			buff[0] = pixleb[2];
+			buff[1] = pixleb[1];
+			buff[2] = pixleb[0];
+			buff[3] = pixleb[3];
+			buff += 4;
 		}
-		buff += offxr*4;
+		buff += offxr * 4;
 	}
 
 	//png图像
@@ -97,17 +127,32 @@ void __stdcall GetWasFrame(int width,int height,int* wasPtr,int directionIndex,i
 	PNGFormatData_R8G8B8A8(pngIDATbuff, pngIDATbuffLen, orginbuff, width, height);
 	CreatePNGByFormatData(width, height, pngIDATbuff, pngIDATbuffLen, pngbuff, buff_len);
 
-	*dataptr=(int*)pngbuff;
-	*dataptrLen=buff_len;
+	*dataptr = (int*)pngbuff;
+	*dataptrLen = buff_len;
 	//资源释放
 	delete[] orginbuff;
 }
-void main2()
+
+void __stdcall GetXYMap(const char * FileName, byte **mapbuff,int* mapbuffsize)
 {
-	char * filename="D:/Demo/myex/Beta/Resources/1207.map.tga";
-	int *Pointer=0;
-	int len=0;
-	GetBitMap(filename,(void**)&Pointer,&len);
+	MapInfo * mapinfo = new MapInfo();
+	LoadMap(FileName, *mapinfo);
+	*mapbuff = (byte*)mapinfo;
+	*mapbuffsize = sizeof(MapInfo);
+}
+
+void main()
+{
+	char* filename = "D:\\BaiduYunDownload\\梦幻西游\\shape.wdf";
+	int* ptr = 0;
+	int directionCount = 0;
+	int frameCount = 0;
+	int width; int height;
+	int centerX; int centerY;
+	DWORD offset = 0xDD757619;
+
+	GetWasFileInfoFromWdfFile(filename, &ptr, &directionCount, &frameCount, &width, &height, &centerX, &centerY, offset);
+	GetWasFileInfoFromWdfFile(filename, &ptr, &directionCount, &frameCount, &width, &height, &centerX, &centerY, offset);
 }
 
 

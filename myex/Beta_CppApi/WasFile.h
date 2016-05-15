@@ -64,7 +64,7 @@ public:// 帧数据偏移
 
 };
 
-class WasImg:__bfile
+class WasImg:public __bfile
 {
 public:
 	int width;
@@ -106,7 +106,7 @@ public:
 		return size;
 	}
 	void load_file(const char* strFileName);
-	void load_data(const BYTE* pData);
+	void load_data();
 	/**
 	* 获取某帧的延时帧数
 	*/

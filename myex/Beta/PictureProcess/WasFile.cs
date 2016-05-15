@@ -68,6 +68,29 @@ namespace Beta.PictureProcess
         }
 
         /// <summary>
+        /// 从路径中获取文件
+        /// </summary>
+        public void LoadFileFromWdf(String filePath,uint hash)
+        {
+            IntPtr wasptr;
+            CppAPI.GetWasFileInfoFromWdfFile(filePath, out wasptr, out DirectionCount, out FrameCount, out Width, out Height, out CentryX, out CentryY,hash);
+            IntPtr dataptr;
+            int datalen = 0;
+            Frames = new BitmapImage[DirectionCount, FrameCount];
+            for (int x = 0; x < DirectionCount; x++)
+            {
+                for (int y = 0; y < FrameCount; y++)
+                {
+                    CppAPI.GetWasFrame(Width, Height, wasptr, x, y, out dataptr, out datalen);
+                    var item = new BitmapImage();
+                    item.FromIntPtr(dataptr, datalen);
+                    Frames[x, y] = item;
+                    CppAPI.Delete(dataptr);
+                }
+            }
+            CppAPI.Delete(wasptr);
+        }
+        /// <summary>
         /// 1-上，2-右上...8-左上
         /// </summary>
         public BitmapImage GetImg(int directon,int count) 

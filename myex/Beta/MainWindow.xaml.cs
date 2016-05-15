@@ -37,10 +37,9 @@ namespace Beta
         byte[,] FixedObstruction;
         int WidthWindow = 800;
         int HeightWindow = 600;
-        QXSprite Spirit = new QXSprite();
+        QXSprite Spirit = new QXSprite(1);
         WasFile wasFile1 = new WasFile();
         WasFile wasFile2 = new WasFile();
-
         QXMap map = new QXMap();
         SolidColorBrush redsolid = new SolidColorBrush(Colors.Red);
         SolidColorBrush GreenYellowSolid = new SolidColorBrush(Colors.GreenYellow);
@@ -60,8 +59,13 @@ namespace Beta
             //Spirit.limitcount = wasFile2.FrameCount - 1;
             //Spirit.Timer.Interval = TimeSpan.FromMilliseconds(100); //精灵图片切换频率
             //Carrier.Children.Add(Spirit);
-            Spirit.Coordinate = new Point(10, 10);
+            Spirit.Coordinate = new Point(100, 100);
             Spirit.CoordinateChanged += MapMove;
+            wasFile1.LoadFileFromWdf("D:\\BaiduYunDownload\\梦幻西游\\shape.wdf", 0xDD757619);
+            wasFile2.LoadFileFromWdf("D:\\BaiduYunDownload\\梦幻西游\\shape.wdf", 0x51327E35);
+            Spirit.WasRunFile = wasFile1;
+            Spirit.WasStantFile = wasFile2;
+            
             FixedObstruction = new byte[1024, 1024];
             {
                 for (var i = 0; i < 1024; i++)
@@ -105,11 +109,11 @@ namespace Beta
             face.SetValue(1, new double[] { 300, 1000 });
             face.SetValue(2, new double[] { 1, 1000 });
             Canvas.SetZIndex(face, 10000);
-            Canvas.SetBottom(face, 0);
+            Canvas.SetBottom(face, 10);
             Carrier.Children.Add(face);
 
             Alert.Init(Carrier);
-            Test();
+            //Test();
             //Canvas.SetTop(mf,300);
             //Canvas.SetLeft(mf, 50);
             //Canvas.SetZIndex(mf, 3);
@@ -197,14 +201,7 @@ namespace Beta
         /// </summary>
         private void AStarMove(QXSprite sprite, Point p)
         {
-            for (var i = Carrier.Children.Count - 1; i >= 0; i--)
-            {
-                Rectangle obj = null;
-                if ((obj = (Carrier.Children[i] as Rectangle)) != null && obj.Name == "DrawRect")
-                {
-                    Carrier.Children.RemoveAt(i);
-                }
-            }
+            
             //进行单元格缩小
             Point start = sprite.Position[0];
             Point mapPosition = p.ToMapCoordinate();
@@ -225,25 +222,23 @@ namespace Beta
             if (path == null || path.Count <= 1)
             {
                 //路径不存在（有可能精灵在移动中）
-                sprite.Action = Actions.Stop;
-                GV.Storyboard.RemoveStoryboard(sprite.Name);
                 return;
             }
-
+            sprite.Action = Actions.Run;
             GV.Storyboard.NewStoryboard(sprite.Name);
-            GV.Storyboard[sprite.Name].Completed += new EventHandler((sender, e) => Move_Completed(sender, e, sprite));
+            GV.Storyboard[sprite.Name].FillBehavior = FillBehavior.HoldEnd;
+            GV.Storyboard[sprite.Name].Completed2= new EventHandler((sender, e) => Move_Completed(sender, e, sprite));
             //创建朝向动画
             DoubleAnimationUsingKeyFrames doubleAnimationUsingKeyFrames = new DoubleAnimationUsingKeyFrames()
             {
-                Duration = new Duration(TimeSpan.FromMilliseconds(path.Count * sprite.VRunSpeed)) //总共花费时间
+                Duration = new Duration(TimeSpan.FromMilliseconds((path.Count) * sprite.VRunSpeed)), //总共花费时间
             };
             Storyboard.SetTarget(doubleAnimationUsingKeyFrames, sprite);
             Storyboard.SetTargetProperty(doubleAnimationUsingKeyFrames, new PropertyPath("Direction"));
             //创建坐标变换逐帧动画
             PointAnimationUsingKeyFrames pointAnimationUsingKeyFrames = new PointAnimationUsingKeyFrames()
             {
-                Duration = new Duration(TimeSpan.FromMilliseconds(path.Count * sprite.VRunSpeed)),
-
+                Duration = new Duration(TimeSpan.FromMilliseconds((path.Count) * sprite.VRunSpeed)),
             };
             Storyboard.SetTarget(pointAnimationUsingKeyFrames, sprite);
             Storyboard.SetTargetProperty(pointAnimationUsingKeyFrames, new PropertyPath("Coordinate"));
@@ -277,11 +272,12 @@ namespace Beta
                 ;
                 doubleAnimationUsingKeyFrames.KeyFrames.Add(linearDoubleKeyFrame);
             }
+            
             GV.Storyboard[sprite.Name].Children.Add(pointAnimationUsingKeyFrames);
             GV.Storyboard[sprite.Name].Children.Add(doubleAnimationUsingKeyFrames);
             //启动属性动画
-            GV.Storyboard[sprite.Name].Begin();
-            sprite.Action = Actions.Run;
+            GV.Storyboard[sprite.Name].Begin(sprite,true);//Storyboard死锁问题，动画会变慢 气死我了
+            
 
         }
         /// <summary>
@@ -289,6 +285,12 @@ namespace Beta
         /// </summary>
         private void Move_Completed(object sender, EventArgs e, QXSprite sprite)
         {
+            //GV.Storyboard[sprite.Name].Children.Clear();
+            //var obj=GV.Storyboard[sprite.Name];
+            //RemoveStoryboard
+            //GV.Storyboard[sprite.Name].Remove();
+            //sprite.BeginAnimation(new PropertyPath("Direction"), null);
+            //Alert.Show(string.Format("p.X={0:f0},p.Y={1:f0}", sprite.Coordinate.X, sprite.Coordinate.Y));
             sprite.Action = Actions.Stop;
         }
         /// <summary>
@@ -300,11 +302,10 @@ namespace Beta
         }
         private void Carrier_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
             Point p = e.GetPosition(Carrier);
             AStarMove(Spirit, p);
-            ShowRect(p);
-            Alert.Show(p.ToString());
+            //ShowRect(p);
+            //Alert.Show(p.ToString());
         }
         Rectangle showRect = new Rectangle();
         private void ShowRect(Point p)
@@ -486,18 +487,18 @@ namespace Beta
             Carrier.Children.Add(player);
         }
         /*
-        //图片操作
-           IntPtr PngBuff = IntPtr.Zero;
-           var len=CppAPI.GetBitMap2(out PngBuff,1);
-           byte[] managed_data = new byte[len];
-           Marshal.Copy(PngBuff, managed_data, 0, len);
-           MemoryStream ms = new MemoryStream(managed_data);
+//图片操作
+  IntPtr PngBuff = IntPtr.Zero;
+  var len=CppAPI.GetBitMap2(out PngBuff,1);
+  byte[] managed_data = new byte[len];
+  Marshal.Copy(PngBuff, managed_data, 0, len);
+  MemoryStream ms = new MemoryStream(managed_data);
 
-           BitmapImage image = new BitmapImage();
-           image.BeginInit();
-           image.StreamSource = ms;
-           image.EndInit();
-           bgMap.Source = image;*/
+  BitmapImage image = new BitmapImage();
+  image.BeginInit();
+  image.StreamSource = ms;
+  image.EndInit();
+  bgMap.Source = image;*/
         /*Canvan 位移动画（特效:从A点到B点 如果在移动过程中出现C点 则会取消到B点的移动）
         1.DoubleAnimation 创建线性缓冲动画
         2.Storyboard 创建故事版

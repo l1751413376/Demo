@@ -308,38 +308,6 @@ BYTE* JpgHandler(BYTE* Buffer, int inSize, UINT* outSize)
 }
 
 
-struct MaskInfo
-{
-	int startX;
-	int startY;
-	int width;
-	int height;
-	int mask_size;
-	byte* img;
-	int imgsize;
-};
-
-struct MapInfo
-{
-	char FileName[256];
-	DWORD Flag;
-	DWORD Width;
-	DWORD Height;
-	DWORD MaskFlag;
-	int m_MapBmpWidth;
-	int m_MapBmpHeight;
-	/// <summary>
-	/// mask数量
-	/// </summary>
-	DWORD MaskNum;
-	MaskInfo* MaskInfos;
-	/// <summary>
-	/// 图像
-	/// </summary>
-	byte* MapImg;
-
-	DWORD MapImgSize;
-};
 
 
 
@@ -359,9 +327,8 @@ void WriteMapPixel(BMP* bmp, int map_row, int map_col, MapInfo* mapInfo)
 		pDst += dst_pitch;
 	}
 }
-void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
+void LoadMap(const char * FileName, MapInfo &mapInfo)
 {
-	MapInfo mapInfo;
 	strcpy(mapInfo.FileName, FileName);
 	__file file;
 	file.open(FileName);
@@ -417,12 +384,6 @@ void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
 			//无法识别格式
 			continue;
 		}
-		char outfileitem[256];
-		sprintf(outfileitem, "D:\\BaiduYunDownload\\1002.map.%d.jpg", i);
-		auto outfile = fopen(outfileitem, "wb+");
-		fwrite(pJpgData, jpg_size, 1, outfile);
-		fclose(outfile);
-
 		int map_row = i / m_MapBlockColNum;
 		int map_col = i % m_MapBlockColNum;
 
@@ -493,14 +454,9 @@ void LoadMap(const char * FileName, byte* MapInfoBuff, DWORD* MapInfoBuffSize)
 		item->img = (byte*)pngbuff;
 		item->imgsize = buff_len;
 
-		char outfileitem[256];
-		sprintf(outfileitem, "D:\\BaiduYunDownload\\1002.mask.%d.png", i);
-		auto outfile = fopen(outfileitem, "wb+");
-		fwrite(item->img, item->imgsize, 1, outfile);
-		fclose(outfile);
+		
 
 	}
-shipmask:
 	//格式化为Png阵列图
 	BYTE * pngIDATbuff = 0;
 	int pngIDATbuffLen = 0;
@@ -515,16 +471,15 @@ shipmask:
 	//资源释放
 	mapInfo.MapImg = (byte*)pngbuff;
 	mapInfo.MapImgSize = buff_len;
-	auto outfilepath = "D:\\BaiduYunDownload\\1002.map.png";
-	auto outfile = fopen(outfilepath, "wb+");
-	fwrite(mapInfo.MapImg, mapInfo.MapImgSize, 1, outfile);
-	fclose(outfile);
 }
 
-void main()
+void main33()
 {
 	init_jpeg();
 	auto filename = "D:\\BaiduYunDownload\\1002.map";
+	MapInfo* mapInfo=new MapInfo();
+	LoadMap(filename, *mapInfo);
+	
 
-	LoadMap(filename, 0, 0);
+
 }

@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace Beta.Controls
 {
     /// <summary>
-    /// QXFacePlate.xaml 的交互逻辑
+    /// QXFacePlate.xaml 的交互逻辑1
     /// </summary>
     public partial class QXFacePlate : UserControl
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -176,7 +177,54 @@ namespace Beta.Controls
         {
             text.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colour));
         }
+        public static byte[] ToBuffer(this IntPtr pointer,int size)
+        {
+            byte[] managed_data = new byte[size];
+            Marshal.Copy(pointer, managed_data, 0, size);
+            CppAPI.Delete(pointer);
+            return managed_data;
+        }
 
+        public static MemoryStream ToStream(this IntPtr pointer, int size)
+        {
+            MemoryStream stream = new MemoryStream(ToBuffer(pointer,size));
+            return stream;
+        }
+
+        public static uint ReadDword(this FileStream stream)
+        {
+            byte[] b = new byte[4];
+            stream.Read(b, 0, 4);
+            return BitConverter.ToUInt32(b, 0);
+        }
+        public static uint ReadDword(this MemoryStream stream)
+        {
+            byte[] b = new byte[4];
+            stream.Read(b, 0, 4);
+            return BitConverter.ToUInt32(b, 0);
+        }
+        #region 从缓冲区获得图片实例
+        /// <summary>
+        /// 从字节从获取
+        /// </summary>
+        public static void FromBytes(this BitmapImage bitmapImage, byte[] bytes)
+        {
+            MemoryStream ms = new MemoryStream(bytes);
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = ms;
+            bitmapImage.EndInit();
+        }
+        /// <summary>
+        /// 从非托管内存获取
+        /// </summary>
+        public static void FromIntPtr(this BitmapImage bitmapImage, IntPtr intPtr, int buffLen)
+        {
+            IntPtr PngBuff = IntPtr.Zero;
+            byte[] managed_data = new byte[buffLen];
+            Marshal.Copy(intPtr, managed_data, 0, buffLen);
+            FromBytes(bitmapImage, managed_data);
+        }
+        #endregion
 
     }
     /// <summary>

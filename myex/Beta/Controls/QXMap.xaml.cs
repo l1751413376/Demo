@@ -23,7 +23,7 @@ namespace Beta.Controls
     public partial class QXMap :UserControl
     {
         /// <summary>
-        /// 窗口对于地图的偏移量x
+        /// 窗口对于地图的偏移量x 
         /// </summary>
         public int CenterX { get { return GV.WindowOffsetX; } set { GV.WindowOffsetX = value; } }
         /// <summary>

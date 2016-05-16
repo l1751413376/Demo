@@ -327,8 +327,15 @@ void WriteMapPixel(BMP* bmp, int map_row, int map_col, MapInfo* mapInfo)
 		pDst += dst_pitch;
 	}
 }
+int init_jpegvalue = 0;
 void LoadMap(const char * FileName, MapInfo &mapInfo)
 {
+	if (init_jpegvalue == 0)
+	{
+		init_jpeg();
+		init_jpegvalue = 1;
+	}
+	
 	strcpy(mapInfo.FileName, FileName);
 	__file file;
 	file.open(FileName);
@@ -421,7 +428,7 @@ void LoadMap(const char * FileName, MapInfo &mapInfo)
 		int pixel_num = item->width * item->height;
 
 		WORD* pOutMaskBmp = new WORD[pixel_num];
-		memset(pOutMaskBmp, 0, sizeof(WORD) * pixel_num);
+		memset(pOutMaskBmp, 0xff, sizeof(WORD) * pixel_num);
 		// Ã·»°maskœÒÀÿ
 		for (int h = 0; h < item->height; h++)
 		{
@@ -478,6 +485,7 @@ void main33()
 	init_jpeg();
 	auto filename = "D:\\BaiduYunDownload\\1002.map";
 	MapInfo* mapInfo=new MapInfo();
+	
 	LoadMap(filename, *mapInfo);
 	
 

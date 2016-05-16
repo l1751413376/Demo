@@ -79,6 +79,19 @@ namespace Beta
             map.Height = 600;
             Canvas.SetZIndex(map, -1);
             Carrier.Children.Add(map);
+            foreach (var item in map.map.MaskInfoList)
+            {
+                QXMap mask = new QXMap();
+                mask.ImageContent.MoveBitmap(item.img2);
+
+                Canvas.SetZIndex(mask, 10000);
+                Canvas.SetLeft(mask, item.startX);
+                Canvas.SetTop(mask, item.startY);
+                mask.Opacity = 0.7;
+                Carrier.Children.Add(mask);
+            }
+
+
             Carrier.Children.Add(Spirit);
             //DrawGrid();
             Canvas.SetZIndex(showRect, -2);

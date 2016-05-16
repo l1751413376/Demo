@@ -56,7 +56,7 @@ namespace Beta.Controls
 
 
             //mask操作
-            var maskstream = MaskInfos.ToStream(MaskInfoSize);
+            var maskstream = MaskInfos.ToStream((int)(MaskInfoSize* MaskNum));
             for (var i = 0; i < MaskNum; i++)
             {
                 var item = new MaskInfo();

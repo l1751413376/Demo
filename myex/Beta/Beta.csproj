@@ -130,13 +130,13 @@
     </Compile>
     <Compile Include="Controls\Helper.cs" />
     <Compile Include="Controls\UnitProperties.cs" />
+    <Compile Include="Controls\XYMap.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PictureProcess\BitmapImageExtend.cs" />
     <Compile Include="PictureProcess\WasFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

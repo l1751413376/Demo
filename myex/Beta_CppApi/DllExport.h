@@ -17,7 +17,7 @@ C_dllexport void __stdcall Delete(void *ptr)
 
 C_dllexport void __stdcall GetWasFileInfoFromWdfFile(char* filename, int** ptr, int* directionCount, int* frameCount, int* width, int *height, int *centerX, int *centerY, DWORD hash);
 
-C_dllexport void __stdcall GetXYMap(const char * FileName, byte *mapbuff,int* mapbuffsize);
+C_dllexport void __stdcall GetXYMap(const char * FileName, byte **mapbuff,int* mapbuffsize);
 
 
 

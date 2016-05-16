@@ -143,16 +143,10 @@ void __stdcall GetXYMap(const char * FileName, byte **mapbuff,int* mapbuffsize)
 
 void main()
 {
-	char* filename = "D:\\BaiduYunDownload\\梦幻西游\\shape.wdf";
-	int* ptr = 0;
-	int directionCount = 0;
-	int frameCount = 0;
-	int width; int height;
-	int centerX; int centerY;
-	DWORD offset = 0xDD757619;
-
-	GetWasFileInfoFromWdfFile(filename, &ptr, &directionCount, &frameCount, &width, &height, &centerX, &centerY, offset);
-	GetWasFileInfoFromWdfFile(filename, &ptr, &directionCount, &frameCount, &width, &height, &centerX, &centerY, offset);
+	auto file = "D:\\BaiduYunDownload\\梦幻西游\\scene\\1002.map";
+	byte* mapbuff;
+	int mapbuffsize;
+	GetXYMap(file,&mapbuff,&mapbuffsize);
 }
 
 

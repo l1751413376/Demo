@@ -44,11 +44,11 @@ namespace Beta.Controls
         {
             get 
             {
-                return ImageContent.Width;
+                return Content.Width;
             }
             set
             {
-                ImageContent.Width = value;
+                Content.Width = value;
             }
         }
 
@@ -58,11 +58,11 @@ namespace Beta.Controls
         {
             get
             {
-                return ImageContent.Height;
+                return Content.Height;
             }
             set
             {
-                ImageContent.Height = value;
+                Content.Height = value;
             }
         }
 
@@ -84,27 +84,16 @@ namespace Beta.Controls
         {
             InitializeComponent();
         }
-
+        public XYMap map = new XYMap();
         public void ReadMap()
         {
-            /*
-            IntPtr PngBuff = IntPtr.Zero;
-            int len = 0;
-            CppAPI.GetBitMap(@"D:\Demo\myex\Beta\Resources\1207.map.tga", out PngBuff, out len);
-            byte[] managed_data = new byte[len];
-            Marshal.Copy(PngBuff, managed_data, 0, len);
-            MemoryStream ms = new MemoryStream(managed_data);
-            
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.StreamSource = ms;
-            image.EndInit();
-             **/
-            BitmapImage image = new BitmapImage(new Uri(@"D:\Demo\myex\Beta\Resources\1442304430-7.jpg"));
-            
-            Source = image;
-            Height_ = image.Height;
-            Width_ = image.Width;
+            map.Load("D:\\BaiduYunDownload\\梦幻西游\\scene\\1002.map");
+            Height_ = map.Height;
+            Width_ = map.Width;
+            Source = map.MapImg2;
+            //图的实际宽高（因为原地图是320*240一块一块）
+            ImageContent.Width = map.MapImg2.Width;
+            ImageContent.Height = map.MapImg2.Height;
         }
 
 

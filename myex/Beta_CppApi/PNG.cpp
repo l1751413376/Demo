@@ -200,7 +200,7 @@ void PNGFormatData_ARGB1555(BYTE *& dest, int & desLen, BYTE * source, int sourc
 			R8G8B8A8[2] = (ARGB1555 & 0x1F) << 3;
 			R8G8B8A8[1] = (ARGB1555 & 0x3E0) >> 2;
 			R8G8B8A8[0] = (ARGB1555 & 0x7C00) >> 7;
-			R8G8B8A8[3] = 0xff;// 
+			R8G8B8A8[3] = (ARGB1555 & 0x8000) != 0 ? 0 : 0xff;
 			memcpy(buff, &R8G8B8A8, 4);
 			buff += 4;
 		}

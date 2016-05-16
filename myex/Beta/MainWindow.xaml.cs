@@ -81,12 +81,12 @@ namespace Beta
             Carrier.Children.Add(map);
             foreach (var item in map.map.MaskInfoList)
             {
-                QXMap mask = new QXMap();
+                QXMask mask = new QXMask();
+                mask.MaskInfo = item;
                 mask.ImageContent.MoveBitmap(item.img2);
 
                 Canvas.SetZIndex(mask, 10000);
-                Canvas.SetLeft(mask, item.startX);
-                Canvas.SetTop(mask, item.startY);
+                mask.Visibility = Visibility.Hidden;
                 mask.Opacity = 0.7;
                 Carrier.Children.Add(mask);
             }
@@ -411,6 +411,11 @@ namespace Beta
                 }
                 Canvas.SetTop(map.ImageContent, -(GV.WindowOffsetY));
             }
+            //
+            QXMask.MoveMask(Carrier);
+
+
+
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

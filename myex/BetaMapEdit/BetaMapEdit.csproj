@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{04AF93EF-E18F-4E6E-A97D-4AA0C261026C}</ProjectGuid>
+    <ProjectGuid>{BB88A57C-ED5E-40AB-9133-330D89FE7A1A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Beta</RootNamespace>
-    <AssemblyName>Beta</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>BetaMapEdit</RootNamespace>
+    <AssemblyName>BetaMapEdit</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,19 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="mscorlib.4.0.0.0.Fakes">
-      <HintPath>FakesAssemblies\mscorlib.4.0.0.0.Fakes.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Reactive">
-      <HintPath>Dll\System.Reactive.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -67,36 +55,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="COMObject\CppAPI.cs" />
-    <Compile Include="COMObject\WindowsAPI.cs" />
-    <Page Include="Controls\Alert.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Dictionary1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\MetalFrame.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\QXFacePlate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\QXMap.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\QXSprite.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Skill.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,40 +63,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controls\Alert.xaml.cs">
-      <DependentUpon>Alert.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\FightPosition.cs" />
-    <Compile Include="Controls\QXMask.cs" />
-    <Compile Include="Controls\Skill.xaml.cs">
-      <DependentUpon>Skill.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\StrokeableLabel.cs" />
-    <Compile Include="Controls\Enumeration.cs" />
-    <Compile Include="Controls\GV.cs" />
-    <Compile Include="Controls\MetalFrame.xaml.cs">
-      <DependentUpon>MetalFrame.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\QXFacePlate.xaml.cs">
-      <DependentUpon>QXFacePlate.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\QXMap.xaml.cs">
-      <DependentUpon>QXMap.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\QXObject.cs" />
-    <Compile Include="Controls\QXSprite.xaml.cs">
-      <DependentUpon>QXSprite.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Helper.cs" />
-    <Compile Include="Controls\UnitProperties.cs" />
-    <Compile Include="Controls\XYMap.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PictureProcess\WasFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -156,44 +86,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="img\2x1red.png0xfile" />
-    <None Include="img\goods.wdf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Resources\1207.map.tga" />
-    <Resource Include="Resources\DroidSansFallback.ttf" />
-    <None Include="Resources\Map001.rvdata2" />
-    <Resource Include="Resources\000.tga" />
-    <Resource Include="Resources\fontawesome-webfont.ttf" />
-    <Resource Include="Resources\FontAwesome.otf" />
-    <Resource Include="Resources\simsun.ttc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\无标题.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dll\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\QXGameHelper\QXGameHelper.csproj">
-      <Project>{3835d757-bf34-469a-b627-66eb169261ac}</Project>
-      <Name>QXGameHelper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="img\8x1redwhite.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\1442304430-7.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="HTMLPage1.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

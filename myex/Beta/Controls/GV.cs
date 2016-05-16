@@ -30,6 +30,15 @@ namespace Beta.Controls
         /// </summary>
         public static int WindowOffsetY;
 
+
+        /// <summary>
+        /// 窗口宽
+        /// </summary>
+        public const int WindowWidth=800;
+        /// <summary>
+        /// 窗口高
+        /// </summary>
+        public const int WindowHegith=600;
         /// <summary>
         /// 精灵移动用Storyboard管理器
         /// </summary>

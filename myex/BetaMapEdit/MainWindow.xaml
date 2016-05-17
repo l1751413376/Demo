@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BetaMapEdit"
         mc:Ignorable="d"
-        Title="MainWindow" Width="914.999" Height="628">
+        Title="MainWindow" Width="914.999" Height="630">
     <Canvas>
-        <ScrollViewer x:Name="MapViewer" Width="800" Height="600" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Margin="0,0,0,1" Background="Black">
+        <ScrollViewer x:Name="MapViewer" Width="800" Height="600" Margin="0"   VerticalScrollBarVisibility="auto"  HorizontalScrollBarVisibility="auto"  Background="{x:Null}">
             <ScrollViewer.Content>
-                <Canvas x:Name="Map" Width="790">
-                    <Canvas x:Name="GridCarrier" Opacity="0.4"></Canvas>
-                    <Canvas x:Name="GridLineCarrier" Opacity="0.4"></Canvas>
-                    <Canvas x:Name="SectionCarrier" Opacity="0.9" Visibility="Collapsed"></Canvas>
+                <Canvas x:Name="Map" >
+                    <Canvas x:Name="GridCarrier" Opacity="0.4" Width="{Binding ElementName=Map,Path=Width}" Height="{Binding ElementName=Map,Path=Height}" MouseLeftButtonDown="GridCarrier_MouseLeftButtonDown" Background="#0000" />
+                    <Canvas x:Name="GridLineCarrier" Opacity="0.4"/>
+                    <Canvas x:Name="SectionCarrier" Opacity="0.9" Visibility="Collapsed"/>
                 </Canvas>
             </ScrollViewer.Content>
         </ScrollViewer>

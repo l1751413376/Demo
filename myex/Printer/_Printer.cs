@@ -37,6 +37,7 @@ namespace Printer
                 Point leftpoint = new Point(0, 0);
 
                 dc.DrawText(text, leftpoint);
+                
             }
 
             return new DocumentPage(visual, _pageSize, new Rect(_pageSize), new Rect(_pageSize));

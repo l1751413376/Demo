@@ -50,7 +50,10 @@ namespace WebService
             }
             else
             {
-                func(null,null);
+                if (func != null)
+                {
+                    func(null, null);
+                }
             }
 
 
@@ -77,15 +80,12 @@ namespace WebService
 
         public void ProcessRequestSocket(Socket s)
         {
+            HttpWebResponse re = new HttpWebResponse(;
             var response = @"
-HTTP/1.1 200 OK
+HTTP/1.1
 Cache-Control: private
 Content-Type: text/html; charset=utf-8
 Vary: Accept-Encoding
-Server: Microsoft-IIS/7.5
-X-AspNet-Version: 4.0.30319
-X-Powered-By: ASP.NET
-Date: Thu, 19 May 2016 03:49:23 GMT
 Content-Length: 10
 
 HelloWorld";

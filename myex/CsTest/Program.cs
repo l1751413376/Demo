@@ -11,8 +11,8 @@ namespace CsTest
 {
     static class Program
     {
-       
-           
+
+
         public static Regex RegProtocol = new Regex("(GET|POST)|([^ ]+)");
         public static Regex RegItem = new Regex("([^ :]+)");
         static void Main(string[] args)
@@ -34,6 +34,19 @@ Accept-Language: zh-CN,zh;q=0.8
 Cookie: ASP.NET_SessionId=vqbklzbaukniy32ehd3jmti1; Hm_lvt_efeba49561e17cb591fcf93d3a48f843=1463718412; Hm_lpvt_efeba49561e17cb591fcf93d3a48f843=1463718412
 
 ------WebKitFormBoundaryySzFkyO1blOdPmrr
+Content-Disposition: form-data; name=""p1""
+
+123
+------WebKitFormBoundaryySzFkyO1blOdPmrr
+Content - Disposition: form - data; name = ""p2""
+
+123
+------WebKitFormBoundaryySzFkyO1blOdPmrr
+Content-Disposition: form-data; name=""file1""; filename=""icon - freeVisa_03.png""
+Content - Type: image / png
+
+PNG
+------WebKitFormBoundaryySzFkyO1blOdPmrr--
 ";
 
             var matches = RegItem.Matches(str);
@@ -47,32 +60,43 @@ Cookie: ASP.NET_SessionId=vqbklzbaukniy32ehd3jmti1; Hm_lvt_efeba49561e17cb591fcf
     public class _HttpRequest
     {
         public Dictionary<string, string> Parameter = new Dictionary<string, string>();
-        private int Cols;
+        public MemoryStream Stream;
+        public Dictionary<string, HttpFile> Files = new Dictionary<string, HttpFile>();
 
+        public string this[string key]
+        {
+            get
+            {
+                if (Parameter.ContainsKey(key)) return Parameter[key];
+                else return "";
+            }
+        }
         #region Reg
         public static Regex RegProtocol = new Regex("(GET|POST)|[^ ]+");
-        public static Regex RegItem = new Regex("([^ :]+)");
-
+        public static Regex RegItem = new Regex("([^:]+)");
+        public static Regex Regmultipart_form_data = new Regex(@"(multipart/form-data)|(boundary=)|(----WebKitFormBoundary\w+)");
+        public static Regex RegContentDisposition = new Regex(@"name|filename|(""[^""]+"")");
         #endregion
         public void ParseFromByte(byte[] buffer)
         {
-            Cols = 0;
-            MemoryStream stream = new MemoryStream(buffer);
-            HeaderProcess(ReadCol(stream));
+            Stream = new MemoryStream(buffer);
+            HeaderProcess(ReadCol());
             string content;
-            while ((content = ReadCol(stream)) != null)
+            while ((content = ReadCol()) != null)
             {
                 ItemProcess(content);
             }
+            Multipart_Form_DataProcess();
 
         }
-        public string ReadCol(MemoryStream stream)
+
+        private string ReadCol()
         {
-            var p = stream.Position;
+            var p = Stream.Position;
             var count = 0;
             while (true)
             {
-                if (stream.ReadByte() == 0x0D && stream.ReadByte() == 0x0A)
+                if (Stream.ReadByte() == 0x0D && Stream.ReadByte() == 0x0A)
                 {
                     break;
                 }
@@ -82,26 +106,88 @@ Cookie: ASP.NET_SessionId=vqbklzbaukniy32ehd3jmti1; Hm_lvt_efeba49561e17cb591fcf
             {
                 return null;//head 结束
             }
-            stream.Seek(p, SeekOrigin.Begin);
+            Stream.Seek(p, SeekOrigin.Begin);
             count += 2;
             var content = new byte[count];
-            stream.Read(content, 0, count);
+            Stream.Read(content, 0, count);
             var str = Encoding.UTF8.GetString(content);
             return str;
         }
-        public void HeaderProcess(string content)
+        public byte[] ReadFile()
+        {
+            var p = Stream.Position;
+            var count = 0;
+            while (true)
+            {
+                if (Stream.ReadByte() == 0x0D && Stream.ReadByte() == 0x0A
+                    //"------"
+                    && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D)
+                {
+                    break;
+                }
+                count++;
+            }
+            if (count == 0)
+            {
+                return null;//head 结束
+            }
+            Stream.Seek(p, SeekOrigin.Begin);
+            var content = new byte[count];
+            Stream.Read(content, 0, count);
+            Stream.Seek(2, SeekOrigin.Current);
+            return content;
+        }
+
+        private void HeaderProcess(string content)
         {
             var matches = RegProtocol.Matches(content);
             Parameter.Add("Method", matches[0].Value);
             Parameter.Add("Url", matches[1].Value);
             Parameter.Add("Protocol", matches[2].Value);
         }
-        public void ItemProcess(string content)
+        private void ItemProcess(string content)
         {
             var Match = RegItem.Match(content);
-            Parameter.Add(Match.Value, content.Replace(Match.Value+": ", ""));
+            Parameter.Add(Match.Value, content.Substring(Match.Value.Length + 2, content.Length - Match.Value.Length - 2));
 
         }
+        public void Multipart_Form_DataProcess()
+        {
+            var ContentType = this["Content-Type"];
+            var matches=Regmultipart_form_data.Matches(ContentType);
+            if (!(matches.Count == 3 && matches[0].Value == "multipart/form-data"))
+            {
+                return;
+            }
+            var WebKitFormBoundary = "--"+matches[2].Value;
+            var WebKitFormBoundaryEnd = WebKitFormBoundary+"--\r\n";
+            string content;
+            while (!string.IsNullOrEmpty(content = ReadCol())&& content!= WebKitFormBoundaryEnd)
+            {
+                var pType=ReadCol();
+                var m2=RegContentDisposition.Matches(pType);
+                //二进制文件
+                if (m2.Count == 4 && m2[0].Value == "name" && m2[2].Value == "filename")
+                {
+                    ReadCol();
+                    ReadCol();
+                    Files.Add(m2[1].Value, new HttpFile() { File = ReadFile() });
+                }
+                else
+                {
+                    ReadCol();
+                    ReadCol();
+                }
+            }
+
+        }
+    }
+
+    public class HttpFile
+    {
+        public string FileType;
+        public string FileName;
+        public byte[] File;
     }
 
 }

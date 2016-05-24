@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WebService
 {
@@ -92,72 +93,28 @@ Content-Length: 10
 
 HelloWorld";
             Byte[] bytesSent = Encoding.ASCII.GetBytes(response);
-            Byte[] bytesReceived = new Byte[655350];
-            s.Receive(bytesReceived, bytesReceived.Length, 0);
-            var request = Encoding.ASCII.GetString(bytesReceived);
+            //接收信息
+            _HttpRequest http = new _HttpRequest();
+            http.ParseFromSocket(s);
             s.Send(bytesSent, bytesSent.Length, 0);
             s.Close();
-        }
-
-
-    }
-    public class _HttpRequest
-    {
-        public Dictionary<string, string> Parameter = new Dictionary<string, string>();
-        private int Cols;
-
-        #region Reg
-        public static Regex RegProtocol = new Regex("(GET|POST)|[^ ]+");
-        public static Regex RegItem = new Regex("([^ :]+)");
-
-        #endregion
-        public void ParseFromByte(byte[] buffer)
-        {
-            Cols = 0;
-            MemoryStream stream = new MemoryStream(buffer);
-            HeaderProcess(ReadCol(stream));
-            string content;
-            while ((content= ReadCol(stream))!=null)
+            
+            var img = new BitmapImage();
+            var key = http.Files.Keys.First();
+            MemoryStream ms = new MemoryStream(http.Files[key].File);
+            img.BeginInit();
+            img.StreamSource = ms;
+            img.EndInit();
+            //() => Content.Background = new ImageBrush(img)
+            
+            img.Freeze();
+            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
             {
-                ItemProcess(content);
-            }
+                Content.Background = new ImageBrush(img);
+            });
+            
+        }
 
-        }
-        public string ReadCol(MemoryStream stream)
-        {
-            var p = stream.Position;
-            var count = 0;
-            while (true)
-            {
-                if (stream.ReadByte() == 0x0D && stream.ReadByte() == 0x0A)
-                {
-                    break;
-                }
-                count++;
-            }
-            if (count == 0)
-            {
-                return null;//head 结束
-            }
-            stream.Seek(p, SeekOrigin.Begin);
-            count += 2;
-            var content = new byte[count];
-            stream.Read(content, 0, count);
-            var str = Encoding.UTF8.GetString(content);
-            return str;
-        }
-        public void HeaderProcess(string content)
-        {
-            var matches=RegProtocol.Matches(content);
-            Parameter.Add("Method", matches[0].Value);
-            Parameter.Add("Url", matches[1].Value);
-            Parameter.Add("Protocol", matches[2].Value);
-        }
-        public void ItemProcess(string content)
-        {
-            var matches = RegItem.Matches(content);
-            Parameter.Add(matches[0].Value, matches[1].Value);
 
-        }
     }
 }

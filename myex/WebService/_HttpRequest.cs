@@ -1,65 +1,21 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using Microsoft.Win32;
-using System.IO;
-using System.Text;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-namespace CsTest
+namespace WebService
 {
-    static class Program
-    {
-
-
-        public static Regex RegProtocol = new Regex("(GET|POST)|([^ ]+)");
-        public static Regex RegItem = new Regex("([^ :]+)");
-        static void Main(string[] args)
-        {
-            var str = @"POST http://ebk.t.17u.cn/ivacation/VisaInfo/UploadETA?q=1&PassengerId=3891314&PassengerName=%E6%B5%8B%E8%AF%95&CustomerSerialId=&OrderSerialid=undefined HTTP/1.1
-Host: ebk.t.17u.cn
-Connection: keep - alive
-Content - Length: 846125
-Pragma: no - cache
-Cache - Control: no - cache
-Accept: */*
-Origin: http://ebk.t.17u.cn
-X-Requested-With: XMLHttpRequest
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36 SE 2.X MetaSr 1.0
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryySzFkyO1blOdPmrr
-Referer: http://ebk.t.17u.cn/ivacation/VisaInfo/VisaOrderList
-Accept-Encoding: gzip,deflate
-Accept-Language: zh-CN,zh;q=0.8
-Cookie: ASP.NET_SessionId=vqbklzbaukniy32ehd3jmti1; Hm_lvt_efeba49561e17cb591fcf93d3a48f843=1463718412; Hm_lpvt_efeba49561e17cb591fcf93d3a48f843=1463718412
-
-------WebKitFormBoundaryySzFkyO1blOdPmrr
-Content-Disposition: form-data; name=""p1""
-
-123
-------WebKitFormBoundaryySzFkyO1blOdPmrr
-Content - Disposition: form - data; name = ""p2""
-
-123
-------WebKitFormBoundaryySzFkyO1blOdPmrr
-Content-Disposition: form-data; name=""file1""; filename=""icon - freeVisa_03.png""
-Content - Type: image / png
-
-PNG
-------WebKitFormBoundaryySzFkyO1blOdPmrr--
-";
-            _HttpRequest request = new _HttpRequest();
-            request.ParseFromByte(Encoding.UTF8.GetBytes(str));
-        }
-
-    }
-
     public class _HttpRequest
     {
         public Dictionary<string, string> Parameter = new Dictionary<string, string>();
         public MemoryStream Stream;
         public Dictionary<string, HttpFile> Files = new Dictionary<string, HttpFile>();
-
+        public List<Byte[]> Buffer = new List<byte[]>();
+        public int BufferCount = 0;
         public string this[string key]
         {
             get
@@ -74,7 +30,7 @@ Content - Type: image / png
         public static Regex Regmultipart_form_data = new Regex(@"(multipart/form-data)|(boundary=)|(----WebKitFormBoundary\w+)");
         public static Regex RegContentDisposition = new Regex(@"name|filename|(""[^""]+"")");
         #endregion
-        public void ParseFromByte(byte[] buffer)
+        public void ParseFromByte(byte[] buffer,int rLength,Socket socket)
         {
             Stream = new MemoryStream(buffer);
             HeaderProcess(ReadCol());
@@ -83,15 +39,49 @@ Content - Type: image / png
             {
                 ItemProcess(content);
             }
+
             Multipart_Form_DataProcess();
 
         }
+        public void ParseFromSocket(Socket s)
+        {
+            Byte[] contentbuff = new Byte[65535];
+            var rLength = s.Receive(contentbuff, contentbuff.Length, 0);
+            Stream = new MemoryStream(contentbuff);
+            HeaderProcess(ReadCol());
+            string content;
+            while ((content = ReadCol()) != null)
+            {
+                ItemProcess(content);
+            }
 
+            var allLength = Convert.ToInt32(Parameter["Content-Length"]);
+            var current= (int)Stream.Position;
+            rLength -= current;
+            var buff = new Byte[rLength];
+            for (int i = 0; i < rLength; i++)
+            {
+                buff[i] = contentbuff[i+current];
+            }
+            Buffer.Add(buff);
+            while ((allLength -= rLength) > 0)
+            {
+                rLength = s.Receive(contentbuff, contentbuff.Length, 0);
+                buff = new Byte[rLength];
+                for (int i = 0; i < rLength; i++)
+                {
+                    buff[i] = contentbuff[i];
+                }
+                Buffer.Add(buff);
+            }
+            Multipart_Form_DataProcess();
+
+        }
         private string ReadCol()
         {
             var p = Stream.Position;
             var count = 0;
-            while (true)
+            while (Stream.Position < Stream.Length)
             {
                 if (Stream.ReadByte() == 0x0D && Stream.ReadByte() == 0x0A)
                 {
@@ -113,9 +103,18 @@ Content - Type: image / png
         public byte[] ReadFile()
         {
             var p = Stream.Position;
-            var count = 0;
+            long count = 0;
             while (true)
             {
+                if (Stream.Position >= Stream.Length)
+                {
+                    BufferCount++;
+                    if (BufferCount >= Buffer.Count)
+                    {
+                        break;
+                    }
+                    Stream = new MemoryStream(Buffer[BufferCount]);
+                }
                 if (Stream.ReadByte() == 0x0D && Stream.ReadByte() == 0x0A
                     //"------"
                     && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D && Stream.ReadByte() == 0x2D)
@@ -128,6 +127,7 @@ Content - Type: image / png
             {
                 return null;//head 结束
             }
+            count += 8;
             Stream.Seek(p, SeekOrigin.Begin);
             var content = new byte[count];
             Stream.Read(content, 0, count);
@@ -151,18 +151,19 @@ Content - Type: image / png
         public void Multipart_Form_DataProcess()
         {
             var ContentType = this["Content-Type"];
-            var matches=Regmultipart_form_data.Matches(ContentType);
+            var matches = Regmultipart_form_data.Matches(ContentType);
             if (!(matches.Count == 3 && matches[0].Value == "multipart/form-data"))
             {
                 return;
             }
-            var WebKitFormBoundary = "--"+matches[2].Value;
-            var WebKitFormBoundaryEnd = WebKitFormBoundary+"--\r\n";
+            var WebKitFormBoundary = "--" + matches[2].Value;
+            var WebKitFormBoundaryEnd = WebKitFormBoundary + "--\r\n";
             string content;
-            while (!string.IsNullOrEmpty(content = ReadCol())&& content!= WebKitFormBoundaryEnd)
+            Stream = new MemoryStream(Buffer[0]);
+            while (!string.IsNullOrEmpty(content = ReadCol()) && content != WebKitFormBoundaryEnd)
             {
-                var pType=ReadCol();
-                var m2=RegContentDisposition.Matches(pType);
+                var pType = ReadCol();
+                var m2 = RegContentDisposition.Matches(pType);
                 //二进制文件
                 if (m2.Count == 4 && m2[0].Value == "name" && m2[2].Value == "filename")
                 {
@@ -186,5 +187,4 @@ Content - Type: image / png
         public string FileName;
         public byte[] File;
     }
-
 }

@@ -7,11 +7,5 @@ using System.Threading.Tasks;
 
 namespace WebService
 {
-    public class HttpSocket
-    {
-        public void Test()
-        {
-           
-        } 
-    }
+    
 }
